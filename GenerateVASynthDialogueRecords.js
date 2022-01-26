@@ -27,8 +27,8 @@ function createBranch(plugin, voice, branch) {
   let branchElement = maybeAddElementWithEditorId(dialogBranchGroup, editorId);
   xelib.Release(dialogBranchGroup);
   maybeAddElementValue(branchElement, 'QNAM', getQuestId(voice));
-  maybeAddElementUIntValue(branchElement, 'TNAM', 0);
-  let dnamElement = maybeAddGenericElement(branchElement, 'DNAM');
+  maybeAddElementValue(branchElement, 'TNAM', 0, 'UInt');
+  let dnamElement = maybeAddElement(branchElement, 'DNAM');
   xelib.WithHandle(dnamElement, function() {
     xelib.SetEnabledFlags(dnamElement, '', [branch.type]);
   });
@@ -54,14 +54,14 @@ function createBranchTopic(plugin, voice, branch) {
   xelib.Release(dialogTopicGroup);
   xelib.WithHandle(topicElement, function() {
     maybeAddElementValue(topicElement, 'FULL', branch.topicText);
-    maybeAddElementFloatValue(topicElement, 'PNAM', branch.priority);
+    maybeAddElementValue(topicElement, 'PNAM', branch.priority, 'Float');
     if (branch.name.length > 0) {
       maybeAddElementValue(topicElement, 'BNAM', getBranchId(voice, branch));
     }
     maybeAddElementValue(topicElement, 'QNAM', getQuestId(voice));
-    xelib.Release(maybeAddGenericElement(topicElement, 'DATA'));
+    xelib.Release(maybeAddElement(topicElement, 'DATA'));
     maybeAddElementValue(topicElement, 'SNAM', 'CUST');
-    xelib.Release(maybeAddGenericElement(topicElement, 'TIFC'));
+    xelib.Release(maybeAddElement(topicElement, 'TIFC'));
   });
 
   return topic;
@@ -234,42 +234,31 @@ function maybeAddElementWithEditorId(parent, editorId) {
 
 // This adds an element to another, then returns it.
 // If the element already exists with that name, it will be returned.
-function maybeAddGenericElement(parent, elementName) {
+function maybeAddElement(parent, elementName) {
   if (xelib.HasElement(parent, elementName)) {
     return xelib.GetElement(parent, elementName);
   }
   return xelib.AddElement(parent, elementName);
 }
 
-/**
- * TODO - I'd rather specify the type as an arg instead of having mostly duplicate functions.
- */
-
-function maybeAddElementValue(parent, elementName, value) {
-  let element = maybeAddGenericElement(parent, elementName);
+// This adds an element to another, if it does not already exist.
+// The added/fetched element's value is then set based on the provided type.
+function maybeAddElementValue(parent, elementName, value, type) {
+  let element = maybeAddElement(parent, elementName);
   xelib.WithHandle(element, function() {
-  	xelib.SetValue(element, '', value);
-  });
-}
-
-function maybeAddElementIntValue(parent, elementName, value) {
-  let element = maybeAddGenericElement(parent, elementName);
-  xelib.WithHandle(element, function() {
-  	xelib.SetIntValue(element, '', value);
-  });
-}
-
-function maybeAddElementUIntValue(parent, elementName, value) {
-  let element = maybeAddGenericElement(parent, elementName);
-  xelib.WithHandle(element, function() {
-  	xelib.SetUIntValue(element, '', value);
-  });
-}
-
-function maybeAddElementFloatValue(parent, elementName, value) {
-  let element = maybeAddGenericElement(parent, elementName);
-  xelib.WithHandle(element, function() {
-  	xelib.SetFloatValue(element, '', value);
+    switch (type) {
+      case 'Int':
+        xelib.SetIntValue(element, '', value);
+        break;
+      case 'UInt':
+        xelib.SetUIntValue(element, '', value);
+        break;
+      case 'Float':
+        xelib.SetFloatValue(element, '', value);
+        break;
+      default:
+        xelib.SetValue(element, '', value)
+    };
   });
 }
 
