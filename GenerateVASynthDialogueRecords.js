@@ -24,7 +24,7 @@ function createBranch(plugin, voice, branch) {
   }
   
   let dialogBranchGroup = xelib.GetElement(plugin, 'DLBR');
-  let branchElement = maybeAddElement(dialogBranchGroup, editorId);
+  let branchElement = maybeAddElementWithEditorId(dialogBranchGroup, editorId);
   xelib.Release(dialogBranchGroup);
   maybeAddElementValue(branchElement, 'QNAM', getQuestId(voice));
   maybeAddElementUIntValue(branchElement, 'TNAM', 0);
@@ -50,7 +50,7 @@ function createBranchTopic(plugin, voice, branch) {
   }
   
   let dialogTopicGroup = xelib.GetElement(plugin, 'DIAL');
-  let topicElement = maybeAddElement(dialogTopicGroup, editorId);
+  let topicElement = maybeAddElementWithEditorId(dialogTopicGroup, editorId);
   xelib.Release(dialogTopicGroup);
   xelib.WithHandle(topicElement, function() {
     maybeAddElementValue(topicElement, 'FULL', branch.topicText);
@@ -100,8 +100,9 @@ function createQuest(plugin, voice) {
   
   zedit.log('Creating a new Quest...');
   let questGroup = xelib.GetElement(plugin, 'QUST');
-  let questElement = maybeAddElement(questGroup, editorId);
-  xelib.WithHandles([questGroup, questElement], function () {
+  let questElement = maybeAddElementWithEditorId(questGroup, editorId);
+  xelib.Release(questGroup);
+  xelib.WithHandle(questElement, function () {
     xelib.Release(xelib.AddElementValue(questElement, 'FULL', voice.fullName));
     xelib.Release(xelib.AddElement(questElement, 'NEXT'));
     xelib.Release(xelib.AddElement(questElement, 'ANAM'));
@@ -122,13 +123,12 @@ function createVoiceType(plugin, voice) {
   
   zedit.log('Creating a new Voice Type...');
   let voiceTypeGroup = xelib.GetElement(plugin, 'VTYP');
-  let newVoiceElement = xelib.AddElement(voiceTypeGroup, '.');
-  xelib.Release(xelib.AddElementValue(newVoiceElement, 'EDID', editorId));
+  let newVoiceElement = maybeAddElementWithEditorId(voiceTypeGroup, editorId);
+  xelib.Release(voiceTypeGroup);
   let newVoiceRecord = getRecord(newVoiceElement);
   xelib.SetFlag(newVoiceRecord, 'DNAM', 'Female', (voice.sex === 'Female'));
   xelib.Release(newVoiceRecord);
   xelib.Release(newVoiceElement);
-  xelib.Release(voiceTypeGroup);
   
   // Add it to to the FormID List.
   let formIdsElement = xelib.GetElement(plugin, 'FLST\\VAS_VoiceTypes\\LNAM');
@@ -172,7 +172,7 @@ function createTopic(plugin, voice, topic) {
   }
   
   let dialogTopicGroup = xelib.GetElement(plugin, 'DIAL');
-  let dialogElement = maybeAddElement(dialogTopicGroup, editorId);
+  let dialogElement = maybeAddElementWithEditorId(dialogTopicGroup, editorId);
   xelib.Release(dialogTopicGroup); 
   xelib.withHandle(dialogELement, function() {
     // TODO
@@ -221,31 +221,29 @@ function logChildElements(rootElement) {
   });
 }
 
-/**
- * TODO - Clean up these functions:
- * - maybeAddElement is too specific and should be combined with the other usages.
- * - I'd rather specify the type as an arg instead of having mostly duplicate functions.
- */
-function maybeAddElement(parent, editorId) {
+// This adds an element to a group, then sets that element's EditorID.
+// If an element already exists with that EditorID, it will be returned.
+function maybeAddElementWithEditorId(parent, editorId) {
   if (xelib.HasElement(parent, editorId)) {
-    zedit.log('DEBUG: maybeAddElement: ' + editorId + ' exists');
     return xelib.GetElement(parent, editorId);
   }
-  let child = xelib.AddElement(parent, '.');
-  xelib.Release(xelib.AddElementValue(child, 'EDID', editorId));
-  zedit.log('DEBUG: maybeAddElement: ' + editorId + ' created');
-  return child;
+  let element = xelib.AddElement(parent, '.');
+  xelib.Release(xelib.AddElementValue(element, 'EDID', editorId));
+  return element;
 }
 
+// This adds an element to another, then returns it.
+// If the element already exists with that name, it will be returned.
 function maybeAddGenericElement(parent, elementName) {
-  let element = null;
   if (xelib.HasElement(parent, elementName)) {
-    element = xelib.GetElement(parent, elementName);
-  } else {
-    element = xelib.AddElement(parent, elementName);
+    return xelib.GetElement(parent, elementName);
   }
-  return element;  
+  return xelib.AddElement(parent, elementName);
 }
+
+/**
+ * TODO - I'd rather specify the type as an arg instead of having mostly duplicate functions.
+ */
 
 function maybeAddElementValue(parent, elementName, value) {
   let element = maybeAddGenericElement(parent, elementName);
