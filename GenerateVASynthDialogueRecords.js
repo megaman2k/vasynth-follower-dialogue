@@ -6,214 +6,163 @@ const voice = {
 voice.fullName = ['VAS', voice.sex, voice.game, voice.name].join('_');
 const pluginName = 'VASynth_Voices.esp';
 
+const quest = {
+  editorId: voice.fullName + '_Dialogue'
+};
+
+const branches = {
+  Recruit:   {name: 'Recruit',   type: 'Top-Level', startingTopic: 'Recruit'},
+  Dismiss:   {name: 'Dismiss',   type: 'Top-Level', startingTopic: 'Dismiss'},
+  Wait:      {name: 'Wait',      type: 'Top-Level', startingTopic: 'Wait'},
+  Follow:    {name: 'Follow',    type: 'Top-Level', startingTopic: 'Follow'},
+  Favor:     {name: 'Favor',     type: 'Top-Level', startingTopic: 'Favor'},
+  FavorMore: {name: 'FavorMore', type: 'Blocking',  startingTopic: 'FavorMore'},
+  Trade:     {name: 'Trade',     type: 'Top-Level', startingTopic: 'Trade'}
+};
+Object.keys(branches).forEach(key => 
+  branches[key].editorId = voice.fullName + '_Branch_' + branches[key].name);
+    
+const topics = {
+    Recruit:        {name: 'Recruit',   priority: 10.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'Follow me. I need your help.'},
+    Dismiss:        {name: 'Dismiss',   priority: 0.0,   category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'It\'s time for us to part ways'},
+    Wait:           {name: 'Wait',      priority: 100.0, category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'Wait here.'},
+    Follow:         {name: 'Follow',    priority: 100.0, category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'Follow me.'},
+    Favor:          {name: 'Favor',     priority: 50.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'I need you to do something.'},
+    FavorMore:      {name: 'FavorMore', priority: 50.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: ''},
+    Trade:          {name: 'Trade',     priority: 10.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'I need to trade some things with you.'},
+    Hello:          {name: 'Hello',                      category: 'Miscellaneous', subtype: 'Hello', subtypeName: 'HELO'},
+    Goodbye:        {name: 'Goodbye',                    category: 'Miscellaneous', subtype: 'GoodBye', subtypeName: 'GBYE'},
+    Shared:         {name: 'Shared',                     category: 'Miscellaneous', subtype: 'SharedInfo', subtypeName: 'IDAT'},
+    Idle:           {name: 'Idle',                       category: 'Miscellaneous', subtype: 'Idle', subtypeName: 'IDLE'},
+    Collide:        {name: 'Collide',                    category: 'Miscellaneous', subtype: 'ActorCollidewithActor', subtypeName: 'ACAC'},
+    CombatToNormal: {name: 'CombatToNormal',             category: 'Detection',     subtype: 'CombatToNormal', subtypeName: 'COTN'},
+    NormalToCombat: {name: 'NormalToCombat',             category: 'Detection',     subtype: 'NormalToCombat', subtypeName: 'NOTC'},
+    Agree:          {name: 'Agree',                      category: 'Favors',        subtype: 'Agree', subtypeName: 'AGRE'},
+    Refuse:         {name: 'Refuse',                     category: 'Favors',        subtype: 'Refuse', subtypeName: 'REFU'},
+    ExitFavor:      {name: 'ExitFavor',                  category: 'Favors',        subtype: 'ExitFavorState', subtypeName: 'FEXT'},
+    Attack:         {name: 'Attack',                     category: 'Combat',        subtype: 'Attack', subtypeName: 'ATCK'},
+    PowerAttack:    {name: 'PowerAttack',                category: 'Combat',        subtype: 'PowerAttack', subtypeName: 'POAT'},
+    Block:          {name: 'Block',                      category: 'Combat',        subtype: 'Block', subtypeName: 'BLOC'},
+    Hit:            {name: 'Hit',                        category: 'Combat',        subtype: 'Hit', subtypeName: 'HIT_'},
+    Taunt:          {name: 'Taunt',                      category: 'Combat',        subtype: 'Taunt', subtypeName: 'TAUT'},
+    Bleedout:       {name: 'Bleedout',                   category: 'Combat',        subtype: 'Bleedout', subtypeName: 'BLED'}
+};
+Object.keys(topics).forEach(key => 
+  topics[key].editorId = voice.fullName + '_Topic_' + topics[key].name);
+
 let plugin = xelib.FileByName(pluginName);
 xelib.WithHandle(plugin, function() {
   createVoiceType(plugin, voice);
-  createQuest(plugin, voice);
-  addBranches(plugin, voice);
-  //addTopics(plugin, voice);
+  createQuest(plugin, quest);
+  Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
+  Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
   //addResponses(plugin, voice);
 });
-
-function createBranch(plugin, voice, branch) {
-  let editorId = getBranchId(voice, branch);
-  
-  if (xelib.HasElement(plugin, 'DLBR\\' + editorId)) {
-    zedit.log('Skipping Branch creation: ' + editorId + ' already exists');
-    return;
-  }
-  
-  let dialogBranchGroup = xelib.GetElement(plugin, 'DLBR');
-  let branchElement = maybeAddElementWithEditorId(dialogBranchGroup, editorId);
-  xelib.Release(dialogBranchGroup);
-  maybeAddElementValue(branchElement, 'QNAM', getQuestId(voice));
-  maybeAddElementValue(branchElement, 'TNAM', 0, 'UInt');
-  let dnamElement = maybeAddElement(branchElement, 'DNAM');
-  xelib.WithHandle(dnamElement, function() {
-    xelib.SetEnabledFlags(dnamElement, '', [branch.type]);
-  });
-  
-  let topic = createBranchTopic(plugin, voice, branch);
-  
-  maybeAddElementValue(branchElement, 'SNAM', getTopicId(voice, topic));
-}
-
-function createBranchTopic(plugin, voice, branch) {
-  let topic = {
-    name: branch.name
-  };
-  let editorId = getTopicId(voice, topic);
-  
-  if (xelib.HasElement(plugin, 'DIAL\\' + editorId)) {
-    zedit.log('Skipping Topic creation: ' + editorId + ' already exists');
-    return topic;
-  }
-  
-  let dialogTopicGroup = xelib.GetElement(plugin, 'DIAL');
-  let topicElement = maybeAddElementWithEditorId(dialogTopicGroup, editorId);
-  xelib.Release(dialogTopicGroup);
-  xelib.WithHandle(topicElement, function() {
-    maybeAddElementValue(topicElement, 'FULL', branch.topicText);
-    maybeAddElementValue(topicElement, 'PNAM', branch.priority, 'Float');
-    if (branch.name.length > 0) {
-      maybeAddElementValue(topicElement, 'BNAM', getBranchId(voice, branch));
-    }
-    maybeAddElementValue(topicElement, 'QNAM', getQuestId(voice));
-    xelib.Release(maybeAddElement(topicElement, 'DATA'));
-    maybeAddElementValue(topicElement, 'SNAM', 'CUST');
-    xelib.Release(maybeAddElement(topicElement, 'TIFC'));
-  });
-
-  return topic;
-}
-
-function addBranches(plugin, voice) {
-  zedit.log('Adding dialogue branches...');
-  
-  const branches = [
-    {name: 'Recruit',   topicText: 'Follow me. I need your help.',          priority: 10.0},
-    {name: 'Dismiss',   topicText: 'It\'s time for us to part ways.',       priority: 0.0},
-    {name: 'Wait',      topicText: 'Wait here.',                            priority: 100.0},
-    {name: 'Follow',    topicText: 'Follow me.',                            priority: 100.0},
-    {name: 'Favor',     topicText: 'I need you to do something.',           priority: 50.0},
-    {name: 'FavorMore', topicText: '',                                      priority: 50.0},
-    {name: 'Trade',     topicText: 'I need to trade some things with you.', priority: 10.0}
-  ];
-    
-  branches.forEach(branch => {
-    branch.type = 'Top-Level';
-    if (branch.name === 'FavorMore') {
-      branch.type = 'Blocking';
-    }
-    createBranch(plugin, voice, branch);
-  });
-
-}
-
-function createQuest(plugin, voice) {
-  let editorId = getQuestId(voice);
-  
-  if (xelib.HasElement(plugin, 'QUST\\' + editorId)) {
-    zedit.log('Skipping Quest creation: ' + editorId + ' already exists');
-    return;
-  }
-  
-  zedit.log('Creating a new Quest...');
-  let questGroup = xelib.GetElement(plugin, 'QUST');
-  let questElement = maybeAddElementWithEditorId(questGroup, editorId);
-  xelib.Release(questGroup);
-  xelib.WithHandle(questElement, function () {
-    xelib.Release(xelib.AddElementValue(questElement, 'FULL', voice.fullName));
-    xelib.Release(xelib.AddElement(questElement, 'NEXT'));
-    xelib.Release(xelib.AddElement(questElement, 'ANAM'));
-    xelib.Release(xelib.AddElement(questElement, 'DNAM'));
-    xelib.SetEnabledFlags(questElement, 'DNAM\\Flags', ['Start Game Enabled', 'Allow repeated stages', 'Unknown 5']);
-    xelib.SetUIntValue(questElement, 'DNAM\\Priority', 50);
-    xelib.SetUIntValue(questElement, 'DNAM\\Form\ Version', 255);
-  });
-}
-
-function createVoiceType(plugin, voice) {
-  let editorId = voice.fullName;
-
-  if (xelib.HasElement(plugin, 'VTYP\\' + editorId)) {
-    zedit.log('Skipping Voice Type creation: ' + editorId + ' already exists');
-    return;
-  }
-  
-  zedit.log('Creating a new Voice Type...');
-  let voiceTypeGroup = xelib.GetElement(plugin, 'VTYP');
-  let newVoiceElement = maybeAddElementWithEditorId(voiceTypeGroup, editorId);
-  xelib.Release(voiceTypeGroup);
-  let newVoiceRecord = getRecord(newVoiceElement);
-  xelib.SetFlag(newVoiceRecord, 'DNAM', 'Female', (voice.sex === 'Female'));
-  xelib.Release(newVoiceRecord);
-  xelib.Release(newVoiceElement);
-  
-  // Add it to to the FormID List.
-  let formIdsElement = xelib.GetElement(plugin, 'FLST\\VAS_VoiceTypes\\LNAM');
-  xelib.Release(xelib.AddElementValue(formIdsElement, '.', editorId));
-  xelib.Release(formIdsElement);
-}
-
-function addTopics(plugin, voice) {
-  zedit.log('Adding dialogue topics...');
-  
-  const topics = [
-    {name: 'Hello'},
-    {name: 'Goodbye'},
-    {name: 'Shared'},
-    {name: 'Idle'},
-    {name: 'Collide'},
-    {name: 'CombatToNormal'},
-    {name: 'NormalToCombat'},
-    {name: 'Agree'},
-    {name: 'Refuse'},
-    {name: 'ExitFavor'},
-    {name: 'Attack'},
-    {name: 'PowerAttack'},
-    {name: 'Block'},
-    {name: 'Hit'},
-    {name: 'Taunt'},
-    {name: 'Bleedout'},
-  ];
-  
-  topics.forEach(topic => {
-    createTopic(plugin, voice, topic);
-  });
-}
-
-function createTopic(plugin, voice, topic) {
-  let editorId = getTopicId(voice, topic);
-  
-  if (xelib.HasElement(plugin, 'DIAL\\' + editorId)) {
-    zedit.log('Skipping Topic creation: ' + editorId + ' already exists');
-    return;
-  }
-  
-  let dialogTopicGroup = xelib.GetElement(plugin, 'DIAL');
-  let dialogElement = maybeAddElementWithEditorId(dialogTopicGroup, editorId);
-  xelib.Release(dialogTopicGroup); 
-  xelib.withHandle(dialogELement, function() {
-    // TODO
-  });
-  
-  // This should be VERY close to the other topics. What will differ is the population of said topic.
-  // At this point I might just start loading in branch and topic settings from JSON files, which
-  // would be more useful down the road for creating more generic quest dialogues.
-}
 
 function addResponses(plugin, voice, topic) {
   zedit.log('Adding dialogue responses...');
 }
 
-function getBranchId(voice, branch) {
-  return voice.fullName + '_Branch_' + branch.name;
-}
-
-function getQuestId(voice) {
-  return voice.fullName + '_Dialogue';
-}
-
-function getTopicId(voice, topic) {
-  return voice.fullName + '_Topic_' + topic.name;
-}
-
-function getRecord(element) {
-  let formId = xelib.GetFormID(element, false, false);
-  return xelib.GetRecord(0, formId); // load-order-based record lookup
-}
-
-// TODO - I can probably eliminate this function.
-function findElementByEditorId(rootElement, searchId) {
-  return xelib.GetElements(rootElement, '', false).find(element => {
-    let formId = xelib.GetFormID(element, false, false);
-    let record = xelib.GetRecord(0, formId);
-    let editorId = xelib.EditorID(record);
-    xelib.Release(record);
-    return (editorId === searchId);
+function createVoiceType(plugin, voice) {
+  let editorId = voice.fullName;
+  if (xelib.HasElement(plugin, 'VTYP\\' + editorId)) {
+    zedit.log('Skipping Voice Type creation: ' + editorId + ' already exists');
+    return;
+  }
+  
+  zedit.log('Creating a new Voice Type "' + editorId + '"...');
+  let voiceTypeGroup = xelib.GetElement(plugin, 'VTYP');
+  let element = maybeAddElementWithEditorId(voiceTypeGroup, editorId);
+  xelib.Release(voiceTypeGroup);
+  xelib.WithHandle(element, function() {
+    xelib.SetFlag(element, 'DNAM', 'Female', (voice.sex === 'Female'));
+  });
+  
+  // Add it to to the FormID List.
+  let formIdsElement = xelib.GetElement(plugin, 'FLST\\VAS_VoiceTypes\\LNAM');
+  xelib.WithHandle(formIdsElement, function() {
+    xelib.Release(xelib.AddElementValue(formIdsElement, '.', editorId));
   });
 }
+
+function createQuest(plugin, quest) {
+  if (xelib.HasElement(plugin, 'QUST\\' + quest.editorId)) {
+    zedit.log('Skipping Quest creation: ' + quest.editorId + ' already exists');
+    return;
+  }
+  
+  zedit.log('Creating a new Quest...');
+  let questGroup = xelib.GetElement(plugin, 'QUST');
+  let element = maybeAddElementWithEditorId(questGroup, quest.editorId);
+  xelib.Release(questGroup);
+  xelib.WithHandle(element, function () {
+    maybeAddElementValue(element, 'FULL', quest.editorId);
+    xelib.Release(maybeAddElement(element, 'NEXT'));
+    xelib.Release(maybeAddElement(element, 'ANAM'));
+    xelib.Release(maybeAddElement(element, 'DNAM'));
+    xelib.SetEnabledFlags(element, 'DNAM\\Flags', ['Start Game Enabled', 'Allow repeated stages', 'Unknown 5']);
+    xelib.SetUIntValue(element, 'DNAM\\Priority', 50);
+    xelib.SetUIntValue(element, 'DNAM\\Form\ Version', 255);
+  });
+}
+
+function createTopic(plugin, quest, topic) {
+  if (xelib.HasElement(plugin, 'DIAL\\' + topic.editorId)) {
+    zedit.log('Skipping Topic creation: ' + topic.editorId + ' already exists');
+    return;
+  }
+  
+  zedit.log('Creating a new Topic "' + topic.editorId + '"...');
+  let dialogTopicGroup = xelib.GetElement(plugin, 'DIAL');
+  let element = maybeAddElementWithEditorId(dialogTopicGroup, topic.editorId);
+  xelib.Release(dialogTopicGroup); 
+  xelib.WithHandle(element, function() {
+    if ('text' in topic) maybeAddElementValue(element, 'FULL', topic.text);
+    maybeAddElementValue(element, 'PNAM', ('priority' in topic ? topic.priority : 50.0), 'Float');
+    maybeAddElementValue(element, 'QNAM', quest.editorId);
+    let dataElement = maybeAddElement(element, 'DATA');
+    xelib.WithHandle(dataElement, function() {
+      maybeAddElementValue(dataElement, 'Category', topic.category);
+      maybeAddElementValue(dataElement, 'Subtype', topic.subtype);
+    });
+    maybeAddElementValue(element, 'SNAM', topic.subtypeName);
+    xelib.Release(maybeAddElement(element, 'TIFC'));
+  });
+}
+
+function createBranch(plugin, quest, branch, topics) {
+  if (xelib.HasElement(plugin, 'DLBR\\' + branch.editorId)) {
+    zedit.log('Skipping Branch creation: ' + branch.editorId + ' already exists');
+    return;
+  }
+
+  zedit.log('Creating a new Branch "' + branch.editorId + '"...');
+  let startingTopic = topics[branch.startingTopic];
+  let dialogBranchGroup = xelib.GetElement(plugin, 'DLBR');
+  let element = maybeAddElementWithEditorId(dialogBranchGroup, branch.editorId);
+  xelib.Release(dialogBranchGroup);
+  xelib.WithHandle(element, function() {
+    maybeAddElementValue(element, 'QNAM', quest.editorId);
+    maybeAddElementValue(element, 'TNAM', 0, 'UInt');
+    let dnamElement = maybeAddElement(element, 'DNAM');
+    xelib.WithHandle(dnamElement, function() {
+       xelib.SetEnabledFlags(dnamElement, '', [branch.type]);
+    });
+    maybeAddElementValue(element, 'SNAM', startingTopic.editorId);
+  });
+
+  // We need to update the starting topic to point back to this branch.
+  let topicElement = xelib.GetElement(plugin, 'DIAL\\' + startingTopic.editorId);
+  xelib.WithHandle(topicElement, function() {
+    maybeAddElementValue(topicElement, 'BNAM', branch.editorId);
+  });
+}
+
+/**
+ * ----------------------------------------------------------------------------
+ *                              HELPER FUNCTIONS 
+ * ----------------------------------------------------------------------------
+ */
 
 function logChildElements(rootElement) {
   xelib.GetElements(rootElement, '', false).forEach(element => {
