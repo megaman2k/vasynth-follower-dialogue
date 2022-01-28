@@ -112,7 +112,6 @@ xelib.WithHandle(plugin, function() {
   infos.forEach(info => createInfo(plugin, info));
 });
 
-
 function createVoiceType(plugin, voice) {
   let editorId = voice.fullName;
   if (xelib.HasElement(plugin, 'VTYP\\' + editorId)) {
@@ -267,14 +266,30 @@ function createResponse(infoElement, info, responseIndex) {
  * ----------------------------------------------------------------------------
  */
 
+/**
+ * Gets the full path to the custom audio that will be used for a response in an INFO.
+ * 
+ * @param {*} info The object describing the INFO's content.
+ * @param {*} response The object describing the response's content.
+ * @returns The full path to the input .fuz file that will be used for the response.
+ */
 function getAudioSrcPath(info, response) {
   // Example:
   //   D:\my\vasynth-outputs\f4_cait\
   //     Hello\
   //       Hey there friend.fuz
-  return [audioInRoot, info.topic, response.audioIn].join('\\');
+  return [audioInRoot, info.topic, response.audioIn + '.fuz'].join('\\');
 }
 
+/**
+ * Gets the full path to the .fuz file associated with a specific response in an INFO.
+ * 
+ * @param {*} info The object describing the INFO's content.
+ * @param {*} infoElement The xelib element for the INFO.
+ * @param {*} responseNumber The number of the response in its INFO(1-based). Usually this is 1,
+ *   but an INFO may have multiple responses.
+ * @returns The full path to the response's .fuz file.
+ */
 function getAudioDestPath(info, infoElement, responseNumber) {
   // Example:
   //   C:\Program Files\Steam\steamapps\common\Skyrim Special Edition\Data\
@@ -291,6 +306,15 @@ function getAudioDestPath(info, infoElement, responseNumber) {
   ].join('\\');
 }
 
+/**
+ * Gets the filename for a .fuz file associated with a specific response in an INFO.
+ * 
+ * @param {*} info The object describing the INFO's contents.
+ * @param {*} infoElement The xelib element for the INFO.
+ * @param {*} responseNumber The number of the response in its INFO(1-based). Usually this is 1,
+ *   but an INFO may have multiple responses.
+ * @returns The filename for the response's .fuz file.
+ */
 function getVoiceFileName(info, infoElement, responseNumber) {
   return [
     quest.editorId.substring(0, 10),                        // First 10 chars of the Quest's EditorID
@@ -300,6 +324,9 @@ function getVoiceFileName(info, infoElement, responseNumber) {
   ].join('_') + '.fuz';                                     // Separated by underscores, plus the extension.
 }
 
+/**
+ * Logs some info about an element for debugging purposes.
+ */
 function logElement(element) {
   zedit.log('============================');
   zedit.log('Name: ' + xelib.Name(element));
@@ -317,6 +344,9 @@ function logElement(element) {
   zedit.log('============================');
 }
 
+/**
+ * Logs the long path of all child elements of the input element.
+ */
 function logChildElements(rootElement) {
   xelib.GetElements(rootElement, '', false).forEach(element => {
     zedit.log(xelib.LongPath(element));
@@ -325,6 +355,13 @@ function logChildElements(rootElement) {
 
 // This adds an element to a group, then sets that element's EditorID.
 // If an element already exists with that EditorID, it will be returned.
+/**
+ * Adds an child element to another (if it does not exist) and sets its EditorID.
+ * 
+ * @param {*} parent The parent element.
+ * @param {*} editorId The EditorID of the child element.
+ * @returns The handle to the child element with an EditorID.
+ */
 function maybeAddElementWithEditorId(parent, editorId) {
   if (xelib.HasElement(parent, editorId)) {
     return xelib.GetElement(parent, editorId);
@@ -334,8 +371,13 @@ function maybeAddElementWithEditorId(parent, editorId) {
   return element;
 }
 
-// This adds an element to another, then returns it.
-// If the element already exists with that name, it will be returned.
+/**
+ * Adds a child element to another (if it does not exist), then returns it.
+ * 
+ * @param {*} parent The parent element.
+ * @param {*} elementName The name of the child element.
+ * @returns The handle to the child element.
+ */
 function maybeAddElement(parent, elementName) {
   if (xelib.HasElement(parent, elementName)) {
     return xelib.GetElement(parent, elementName);
@@ -343,8 +385,15 @@ function maybeAddElement(parent, elementName) {
   return xelib.AddElement(parent, elementName);
 }
 
-// This adds an element to another, if it does not already exist.
-// The added/fetched element's value is then set based on the provided type.
+// TODO - The variable values can probably just be deleted in favor of using strings.
+/**
+ * Adds a child element (if necessary) and sets a value on it.
+ * 
+ * @param {*} parent The parent element where a child is being added.
+ * @param {*} elementName The name of the child element.
+ * @param {*} value The value to assign to the child element.
+ * @param {*} type The type of the child element.
+ */
 function maybeAddElementValue(parent, elementName, value, type) {
   let element = maybeAddElement(parent, elementName);
   xelib.WithHandle(element, function() {
