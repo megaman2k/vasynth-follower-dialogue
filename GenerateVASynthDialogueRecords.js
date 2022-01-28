@@ -105,10 +105,10 @@ const infos = [
 
 let plugin = xelib.FileByName(pluginName);
 xelib.WithHandle(plugin, function() {
-  // createVoiceType(plugin, voice);
-  // createQuest(plugin, quest);
-  // Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
-  // Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
+  createVoiceType(plugin, voice);
+  createQuest(plugin, quest);
+  Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
+  Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
   infos.forEach(info => createInfo(plugin, info));
 });
 
