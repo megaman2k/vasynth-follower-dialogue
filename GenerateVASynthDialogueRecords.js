@@ -50,28 +50,60 @@ const topics = {
 Object.keys(topics).forEach(key => 
   topics[key].editorId = voice.fullName + '_Topic_' + topics[key].name);
 
+const conditionTypes = {
+  equals: '10000000',
+  notEquals: '00000000',
+};
+
 const commonConditions = {
   isNewVoice: {
     comparisonValue: '1.0',
     function: 'GetIsVoiceType',
     parameter1: voice.fullName,
-    type: '10000000'
-  }
+    type: 'equals'
+  },
+  isntFollowing: {
+    comparisonValue: '1.0',
+    function: 'GetInFaction',
+    parameter1: 'CurrentFollowerFaction',
+    type: 'notEquals'
+  },
 };
+
+const audioInRoot = 'B:\\games\\skyrim\\generated\\voice\\f4_cait';
+const audioOutPath = 'B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth\\sound\\voice\\' + pluginName + '\\' + voice.fullName;
+function getVoiceFilename(infoElement, responseNumber) {
+  // Not sure how the eff this is structured. Looks like truncated Quest + truncated Topic.
+  return 'VAS_Female_VAS_Female_FO4__00' + xelib.GetHexFormID(infoElement, false, true) + '_' + responseNumber.toString() + '.fuz';
+}
 
 // Infos can be shared or not. Shared ones have editorIds.
 // Infos can use a shared response data or not. Those that do reference the above editorIds. The others have "Response" objects.
 const infos = [
-  // shared
-  {topic: 'Shared', editorId: voice.fullName + '_Shared_Yes', conditions: [commonConditions.isNewVoice], responses: [
-    {text: 'Yes.', emotionType: 'Neutral', emotionValue: 50}
-  ]},
-  // non-shared, uses shared response
-  {topic: 'Agree', flags: ['Random'], conditions: [commonConditions.isNewVoice], responseData: voice.fullName + '_Shared_Yes'},
-  // non-shared, uses own response
-  {topic: 'Agree', flags: ['Random', 'Goodbye'], conditions: [commonConditions.isNewVoice], responses: [
-     {text: 'Alright. Fine.', emotionType: 'Neutral', emotionValue: 50}
-  ]}
+  // // shared
+  // {topic: 'Shared', editorId: voice.fullName + '_Shared_Yes', conditions: [commonConditions.isNewVoice], responses: [
+  //   {text: 'Yes.', emotionType: 'Neutral', emotionValue: 50}
+  // ]},
+  // // non-shared, uses shared response
+  // {topic: 'Agree', flags: ['Random'], conditions: [commonConditions.isNewVoice], responseData: voice.fullName + '_Shared_Yes'},
+  // // non-shared, uses own response
+  // {topic: 'Agree', flags: ['Random', 'Goodbye'], conditions: [commonConditions.isNewVoice], responses: [
+  //    {text: 'Alright. Fine.', emotionType: 'Neutral', emotionValue: 50}
+  // ]},
+
+  // "You're back" style greetings.
+  // 'GetActorValue' 'WaitingForPlayer' == 1.0
+
+  // Other greetings/universal.
+  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.isntFollowing], responses: [
+     {text: 'Greetings.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Greetings.fuz'}]},
+  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.isntFollowing], responses: [
+     {text: 'Hey there.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Hey there.fuz'}]},
+
+  // "Stranger" greetings.
+
+  // "Friend" greetings.
+
 ];
 
 let plugin = xelib.FileByName(pluginName);
@@ -90,7 +122,7 @@ function createInfo(plugin, topics, info) {
   if ('editorId' in info) maybeAddElementValue(element, 'EDID', info.editorId);
   if ('conditions' in info) info.conditions.forEach(condition => createCondition(element, condition));
   let i = 0;
-  if ('responses' in info) info.responses.forEach(response => createResponse(element, response, i++));
+  if ('responses' in info) info.responses.forEach(response => createResponse(element, response, i++, info));
   if ('flags' in info) {
     let f = xelib.AddElement(element, 'ENAM');
     xelib.SetEnabledFlags(f, 'Flags', info.flags);
@@ -116,15 +148,23 @@ function createCondition(infoElement, condition) {
   let element = xelib.AddArrayItem(infoElement, 'Conditions', 'CTDA');
   xelib.SetValue(element, 'CTDA\\Function', condition.function);
   xelib.SetValue(element, 'CTDA\\Parameter #1', condition.parameter1);
-  xelib.SetValue(element, 'CTDA\\Type', condition.type);
+  xelib.SetValue(element, 'CTDA\\Type', conditionTypes[condition.type]);
   xelib.SetValue(element, 'CTDA\\Comparison Value', condition.comparisonValue);
 }
 
-function createResponse(infoElement, response, i) {
+function createResponse(infoElement, response, responseIndex, info) {
+  let responseNumber = responseIndex + 1;
   let element = xelib.AddArrayItem(infoElement, 'Responses');
   xelib.SetValue(element, 'TRDT\\Emotion Type', response.emotionType);
   xelib.SetValue(element, 'TRDT\\Emotion Value', response.emotionValue.toString());
-  xelib.AddElementValue(infoElement, 'Responses\\[' + i.toString() + ']\\NAM1', response.text);
+  xelib.SetValue(element, 'TRDT\\Response number', responseNumber.toString());
+  xelib.AddElementValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
+  logElement(infoElement);
+
+  let audioSrc = audioInRoot + '\\' + info.topic + '\\' + response.audioIn;
+  let audioDest = audioOutPath + '\\' + getVoiceFilename(infoElement, responseNumber);
+  zedit.log('DEBUG: Copying "' + audioSrc + '" to "' + audioDest + '"');
+  fh.jetpack.copy(audioSrc, audioDest, { overwrite: true });
 }
 
 function createVoiceType(plugin, voice) {
@@ -237,6 +277,9 @@ function logElement(element) {
   zedit.log('LongPath: ' + xelib.LongPath(element));
   zedit.log('LocalPath: ' + xelib.LocalPath(element));
   zedit.log('Signature: ' + xelib.Signature(element));
+  zedit.log('FormID (default): ' + xelib.GetHexFormID(element, false, false));
+  zedit.log('FormID (native): ' + xelib.GetHexFormID(element, true, false));
+  zedit.log('FormID (local): ' + xelib.GetHexFormID(element, false, true));
   zedit.log('Child Elements:');
   logChildElements(element);
   zedit.log('============================');
