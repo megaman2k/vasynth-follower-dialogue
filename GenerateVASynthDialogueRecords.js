@@ -71,10 +71,39 @@ const commonConditions = {
 };
 
 const audioInRoot = 'B:\\games\\skyrim\\generated\\voice\\f4_cait';
-const audioOutPath = 'B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth\\sound\\voice\\' + pluginName + '\\' + voice.fullName;
-function getVoiceFilename(infoElement, responseNumber) {
-  // Not sure how the eff this is structured. Looks like truncated Quest + truncated Topic.
-  return 'VAS_Female_VAS_Female_FO4__00' + xelib.GetHexFormID(infoElement, false, true) + '_' + responseNumber.toString() + '.fuz';
+const dataPath = 'B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth';
+
+function getAudioSrcPath(info, response) {
+  // Example:
+  //   D:\my\vasynth-outputs\f4_cait\
+  //     Hello\
+  //       Hey there friend.fuz
+  return [audioInRoot, info.topic, response.audioIn].join('\\');
+}
+
+function getAudioDestPath(info, infoElement, responseNumber) {
+  // Example:
+  //   C:\Program Files\Steam\steamapps\common\Skyrim Special Edition\Data\
+  //     sound\voice\
+  //       VASynth_Voices.esp\
+  //         VAS_Female_FO4_Cait\
+  //           voiceFileName
+  return [
+    dataPath,
+    'sound\\voice',
+    pluginName,
+    voice.fullName,
+    getVoiceFileName(info, infoElement, responseNumber)
+  ].join('\\');
+}
+
+function getVoiceFileName(info, infoElement, responseNumber) {
+  return [
+    quest.editorId.substring(0, 10),                        // First 10 chars of the Quest's EditorID
+    topics[info.topic].editorId.substring(0, 15),           // First 15 chars of the Topic's EditorID
+    '00' + xelib.GetHexFormID(infoElement, false, true),    // FormID for the INFO (starting with 00)
+    responseNumber.toString()                               // The response number for the audio in the INFO (1-indexed)
+  ].join('_') + '.fuz';                                     // Separated by underscores, plus the extension.
 }
 
 // Infos can be shared or not. Shared ones have editorIds.
@@ -112,17 +141,17 @@ xelib.WithHandle(plugin, function() {
   // createQuest(plugin, quest);
   // Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
   // Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
-  infos.forEach(info => createInfo(plugin, topics, info));
+  infos.forEach(info => createInfo(plugin, info));
 });
 
-function createInfo(plugin, topics, info) {
+function createInfo(plugin, info) {
   let topic = topics[info.topic];
   let element = xelib.AddElement(plugin, 'DIAL\\' + topic.editorId + '\\INFO\\');
 
   if ('editorId' in info) maybeAddElementValue(element, 'EDID', info.editorId);
   if ('conditions' in info) info.conditions.forEach(condition => createCondition(element, condition));
   let i = 0;
-  if ('responses' in info) info.responses.forEach(response => createResponse(element, response, i++, info));
+  if ('responses' in info) info.responses.forEach(response => createResponse(element, info, i++));
   if ('flags' in info) {
     let f = xelib.AddElement(element, 'ENAM');
     xelib.SetEnabledFlags(f, 'Flags', info.flags);
@@ -152,7 +181,8 @@ function createCondition(infoElement, condition) {
   xelib.SetValue(element, 'CTDA\\Comparison Value', condition.comparisonValue);
 }
 
-function createResponse(infoElement, response, responseIndex, info) {
+function createResponse(infoElement, info, responseIndex) {
+  let response = info.responses[responseIndex];
   let responseNumber = responseIndex + 1;
   let element = xelib.AddArrayItem(infoElement, 'Responses');
   xelib.SetValue(element, 'TRDT\\Emotion Type', response.emotionType);
@@ -161,8 +191,8 @@ function createResponse(infoElement, response, responseIndex, info) {
   xelib.AddElementValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
   logElement(infoElement);
 
-  let audioSrc = audioInRoot + '\\' + info.topic + '\\' + response.audioIn;
-  let audioDest = audioOutPath + '\\' + getVoiceFilename(infoElement, responseNumber);
+  let audioSrc = getAudioSrcPath(info, response);
+  let audioDest = getAudioDestPath(info, infoElement, responseNumber);
   zedit.log('DEBUG: Copying "' + audioSrc + '" to "' + audioDest + '"');
   fh.jetpack.copy(audioSrc, audioDest, { overwrite: true });
 }
