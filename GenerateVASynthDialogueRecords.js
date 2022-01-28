@@ -73,38 +73,6 @@ const commonConditions = {
 const audioInRoot = 'B:\\games\\skyrim\\generated\\voice\\f4_cait';
 const dataPath = 'B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth';
 
-function getAudioSrcPath(info, response) {
-  // Example:
-  //   D:\my\vasynth-outputs\f4_cait\
-  //     Hello\
-  //       Hey there friend.fuz
-  return [audioInRoot, info.topic, response.audioIn].join('\\');
-}
-
-function getAudioDestPath(info, infoElement, responseNumber) {
-  // Example:
-  //   C:\Program Files\Steam\steamapps\common\Skyrim Special Edition\Data\
-  //     sound\voice\
-  //       VASynth_Voices.esp\
-  //         VAS_Female_FO4_Cait\
-  //           voiceFileName
-  return [
-    dataPath,
-    'sound\\voice',
-    pluginName,
-    voice.fullName,
-    getVoiceFileName(info, infoElement, responseNumber)
-  ].join('\\');
-}
-
-function getVoiceFileName(info, infoElement, responseNumber) {
-  return [
-    quest.editorId.substring(0, 10),                        // First 10 chars of the Quest's EditorID
-    topics[info.topic].editorId.substring(0, 15),           // First 15 chars of the Topic's EditorID
-    '00' + xelib.GetHexFormID(infoElement, false, true),    // FormID for the INFO (starting with 00)
-    responseNumber.toString()                               // The response number for the audio in the INFO (1-indexed)
-  ].join('_') + '.fuz';                                     // Separated by underscores, plus the extension.
-}
 
 // Infos can be shared or not. Shared ones have editorIds.
 // Infos can use a shared response data or not. Those that do reference the above editorIds. The others have "Response" objects.
@@ -144,58 +112,6 @@ xelib.WithHandle(plugin, function() {
   infos.forEach(info => createInfo(plugin, info));
 });
 
-function createInfo(plugin, info) {
-  let topic = topics[info.topic];
-  let element = xelib.AddElement(plugin, 'DIAL\\' + topic.editorId + '\\INFO\\');
-
-  if ('editorId' in info) maybeAddElementValue(element, 'EDID', info.editorId);
-  if ('conditions' in info) info.conditions.forEach(condition => createCondition(element, condition));
-  let i = 0;
-  if ('responses' in info) info.responses.forEach(response => createResponse(element, info, i++));
-  if ('flags' in info) {
-    let f = xelib.AddElement(element, 'ENAM');
-    xelib.SetEnabledFlags(f, 'Flags', info.flags);
-  }
-  if ('responseData' in info) xelib.AddElementValue(element, 'DNAM', info.responseData);
-
-  // Mandatory elements/values:
-  xelib.AddElement(element, 'CNAM'); // Favor Level: defaults to "None"
-  xelib.AddElement(element, 'PNAM'); // Previous INFO: defaults to "NULL"
-  // We need to find the previous response in this topic and set PNAM to it.
-  let infoGroup = xelib.GetElement(plugin, 'DIAL\\' + topic.editorId + '\\Child Group');
-  xelib.WithHandle(infoGroup, function() {
-    let count = xelib.ElementCount(infoGroup);
-    let previousInfoIndex = count - 2;
-    if (previousInfoIndex >= 0) {
-      let previousInfo = xelib.GetElements(infoGroup)[previousInfoIndex];
-      xelib.SetValue(element, 'PNAM', xelib.GetHexFormID(previousInfo));
-    }
-  });
-}
-
-function createCondition(infoElement, condition) {
-  let element = xelib.AddArrayItem(infoElement, 'Conditions', 'CTDA');
-  xelib.SetValue(element, 'CTDA\\Function', condition.function);
-  xelib.SetValue(element, 'CTDA\\Parameter #1', condition.parameter1);
-  xelib.SetValue(element, 'CTDA\\Type', conditionTypes[condition.type]);
-  xelib.SetValue(element, 'CTDA\\Comparison Value', condition.comparisonValue);
-}
-
-function createResponse(infoElement, info, responseIndex) {
-  let response = info.responses[responseIndex];
-  let responseNumber = responseIndex + 1;
-  let element = xelib.AddArrayItem(infoElement, 'Responses');
-  xelib.SetValue(element, 'TRDT\\Emotion Type', response.emotionType);
-  xelib.SetValue(element, 'TRDT\\Emotion Value', response.emotionValue.toString());
-  xelib.SetValue(element, 'TRDT\\Response number', responseNumber.toString());
-  xelib.AddElementValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
-  logElement(infoElement);
-
-  let audioSrc = getAudioSrcPath(info, response);
-  let audioDest = getAudioDestPath(info, infoElement, responseNumber);
-  zedit.log('DEBUG: Copying "' + audioSrc + '" to "' + audioDest + '"');
-  fh.jetpack.copy(audioSrc, audioDest, { overwrite: true });
-}
 
 function createVoiceType(plugin, voice) {
   let editorId = voice.fullName;
@@ -292,11 +208,97 @@ function createBranch(plugin, quest, branch, topics) {
   });
 }
 
+function createInfo(plugin, info) {
+  let topic = topics[info.topic];
+  let element = xelib.AddElement(plugin, 'DIAL\\' + topic.editorId + '\\INFO\\');
+
+  if ('editorId' in info) maybeAddElementValue(element, 'EDID', info.editorId);
+  if ('conditions' in info) info.conditions.forEach(condition => createCondition(element, condition));
+  let i = 0;
+  if ('responses' in info) info.responses.forEach(response => createResponse(element, info, i++));
+  if ('flags' in info) {
+    let f = xelib.AddElement(element, 'ENAM');
+    xelib.SetEnabledFlags(f, 'Flags', info.flags);
+  }
+  if ('responseData' in info) xelib.AddElementValue(element, 'DNAM', info.responseData);
+
+  // Mandatory elements/values:
+  xelib.AddElement(element, 'CNAM'); // Favor Level: defaults to "None"
+  xelib.AddElement(element, 'PNAM'); // Previous INFO: defaults to "NULL"
+  // We need to find the previous response in this topic and set PNAM to it.
+  let infoGroup = xelib.GetElement(plugin, 'DIAL\\' + topic.editorId + '\\Child Group');
+  xelib.WithHandle(infoGroup, function() {
+    let count = xelib.ElementCount(infoGroup);
+    let previousInfoIndex = count - 2;
+    if (previousInfoIndex >= 0) {
+      let previousInfo = xelib.GetElements(infoGroup)[previousInfoIndex];
+      xelib.SetValue(element, 'PNAM', xelib.GetHexFormID(previousInfo));
+    }
+  });
+}
+
+function createCondition(infoElement, condition) {
+  let element = xelib.AddArrayItem(infoElement, 'Conditions', 'CTDA');
+  xelib.SetValue(element, 'CTDA\\Function', condition.function);
+  xelib.SetValue(element, 'CTDA\\Parameter #1', condition.parameter1);
+  xelib.SetValue(element, 'CTDA\\Type', conditionTypes[condition.type]);
+  xelib.SetValue(element, 'CTDA\\Comparison Value', condition.comparisonValue);
+}
+
+function createResponse(infoElement, info, responseIndex) {
+  let response = info.responses[responseIndex];
+  let responseNumber = responseIndex + 1;
+  let element = xelib.AddArrayItem(infoElement, 'Responses');
+  xelib.SetValue(element, 'TRDT\\Emotion Type', response.emotionType);
+  xelib.SetValue(element, 'TRDT\\Emotion Value', response.emotionValue.toString());
+  xelib.SetValue(element, 'TRDT\\Response number', responseNumber.toString());
+  xelib.AddElementValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
+  logElement(infoElement);
+
+  let audioSrc = getAudioSrcPath(info, response);
+  let audioDest = getAudioDestPath(info, infoElement, responseNumber);
+  zedit.log('DEBUG: Copying "' + audioSrc + '" to "' + audioDest + '"');
+  fh.jetpack.copy(audioSrc, audioDest, { overwrite: true });
+}
+
 /**
  * ----------------------------------------------------------------------------
  *                              HELPER FUNCTIONS 
  * ----------------------------------------------------------------------------
  */
+
+function getAudioSrcPath(info, response) {
+  // Example:
+  //   D:\my\vasynth-outputs\f4_cait\
+  //     Hello\
+  //       Hey there friend.fuz
+  return [audioInRoot, info.topic, response.audioIn].join('\\');
+}
+
+function getAudioDestPath(info, infoElement, responseNumber) {
+  // Example:
+  //   C:\Program Files\Steam\steamapps\common\Skyrim Special Edition\Data\
+  //     sound\voice\
+  //       VASynth_Voices.esp\
+  //         VAS_Female_FO4_Cait\
+  //           voiceFileName
+  return [
+    dataPath,
+    'sound\\voice',
+    pluginName,
+    voice.fullName,
+    getVoiceFileName(info, infoElement, responseNumber)
+  ].join('\\');
+}
+
+function getVoiceFileName(info, infoElement, responseNumber) {
+  return [
+    quest.editorId.substring(0, 10),                        // First 10 chars of the Quest's EditorID
+    topics[info.topic].editorId.substring(0, 15),           // First 15 chars of the Topic's EditorID
+    '00' + xelib.GetHexFormID(infoElement, false, true),    // FormID for the INFO (starting with 00)
+    responseNumber.toString()                               // The response number for the audio in the INFO (1-indexed)
+  ].join('_') + '.fuz';                                     // Separated by underscores, plus the extension.
+}
 
 function logElement(element) {
   zedit.log('============================');
