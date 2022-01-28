@@ -1,0 +1,267 @@
+{
+  "config": {
+    "plugin": "VASynth_Voices.esp",
+	"audioInputPath": "B:\\games\\skyrim\\generated\\voice\\f4_cait",
+	"dataPath": "B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth"
+  },
+  "voice": {
+    "sex": "Female",
+	"game": "FO4",
+	"name": "Cait"
+  },
+  
+  "branches": {
+    "Recruit":   {"name": "Recruit",   "type": "Top-Level", "startingTopic": "Recruit"},
+	"Dismiss":   {"name": "Dismiss",   "type": "Top-Level", "startingTopic": "Dismiss"},
+	"Wait":      {"name": "Wait",      "type": "Top-Level", "startingTopic": "Wait"},
+	"Follow":    {"name": "Follow",    "type": "Top-Level", "startingTopic": "Follow"},
+	"Favor":     {"name": "Favor",     "type": "Top-Level", "startingTopic": "Favor"},
+	"FavorMore": {"name": "FavorMore", "type": "Blocking",  "startingTopic": "FavorMore"},
+	"Trade":     {"name": "Trade",     "type": "Top-Level", "startingTopic": "Trade"}
+  },
+  
+  "topics": {
+    "Recruit":        {"name": "Recruit",   "priority": 10.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Follow me. I need your help."},
+    "Dismiss":        {"name": "Dismiss",   "priority": 0.0,   "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "It's time for us to part ways"},
+    "Wait":           {"name": "Wait",      "priority": 100.0, "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Wait here."},
+    "Follow":         {"name": "Follow",    "priority": 100.0, "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Follow me."},
+    "Favor":          {"name": "Favor",     "priority": 50.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "I need you to do something."},
+    "FavorMore":      {"name": "FavorMore", "priority": 50.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": ""},
+    "Trade":          {"name": "Trade",     "priority": 10.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "I need to trade some things with you."},
+    "Hello":          {"name": "Hello",                        "category": "Miscellaneous", "subtype": "Hello",                 "subtypeName": "HELO"},
+    "Goodbye":        {"name": "Goodbye",                      "category": "Miscellaneous", "subtype": "GoodBye",               "subtypeName": "GBYE"},
+    "Shared":         {"name": "Shared",                       "category": "Miscellaneous", "subtype": "SharedInfo",            "subtypeName": "IDAT"},
+    "Idle":           {"name": "Idle",                         "category": "Miscellaneous", "subtype": "Idle",                  "subtypeName": "IDLE"},
+    "Collide":        {"name": "Collide",                      "category": "Miscellaneous", "subtype": "ActorCollidewithActor", "subtypeName": "ACAC"},
+    "CombatToNormal": {"name": "CombatToNormal",               "category": "Detection",     "subtype": "CombatToNormal",        "subtypeName": "COTN"},
+    "NormalToCombat": {"name": "NormalToCombat",               "category": "Detection",     "subtype": "NormalToCombat",        "subtypeName": "NOTC"},
+    "Agree":          {"name": "Agree",                        "category": "Favors",        "subtype": "Agree",                 "subtypeName": "AGRE"},
+    "Refuse":         {"name": "Refuse",                       "category": "Favors",        "subtype": "Refuse",                "subtypeName": "REFU"},
+    "ExitFavor":      {"name": "ExitFavor",                    "category": "Favors",        "subtype": "ExitFavorState",        "subtypeName": "FEXT"},
+    "Attack":         {"name": "Attack",                       "category": "Combat",        "subtype": "Attack",                "subtypeName": "ATCK"},
+    "PowerAttack":    {"name": "PowerAttack",                  "category": "Combat",        "subtype": "PowerAttack",           "subtypeName": "POAT"},
+    "Block":          {"name": "Block",                        "category": "Combat",        "subtype": "Block",                 "subtypeName": "BLOC"},
+    "Hit":            {"name": "Hit",                          "category": "Combat",        "subtype": "Hit",                   "subtypeName": "HIT_"},
+    "Taunt":          {"name": "Taunt",                        "category": "Combat",        "subtype": "Taunt",                 "subtypeName": "TAUT"},
+    "Bleedout":       {"name": "Bleedout",                     "category": "Combat",        "subtype": "Bleedout",              "subtypeName": "BLED"}
+  },
+  
+  "infoTemplates": {
+    "random": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice"]
+	},
+	"nonFollowerRandom": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice", "nonFollower"]
+	},
+	"nonFollowerRandomEnd": {
+	  "flags": ["Random", "RandomEnd"],
+	  "conditions": ["isNewVoice", "nonFollower"]
+	},
+	"nonFollowerFriendRandom": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice", "nonFollower"]
+	},
+	"nonFollowerFriendRandomEnd": {
+	  "flags": ["Random", "RandomEnd"],
+	  "conditions": ["isNewVoice", "nonFollower"]
+	},
+	"followerRandom": {
+       "flags": ["Random"], "conditions": ["isNewVoice", "follower"]
+	},
+	"followerRandomEnd": {
+	  "flags": ["Random", "RandomEnd"], "conditions": ["isNewVoice", "follower"]
+	}
+  },
+  
+  "infos": {
+    "Recruit": [
+	
+	],
+    "Dismiss": [
+	
+	],
+    "Wait": [
+	
+	],
+    "Follow": [
+	
+	],
+    "Favor": [
+	
+	],
+    "FavorMore": [
+	
+	],
+    "Trade": [
+	
+	],
+    "Hello": [
+	  {"template": "nonFollowerStrangerRandom", "responses":
+	    [
+		  {"audioIn": "Greetings to you, stranger", 
+		      "text": "Greetings to you, stranger."}
+		]},
+	  {"template": "nonFollowerStrangerRandom", "responses":
+	    [
+		  {"audioIn": "Greetings, traveler",
+		      "text": "Greetings, traveler."}
+		]},
+      {"template": "nonFollowerRandom", "responses":
+	    [
+		  {"audioIn": "Greetings",
+		      "text": "Greetings."}
+		]},
+      {"template": "nonFollowerRandom", "responses":
+	    [
+		  {"audioIn": "Hey there",
+		      "text": "Hey there."}
+		]},
+      {"template": "nonFollowerRandom", "responses":
+	    [
+		  {"audioIn": "Oh, hi there",
+		      "text": "Oh, hi there."}
+		]},
+      {"template": "nonFollowerRandom", "responses":
+	    [
+		  {"audioIn": "We meet again",
+		      "text": "We meet again."}
+		]},
+      {"template": "nonFollowerFriendRandom", "responses":
+	    [
+		  {"audioIn": "Good to see you", 
+		      "text": "Good to see you!"}
+		]},
+	  {"template": "nonFollowerFriendRandom", "responses":
+	    [
+		  {"audioIn": "Great to see you!",
+		      "text": "Great to see you!"}
+		]},
+	  {"template": "nonFollowerFriendRandom", "responses":
+	    [
+		  {"audioIn": "Greetings to you, friend",
+		      "text": "Greetings to you, friend."}
+		]},
+	  {"template": "nonFollowerFriendRandom", "responses":
+	    [
+		  {"audioIn": "How's about you",
+		      "text": "How's about ya?"}
+		]},
+	  {"template": "nonFollowerFriendRandom", "responses":
+	    [
+		  {"audioIn": "How's it going", 
+		     "text": "How's it going?"}
+		]},
+	  {"template": "nonFollowerFriendRandom", "responses":
+	    [
+		  {"audioIn": "What's the news", 
+		     "text": "What's the news?"}
+		]}
+	],
+    "Goodbye": [
+	
+	],
+    "Shared": [
+	
+	],
+    "Idle": [
+	
+	],
+    "Collide": [
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Hey, watch it", 
+		      "text": "Hey! Watch it!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "I'm standing here!", 
+		      "text": "I'm standing here!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Keep your hands to yourself", 
+		      "text": "Keep your hands to yourself!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Owch!", 
+		      "text": "Ouch!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Quit being an arse", 
+		      "text": "Quit bein' an arse!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Quit being an eejit", 
+		      "text": "Quit bein' an idiot!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Stop actin the maggit", 
+		      "text": "Stop actin' the maggot!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Watch it!", 
+		      "text": "Watch it!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Watch out!", 
+		      "text": "Watch out!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "Watch where your going!", 
+		      "text": "Watch where you're going!"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "What's your problem", 
+		      "text": "What's your problem?"}
+		]},
+      {"template": "random", "responses":
+	    [
+		  {"audioIn": "You thick or something", 
+		      "text": "You thick or somethin'?"}
+		]}
+	],
+    "CombatToNormal": [
+	
+	],
+    "NormalToCombat": [
+	
+	],
+    "Agree": [
+	
+	],
+    "Refuse": [
+	
+	],
+    "ExitFavor": [
+	
+	],
+    "Attack": [
+	
+	],
+    "PowerAttack": [
+	
+	],
+    "Block": [
+	
+	],
+    "Hit": [
+	
+	],
+    "Taunt": [
+	
+	],
+    "Bleedout": [
+	
+	]
+  }
+}

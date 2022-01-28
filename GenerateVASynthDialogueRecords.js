@@ -1,54 +1,24 @@
-const voice = {
-  sex: 'Female',
-  game: 'FO4',
-  name: 'Cait',
-};
+const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config.json');
+
+const pluginName = config.config.plugin;
+const voice = config.voice;
 voice.fullName = ['VAS', voice.sex, voice.game, voice.name].join('_');
-const pluginName = 'VASynth_Voices.esp';
 
 const quest = {
   editorId: voice.fullName + '_Dialogue'
 };
 
-const branches = {
-  Recruit:   {name: 'Recruit',   type: 'Top-Level', startingTopic: 'Recruit'},
-  Dismiss:   {name: 'Dismiss',   type: 'Top-Level', startingTopic: 'Dismiss'},
-  Wait:      {name: 'Wait',      type: 'Top-Level', startingTopic: 'Wait'},
-  Follow:    {name: 'Follow',    type: 'Top-Level', startingTopic: 'Follow'},
-  Favor:     {name: 'Favor',     type: 'Top-Level', startingTopic: 'Favor'},
-  FavorMore: {name: 'FavorMore', type: 'Blocking',  startingTopic: 'FavorMore'},
-  Trade:     {name: 'Trade',     type: 'Top-Level', startingTopic: 'Trade'}
-};
+const branches = config.branches;
 Object.keys(branches).forEach(key => 
   branches[key].editorId = voice.fullName + '_Branch_' + branches[key].name);
-    
-const topics = {
-    Recruit:        {name: 'Recruit',   priority: 10.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'Follow me. I need your help.'},
-    Dismiss:        {name: 'Dismiss',   priority: 0.0,   category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'It\'s time for us to part ways'},
-    Wait:           {name: 'Wait',      priority: 100.0, category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'Wait here.'},
-    Follow:         {name: 'Follow',    priority: 100.0, category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'Follow me.'},
-    Favor:          {name: 'Favor',     priority: 50.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'I need you to do something.'},
-    FavorMore:      {name: 'FavorMore', priority: 50.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: ''},
-    Trade:          {name: 'Trade',     priority: 10.0,  category: 'Topic',         subtype: 'Custom', subtypeName: 'CUST', text: 'I need to trade some things with you.'},
-    Hello:          {name: 'Hello',                      category: 'Miscellaneous', subtype: 'Hello', subtypeName: 'HELO'},
-    Goodbye:        {name: 'Goodbye',                    category: 'Miscellaneous', subtype: 'GoodBye', subtypeName: 'GBYE'},
-    Shared:         {name: 'Shared',                     category: 'Miscellaneous', subtype: 'SharedInfo', subtypeName: 'IDAT'},
-    Idle:           {name: 'Idle',                       category: 'Miscellaneous', subtype: 'Idle', subtypeName: 'IDLE'},
-    Collide:        {name: 'Collide',                    category: 'Miscellaneous', subtype: 'ActorCollidewithActor', subtypeName: 'ACAC'},
-    CombatToNormal: {name: 'CombatToNormal',             category: 'Detection',     subtype: 'CombatToNormal', subtypeName: 'COTN'},
-    NormalToCombat: {name: 'NormalToCombat',             category: 'Detection',     subtype: 'NormalToCombat', subtypeName: 'NOTC'},
-    Agree:          {name: 'Agree',                      category: 'Favors',        subtype: 'Agree', subtypeName: 'AGRE'},
-    Refuse:         {name: 'Refuse',                     category: 'Favors',        subtype: 'Refuse', subtypeName: 'REFU'},
-    ExitFavor:      {name: 'ExitFavor',                  category: 'Favors',        subtype: 'ExitFavorState', subtypeName: 'FEXT'},
-    Attack:         {name: 'Attack',                     category: 'Combat',        subtype: 'Attack', subtypeName: 'ATCK'},
-    PowerAttack:    {name: 'PowerAttack',                category: 'Combat',        subtype: 'PowerAttack', subtypeName: 'POAT'},
-    Block:          {name: 'Block',                      category: 'Combat',        subtype: 'Block', subtypeName: 'BLOC'},
-    Hit:            {name: 'Hit',                        category: 'Combat',        subtype: 'Hit', subtypeName: 'HIT_'},
-    Taunt:          {name: 'Taunt',                      category: 'Combat',        subtype: 'Taunt', subtypeName: 'TAUT'},
-    Bleedout:       {name: 'Bleedout',                   category: 'Combat',        subtype: 'Bleedout', subtypeName: 'BLED'}
-};
+
+const topics = config.topics;
 Object.keys(topics).forEach(key => 
   topics[key].editorId = voice.fullName + '_Topic_' + topics[key].name);
+
+const infoTemplates = config.infoTemplates;
+// TODO - Bring in infos from JSON.
+// const infos = config.infos;
 
 const conditionTypes = {
   equals: '10000000',
@@ -62,17 +32,13 @@ const commonConditions = {
     parameter1: voice.fullName,
     type: 'equals'
   },
-  isntFollowing: {
+  nonFollower: {
     comparisonValue: '1.0',
     function: 'GetInFaction',
     parameter1: 'CurrentFollowerFaction',
     type: 'notEquals'
   },
 };
-
-const audioInRoot = 'B:\\games\\skyrim\\generated\\voice\\f4_cait';
-const dataPath = 'B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth';
-
 
 // Infos can be shared or not. Shared ones have editorIds.
 // Infos can use a shared response data or not. Those that do reference the above editorIds. The others have "Response" objects.
@@ -90,25 +56,18 @@ const infos = [
 
   // "You're back" style greetings.
   // 'GetActorValue' 'WaitingForPlayer' == 1.0
-
-  // Other greetings/universal.
-  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.isntFollowing], responses: [
-     {text: 'Greetings.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Greetings.fuz'}]},
-  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.isntFollowing], responses: [
-     {text: 'Hey there.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Hey there.fuz'}]},
-
-  // "Stranger" greetings.
-
-  // "Friend" greetings.
-
+  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.nonFollower], responses: [
+     {text: 'Greetings.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Greetings'}]},
+  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.nonFollower], responses: [
+     {text: 'Hey there.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Hey there'}]},
 ];
 
 let plugin = xelib.FileByName(pluginName);
 xelib.WithHandle(plugin, function() {
-  createVoiceType(plugin, voice);
-  createQuest(plugin, quest);
-  Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
-  Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
+  // createVoiceType(plugin, voice);
+  // createQuest(plugin, quest);
+  // Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
+  // Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
   infos.forEach(info => createInfo(plugin, info));
 });
 
@@ -278,7 +237,7 @@ function getAudioSrcPath(info, response) {
   //   D:\my\vasynth-outputs\f4_cait\
   //     Hello\
   //       Hey there friend.fuz
-  return [audioInRoot, info.topic, response.audioIn + '.fuz'].join('\\');
+  return [config.config.audioInputPath, info.topic, response.audioIn + '.fuz'].join('\\');
 }
 
 /**
@@ -298,7 +257,7 @@ function getAudioDestPath(info, infoElement, responseNumber) {
   //         VAS_Female_FO4_Cait\
   //           voiceFileName
   return [
-    dataPath,
+    config.config.dataPath,
     'sound\\voice',
     pluginName,
     voice.fullName,
