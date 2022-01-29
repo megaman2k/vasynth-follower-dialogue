@@ -1,3 +1,8 @@
+/**
+ * TODO list
+ * - Links/invisible continues from top-level topics to the ones with scripts.
+ * - Conditions need to be added for most of the responses.
+ */
 const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config.json');
 
 const pluginName = config.config.plugin;
@@ -17,12 +22,17 @@ Object.keys(topics).forEach(key =>
   topics[key].editorId = voice.fullName + '_Topic_' + topics[key].name);
 
 const infoTemplates = config.infoTemplates;
-// TODO - Bring in infos from JSON.
-// const infos = config.infos;
+const infos = config.infos;
+infos.Shared.forEach(info =>
+  info.editorId = voice.fullName + '_Shared_' + info.key);
 
 const conditionTypes = {
-  equals: '10000000',
-  notEquals: '00000000',
+  eq: '10000000',
+  ne: '00000000',
+  le: '10100000',
+  ge: '11000000',
+  lt: '00100000',
+  gt: '01000000',
 };
 
 const commonConditions = {
@@ -30,37 +40,48 @@ const commonConditions = {
     comparisonValue: '1.0',
     function: 'GetIsVoiceType',
     parameter1: voice.fullName,
-    type: 'equals'
+    type: 'eq'
+  },
+  follower: {
+    comparisonValue: '1.0',
+    function: 'GetInFaction',
+    parameter1: 'CurrentFollowerFaction',
+    type: 'eq'
   },
   nonFollower: {
     comparisonValue: '1.0',
     function: 'GetInFaction',
     parameter1: 'CurrentFollowerFaction',
-    type: 'notEquals'
+    type: 'ne'
+  },
+  potentialFollower: {
+    comparisonValue: '1.0',
+    function: 'GetInFaction',
+    parameter1: 'PotentialFollowerFaction',
+    type: 'eq'
+  },
+  waiting: {
+    comparisonValue: '1.0',
+    function: 'GetActorValue',
+    parameter1: 'Waiting For Player',
+    type: 'eq'
+  },
+  stranger: {
+    comparisonValue: '0.0',
+    function: 'GetRelationshipRank',
+    type: 'le'
+  },
+  friend: {
+    comparisonValue: '1.0',
+    function: 'GetRelationshipRank',
+    type: 'ge'
+  },
+  enemy: {
+    comparisonValue: '0.0',
+    function: 'GetRelationshipRank',
+    type: 'lt'
   },
 };
-
-// Infos can be shared or not. Shared ones have editorIds.
-// Infos can use a shared response data or not. Those that do reference the above editorIds. The others have "Response" objects.
-const infos = [
-  // // shared
-  // {topic: 'Shared', editorId: voice.fullName + '_Shared_Yes', conditions: [commonConditions.isNewVoice], responses: [
-  //   {text: 'Yes.', emotionType: 'Neutral', emotionValue: 50}
-  // ]},
-  // // non-shared, uses shared response
-  // {topic: 'Agree', flags: ['Random'], conditions: [commonConditions.isNewVoice], responseData: voice.fullName + '_Shared_Yes'},
-  // // non-shared, uses own response
-  // {topic: 'Agree', flags: ['Random', 'Goodbye'], conditions: [commonConditions.isNewVoice], responses: [
-  //    {text: 'Alright. Fine.', emotionType: 'Neutral', emotionValue: 50}
-  // ]},
-
-  // "You're back" style greetings.
-  // 'GetActorValue' 'WaitingForPlayer' == 1.0
-  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.nonFollower], responses: [
-     {text: 'Greetings.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Greetings'}]},
-  {topic: 'Hello', flags: ['Random'], conditions: [commonConditions.isNewVoice, commonConditions.nonFollower], responses: [
-     {text: 'Hey there.', emotionType: 'Neutral', emotionValue: 50, audioIn: 'Hey there'}]},
-];
 
 let plugin = xelib.FileByName(pluginName);
 xelib.WithHandle(plugin, function() {
@@ -68,7 +89,9 @@ xelib.WithHandle(plugin, function() {
   // createQuest(plugin, quest);
   // Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
   // Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
-  infos.forEach(info => createInfo(plugin, info));
+  Object.keys(infos).forEach(topicKey => {
+    infos[topicKey].forEach(info => createInfo(plugin, topicKey, info));
+  });
 });
 
 function createVoiceType(plugin, voice) {
@@ -166,19 +189,33 @@ function createBranch(plugin, quest, branch, topics) {
   });
 }
 
-function createInfo(plugin, info) {
-  let topic = topics[info.topic];
+function createInfo(plugin, topicKey, info) {
+  let topic = topics[topicKey];
   let element = xelib.AddElement(plugin, 'DIAL\\' + topic.editorId + '\\INFO\\');
+
+  // Templates are used to keep info definitions in JSON simple.
+  if ('template' in info) {
+    if (info.template in infoTemplates) {
+      let template = infoTemplates[info.template];
+      if (!('flags' in info)) info.flags = template.flags;
+      if (!('conditions' in info)) info.conditions = template.conditions;
+    } else {
+      zedit.log('WARNING: INFO template not found: ' + info.template)
+    }
+  }
 
   if ('editorId' in info) maybeAddElementValue(element, 'EDID', info.editorId);
   if ('conditions' in info) info.conditions.forEach(condition => createCondition(element, condition));
   let i = 0;
-  if ('responses' in info) info.responses.forEach(response => createResponse(element, info, i++));
+  if ('responses' in info) info.responses.forEach(response => createResponse(element, topicKey, info, i++));
   if ('flags' in info) {
     let f = xelib.AddElement(element, 'ENAM');
     xelib.SetEnabledFlags(f, 'Flags', info.flags);
   }
-  if ('responseData' in info) xelib.AddElementValue(element, 'DNAM', info.responseData);
+  if ('responseData' in info) {
+    let sharedInfoEditorId = voice.fullName + '_Shared_' + info.responseData;
+    xelib.AddElementValue(element, 'DNAM', sharedInfoEditorId);
+  }
 
   // Mandatory elements/values:
   xelib.AddElement(element, 'CNAM'); // Favor Level: defaults to "None"
@@ -196,27 +233,40 @@ function createInfo(plugin, info) {
 }
 
 function createCondition(infoElement, condition) {
+
+  if (typeof condition === 'string') {
+    if (condition in commonConditions) {
+      condition = commonConditions[condition];
+    } else {
+      zedit.log('WARNING: Condition template not found: ' + condition);
+      return;
+    }
+  }
+
   let element = xelib.AddArrayItem(infoElement, 'Conditions', 'CTDA');
   xelib.SetValue(element, 'CTDA\\Function', condition.function);
-  xelib.SetValue(element, 'CTDA\\Parameter #1', condition.parameter1);
+  if ('parameter1' in condition) xelib.SetValue(element, 'CTDA\\Parameter #1', condition.parameter1);
   xelib.SetValue(element, 'CTDA\\Type', conditionTypes[condition.type]);
   xelib.SetValue(element, 'CTDA\\Comparison Value', condition.comparisonValue);
 }
 
-function createResponse(infoElement, info, responseIndex) {
+function createResponse(infoElement, topicKey, info, responseIndex) {
   let response = info.responses[responseIndex];
   let responseNumber = responseIndex + 1;
   let element = xelib.AddArrayItem(infoElement, 'Responses');
-  xelib.SetValue(element, 'TRDT\\Emotion Type', response.emotionType);
-  xelib.SetValue(element, 'TRDT\\Emotion Value', response.emotionValue.toString());
+  xelib.SetValue(element, 'TRDT\\Emotion Type', 'emotionType' in response ? response.emotionType : 'Neutral');
+  xelib.SetValue(element, 'TRDT\\Emotion Value', 'emotionValue' in response ? response.emotionValue.toString() : '50');
   xelib.SetValue(element, 'TRDT\\Response number', responseNumber.toString());
   xelib.AddElementValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
-  logElement(infoElement);
 
-  let audioSrc = getAudioSrcPath(info, response);
-  let audioDest = getAudioDestPath(info, infoElement, responseNumber);
-  zedit.log('DEBUG: Copying "' + audioSrc + '" to "' + audioDest + '"');
-  fh.jetpack.copy(audioSrc, audioDest, { overwrite: true });
+  let audioSrc = getAudioSrcPath(topicKey, response);
+  let audioDest = getAudioDestPath(topicKey, infoElement, responseNumber);
+  if (fh.jetpack.exists(audioSrc)) {
+    //zedit.log('DEBUG: Copying "' + audioSrc + '" to "' + audioDest + '"');
+    fh.jetpack.copy(audioSrc, audioDest, { overwrite: true });
+  } else {
+    zedit.log('ERROR: Could not find audio file: ' + audioSrc);
+  }
 }
 
 /**
@@ -232,24 +282,26 @@ function createResponse(infoElement, info, responseIndex) {
  * @param {*} response The object describing the response's content.
  * @returns The full path to the input .fuz file that will be used for the response.
  */
-function getAudioSrcPath(info, response) {
+function getAudioSrcPath(topicKey, response) {
   // Example:
   //   D:\my\vasynth-outputs\f4_cait\
   //     Hello\
   //       Hey there friend.fuz
-  return [config.config.audioInputPath, info.topic, response.audioIn + '.fuz'].join('\\');
+  let fuzFileName = 'audioIn' in response ? response.audioIn : response.text;
+  fuzFileName = fuzFileName.replace(/\W$/, '') + '.fuz';
+  return [config.config.audioInputPath, topicKey, fuzFileName].join('\\');
 }
 
 /**
  * Gets the full path to the .fuz file associated with a specific response in an INFO.
  * 
- * @param {*} info The object describing the INFO's content.
+ * @param {*} topicKey The topic the INFO falls under.
  * @param {*} infoElement The xelib element for the INFO.
  * @param {*} responseNumber The number of the response in its INFO(1-based). Usually this is 1,
  *   but an INFO may have multiple responses.
  * @returns The full path to the response's .fuz file.
  */
-function getAudioDestPath(info, infoElement, responseNumber) {
+function getAudioDestPath(topicKey, infoElement, responseNumber) {
   // Example:
   //   C:\Program Files\Steam\steamapps\common\Skyrim Special Edition\Data\
   //     sound\voice\
@@ -261,23 +313,23 @@ function getAudioDestPath(info, infoElement, responseNumber) {
     'sound\\voice',
     pluginName,
     voice.fullName,
-    getVoiceFileName(info, infoElement, responseNumber)
+    getVoiceFileName(topicKey, infoElement, responseNumber)
   ].join('\\');
 }
 
 /**
  * Gets the filename for a .fuz file associated with a specific response in an INFO.
  * 
- * @param {*} info The object describing the INFO's contents.
+ * @param {*} topicKey The topic the INFO falls under.
  * @param {*} infoElement The xelib element for the INFO.
  * @param {*} responseNumber The number of the response in its INFO(1-based). Usually this is 1,
  *   but an INFO may have multiple responses.
  * @returns The filename for the response's .fuz file.
  */
-function getVoiceFileName(info, infoElement, responseNumber) {
+function getVoiceFileName(topicKey, infoElement, responseNumber) {
   return [
     quest.editorId.substring(0, 10),                        // First 10 chars of the Quest's EditorID
-    topics[info.topic].editorId.substring(0, 15),           // First 15 chars of the Topic's EditorID
+    topics[topicKey].editorId.substring(0, 15),             // First 15 chars of the Topic's EditorID
     '00' + xelib.GetHexFormID(infoElement, false, true),    // FormID for the INFO (starting with 00)
     responseNumber.toString()                               // The response number for the audio in the INFO (1-indexed)
   ].join('_') + '.fuz';                                     // Separated by underscores, plus the extension.

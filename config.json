@@ -51,217 +51,360 @@
 	  "flags": ["Random"],
 	  "conditions": ["isNewVoice"]
 	},
-	"nonFollowerRandom": {
+	"waiting": {
 	  "flags": ["Random"],
-	  "conditions": ["isNewVoice", "nonFollower"]
+	  "conditions": ["isNewVoice", "follower", "waiting"]
 	},
-	"nonFollowerRandomEnd": {
-	  "flags": ["Random", "RandomEnd"],
-	  "conditions": ["isNewVoice", "nonFollower"]
+	"waitingEnd": {
+	  "flags": ["Random", "Random End"],
+	  "conditions": ["isNewVoice", "follower", "waiting"]
 	},
-	"nonFollowerFriendRandom": {
+	"greeting": {
 	  "flags": ["Random"],
-	  "conditions": ["isNewVoice", "nonFollower"]
+	  "conditions": ["isNewVoice", "nonFollower"]	
 	},
-	"nonFollowerFriendRandomEnd": {
-	  "flags": ["Random", "RandomEnd"],
-	  "conditions": ["isNewVoice", "nonFollower"]
+	"greetingFriend": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice", "friend", "nonFollower"]
 	},
-	"followerRandom": {
-       "flags": ["Random"], "conditions": ["isNewVoice", "follower"]
+	"greetingStranger": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice", "stranger", "nonFollower"]
 	},
-	"followerRandomEnd": {
-	  "flags": ["Random", "RandomEnd"], "conditions": ["isNewVoice", "follower"]
+	"goodbye": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice"]
+	},
+	"goodbyeEnemy": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice", "enemy"]
+	},
+	"goodbyeFriend": {
+	  "flags": ["Random"],
+	  "conditions": ["isNewVoice", "friend"]
 	}
   },
   
   "infos": {
+    "Shared": [
+	  {"key": "OK1",       "responses": [{"text": "Alright then."}]},
+	  {"key": "OK2",       "responses": [{"text": "Aye."}]},
+	  {"key": "OK3",       "responses": [{"text": "Okay."}]},
+	  {"key": "OK4",       "responses": [{"text": "Alright. Fine."}]},
+	  {"key": "OK5",       "responses": [{"text": "If you say so."}]},
+	  {"key": "OK6",       "responses": [{"text": "If you insist."}]},
+	  {"key": "OK7",       "responses": [{"text": "Fine."}]},
+	  {"key": "OK8",       "responses": [{"text": "Sure."}]},
+	  {"key": "Follow1",   "responses": [{"text": "Off we go."}]},
+	  {"key": "Follow2",   "responses": [{"text": "Let's crack on!"}]},
+	  {"key": "Follow3",   "responses": [{"text": "Let's get going, then."}]},
+	  {"key": "Follow4",   "responses": [{"text": "Let's get on with it."}]},
+	  {"key": "Follow5",   "responses": [{"text": "Let's go."}]},
+	  {"key": "Follow6",   "responses": [{"text": "I'll follow your lead."}]},
+	  {"key": "Follow7",   "responses": [{"text": "Lead the way."}]},
+      {"key": "Follow8",   "responses": [{"text": "I'm right behind ya."}]},
+      {"key": "Follow9",   "responses": [{"text": "What are you waiting for?"}]},
+      {"key": "Follow10",   "responses": [{"text": "Lead on, adventurer."}]},
+	  {"key": "Well", "responses": [{"text": "Well?", "audioIn": "Well."}]}
+	],
     "Recruit": [
-	
+      {"template": "random", "responseData": "Follow1"},
+      {"template": "random", "responseData": "Follow2"},
+      {"template": "random", "responseData": "Follow3"},
+      {"template": "random", "responseData": "Follow4"},
+      {"template": "random", "responseData": "Follow5"},
+      {"template": "random", "responseData": "Follow6"},
+      {"template": "random", "responseData": "Follow7"},
+      {"template": "random", "responseData": "Follow8"},
+      {"template": "random", "responseData": "Follow9"},
+      {"template": "random", "responses": [{"text": "Let's get started, then, shall we?"}]},
+      {"template": "random", "responses": [{"text": "Well, what are we waiting for? Let's move.", "audioIn": "Well, what are we waiting for Let's move"}]},
+      {"template": "random", "responses": [{"text": "I guess I've not got much better to do at the moment."}]},
+      {"template": "random", "responses": [{"text": "I'm up for it. So where we headed?"}]},
+      {"template": "random", "responses": [{"text": "You can count me in."}]},
+      {"template": "random", "responses": [{"text": "Where you taking me this time?"}]},
+      {"template": "random", "responses": [{"text": "I hope you're planning on doing something fun."}]}
 	],
     "Dismiss": [
-	
+      {"template": "random", "responseData": "OK1"},
+      {"template": "random", "responseData": "OK2"},
+      {"template": "random", "responseData": "OK3"},
+      {"template": "random", "responseData": "OK4"},
+      {"template": "random", "responseData": "OK5"},
+      {"template": "random", "responseData": "OK6"},
+      {"template": "random", "responseData": "OK7"},
+      {"template": "random", "responseData": "OK8"},
+	  {"template": "random", "responses": [{"text": "Okay then. You know where to find me."}]},
+	  {"template": "random", "responses": [{"text": "If you change your mind, you know where I am."}]},
+	  {"template": "random", "responses": [{"text": "I'll head back, then."}]},
+	  {"template": "random", "responses": [{"text": "I'll just head out then."}]},
+	  {"template": "random", "responses": [{"text": "That's fine, then. I think I'm better off without ya anyway."}]},
+	  {"template": "random", "responses": [{"text": "Alright, I'll just feck off somewhere else for a while."}]},
+	  {"template": "random", "responses": [{"text": "Alright, then. Good luck out there."}]},
+	  {"template": "random", "responses": [{"text": "Good luck out there without me."}]},
+	  {"template": "random", "responses": [{"text": "Well. I'll pop on back to the usual spot. Later."}]}
 	],
     "Wait": [
-	
+      {"template": "random", "responseData": "OK1"},
+      {"template": "random", "responseData": "OK2"},
+      {"template": "random", "responseData": "OK3"},
+      {"template": "random", "responseData": "OK4"},
+      {"template": "random", "responseData": "OK5"},
+      {"template": "random", "responseData": "OK6"},
+      {"template": "random", "responseData": "OK7"},
+      {"template": "random", "responseData": "OK8"},
+	  {"template": "random", "responses": [{"text": "Alright. I guess I'll just stay put."}]},
+	  {"template": "random", "responses": [{"text": "Don't keep me waiting."}]},
+	  {"template": "random", "responses": [{"text": "Don't leave me here and go off loligaggin'."}]},
+	  {"template": "random", "responses": [{"text": "I'll see you when I see you."}]},
+	  {"template": "random", "responses": [{"text": "I'll see you in a bit."}]},
+	  {"template": "random", "responses": [{"text": "Okay. Go off an' leave me. I'll just be faffin' about."}]}
 	],
     "Follow": [
-	
+      {"template": "random", "responseData": "Follow1"},
+      {"template": "random", "responseData": "Follow2"},
+      {"template": "random", "responseData": "Follow3"},
+      {"template": "random", "responseData": "Follow4"},
+      {"template": "random", "responseData": "Follow5"},
+      {"template": "random", "responseData": "Follow6"},
+      {"template": "random", "responseData": "Follow7"},
+      {"template": "random", "responseData": "Follow8"},
+      {"template": "random", "responseData": "Follow9"},
+      {"template": "random", "responseData": "OK1"},
+      {"template": "random", "responseData": "OK2"},
+      {"template": "random", "responseData": "OK3"},
+	  {"template": "random", "responses": [{"text": "Right. That's enough sittin' around."}]},
+	  {"template": "random", "responses": [{"text": "Well that was a nice little breather."}]},
+	  {"template": "random", "responses": [{"text": "Good. I'm ready to get goin'."}]},
+	  {"template": "random", "responses": [{"text": "Great. Let's get outta here."}]}
 	],
     "Favor": [
-	
+      {"template": "random", "responseData": "Well"},
+	  {"template": "random", "responses": [{"text": "I'll give it a lash."}]},
+	  {"template": "random", "responses": [{"text": "What do you need?"}]},
+	  {"template": "random", "responses": [{"text": "What is it?"}]},
+	  {"template": "random", "responses": [{"text": "What is it now?"}]},
+	  {"template": "random", "responses": [{"text": "This'll be exciting."}]},
+	  {"template": "random", "responses": [{"text": "No funny business, okay?"}]},
+	  {"template": "random", "responses": [{"text": "Sure, whatever you need."}]},
+	  {"template": "random", "responses": [{"text": "Just say the word."}]},
+	  {"template": "random", "responses": [{"text": "I'll see what I can do."}]}
 	],
     "FavorMore": [
-	
+      {"template": "random", "responseData": "Well"},
+	  {"template": "random", "responses": [{"text": "Anything else?"}]},
+	  {"template": "random", "responses": [{"text": "Is there something else?"}]},
+	  {"template": "random", "responses": [{"text": "What else can I do for ya?"}]},
+	  {"template": "random", "responses": [{"text": "Was there something else?"}]},
+	  {"template": "random", "responses": [{"text": "I'm chompin' at the bit."}]},
+	  {"template": "random", "responses": [{"text": "Do you need anything else?"}]},
+	  {"template": "random", "responses": [{"text": "What else?"}]},
+	  {"template": "random", "responses": [{"text": "Can I do anything else for you, my liege?"}]}
 	],
     "Trade": [
-	
+	  {"template": "random", "responses": [{"text": "Let's see what you've got."}]},
+	  {"template": "random", "responses": [{"text": "Let's take a gander."}]},
+	  {"template": "random", "responses": [{"text": "Let's take a proper gander."}]},
+	  {"template": "random", "responses": [{"text": "Let's take a gander 'n see what we can swap."}]},
+	  {"template": "random", "responses": [{"text": "Need me to carry something?"}]},
+	  {"template": "random", "responses": [{"text": "Do you fancy me a mule or somethin'?"}]},
+	  {"template": "random", "responses": [{"text": "What's mine is yours. Or so some would say."}]},
+	  {"template": "random", "responses": [{"text": "Alright. Let's get this over with."}]},
+	  {"template": "random", "responses": [{"text": "If you can give me a few more things to carry, that'd be just grand."}]},
+	  {"template": "random", "responses": [{"text": "If you make me carry somethin' stupid heavy, you'd better buy me a pint o' the black stuff later.", "audioIn": "If you make me carry somethin' stupid heavy, you'd better buy me a pin"}]},
+	  {"template": "random", "responses": [{"text": "This'd better be worth it."}]},
+	  {"template": "random", "responses": [{"text": "What else you got?"}]},
+	  {"template": "random", "responses": [{"text": "You're looking pretty weak. Let's share the load."}]}
 	],
     "Hello": [
-	  {"template": "nonFollowerStrangerRandom", "responses":
-	    [
-		  {"audioIn": "Greetings to you, stranger", 
-		      "text": "Greetings to you, stranger."}
-		]},
-	  {"template": "nonFollowerStrangerRandom", "responses":
-	    [
-		  {"audioIn": "Greetings, traveler",
-		      "text": "Greetings, traveler."}
-		]},
-      {"template": "nonFollowerRandom", "responses":
-	    [
-		  {"audioIn": "Greetings",
-		      "text": "Greetings."}
-		]},
-      {"template": "nonFollowerRandom", "responses":
-	    [
-		  {"audioIn": "Hey there",
-		      "text": "Hey there."}
-		]},
-      {"template": "nonFollowerRandom", "responses":
-	    [
-		  {"audioIn": "Oh, hi there",
-		      "text": "Oh, hi there."}
-		]},
-      {"template": "nonFollowerRandom", "responses":
-	    [
-		  {"audioIn": "We meet again",
-		      "text": "We meet again."}
-		]},
-      {"template": "nonFollowerFriendRandom", "responses":
-	    [
-		  {"audioIn": "Good to see you", 
-		      "text": "Good to see you!"}
-		]},
-	  {"template": "nonFollowerFriendRandom", "responses":
-	    [
-		  {"audioIn": "Great to see you!",
-		      "text": "Great to see you!"}
-		]},
-	  {"template": "nonFollowerFriendRandom", "responses":
-	    [
-		  {"audioIn": "Greetings to you, friend",
-		      "text": "Greetings to you, friend."}
-		]},
-	  {"template": "nonFollowerFriendRandom", "responses":
-	    [
-		  {"audioIn": "How's about you",
-		      "text": "How's about ya?"}
-		]},
-	  {"template": "nonFollowerFriendRandom", "responses":
-	    [
-		  {"audioIn": "How's it going", 
-		     "text": "How's it going?"}
-		]},
-	  {"template": "nonFollowerFriendRandom", "responses":
-	    [
-		  {"audioIn": "What's the news", 
-		     "text": "What's the news?"}
-		]}
+	  {"template": "random",           "responseData": "Well"},
+	  {"template": "waiting",          "responses": [{"text": "I've been waitin'."}]},
+	  {"template": "waiting",          "responses": [{"text": "I've been waitin' for ya."}]},
+	  {"template": "waiting",          "responses": [{"text": "Took ya long enough."}]},
+	  {"template": "waiting",          "responses": [{"text": "Ah, you're back."}]},
+	  {"template": "waiting",          "responses": [{"text": "Finally."}]},
+	  {"template": "waitingEnd",       "responses": [{"text": "Oh. There you are."}]},
+	  {"template": "greetingStranger", "responses": [{"text": "Greetings to you, stranger."}]},
+	  {"template": "greetingStranger", "responses": [{"text": "Greetings, traveler."}]},
+      {"template": "greeting",         "responses": [{"text": "Greetings."}]},
+      {"template": "greeting",         "responses": [{"text": "Hey there."}]},
+      {"template": "greeting",         "responses": [{"text": "Oh, hi there."}]},
+      {"template": "greetingFriend",   "responses": [{"text": "We meet again."}]},
+      {"template": "greetingFriend",   "responses": [{"text": "Good to see you!"}]},
+	  {"template": "greetingFriend",   "responses": [{"text": "Great to see you!"}]},
+	  {"template": "greetingFriend",   "responses": [{"text": "Greetings to you, friend."}]},
+	  {"template": "greetingFriend",   "responses": [{"text": "How's about ya?"}]},
+	  {"template": "greetingFriend",   "responses": [{"text": "How's it going?"}]},
+	  {"template": "greetingFriend",   "responses": [{"text": "What's the news?"}]},
+	  {"template": "greetingFriend",   "responses": [{"text": "How ya gettin' on?"}]},
+	  {"template": "greetingFriend",   "responses": [{"text": "Howsagoin'?"}]}
 	],
     "Goodbye": [
-	
+      {"template": "goodbye",       "responses": [{"text": "Fare thee well."}]},
+      {"template": "goodbye",       "responses": [{"text": "Farewell."}]},
+      {"template": "goodbye",       "responses": [{"text": "See ya later."}]},
+      {"template": "goodbye",       "responses": [{"text": "Until next time."}]},
+      {"template": "goodbye",       "responses": [{"text": "Until we meet again."}]},
+      {"template": "goodbyeFriend", "responses": [{"text": "Take care."}]},
+      {"template": "goodbyeFriend", "responses": [{"text": "Bye for now."}]},
+      {"template": "goodbyeFriend", "responses": [{"text": "Talk later."}]},
+      {"template": "goodbyeEnemy",  "responses": [{"text": "Alright, feck off then.", "emotionType": "Anger"}]},
+      {"template": "goodbyeEnemy",  "responses": [{"text": "Eff off.", "emotionType": "Anger"}]},
+      {"template": "goodbyeEnemy",  "responses": [{"text": "Feck off.", "emotionType": "Anger"}]},
+      {"template": "goodbyeEnemy",  "responses": [{"text": "Feck off, ya gobshite.", "emotionType": "Anger"}]},
+      {"template": "goodbyeEnemy",  "responses": [{"text": "Later... fecker.", "audioIn": "Later, fecker", "emotionType": "Anger"}]}
 	],
-    "Shared": [
-	
-	],
-    "Idle": [
-	
-	],
+    "Idle": [],
     "Collide": [
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Hey, watch it", 
-		      "text": "Hey! Watch it!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "I'm standing here!", 
-		      "text": "I'm standing here!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Keep your hands to yourself", 
-		      "text": "Keep your hands to yourself!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Owch!", 
-		      "text": "Ouch!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Quit being an arse", 
-		      "text": "Quit bein' an arse!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Quit being an eejit", 
-		      "text": "Quit bein' an idiot!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Stop actin the maggit", 
-		      "text": "Stop actin' the maggot!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Watch it!", 
-		      "text": "Watch it!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Watch out!", 
-		      "text": "Watch out!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "Watch where your going!", 
-		      "text": "Watch where you're going!"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "What's your problem", 
-		      "text": "What's your problem?"}
-		]},
-      {"template": "random", "responses":
-	    [
-		  {"audioIn": "You thick or something", 
-		      "text": "You thick or somethin'?"}
-		]}
+      {"template": "random", "responses": [{"text": "Hey, watch it!", "emotionType": "Surprise"}]},
+      {"template": "random", "responses": [{"text": "I'm standing here!", "emotionType": "Anger"}]},
+      {"template": "random", "responses": [{"text": "Keep your hands to yourself!", "emotionType": "Anger"}]},
+      {"template": "random", "responses": [{"text": "Quit bein' an arse!", "emotionType": "Anger"}]},
+      {"template": "random", "responses": [{"text": "Quit bein' an eejit!", "emotionType": "Anger"}]},
+      {"template": "random", "responses": [{"text": "Stop actin' the maggot!", "emotionType": "Anger"}]},
+      {"template": "random", "responses": [{"text": "Watch it!", "emotionType": "Surprise"}]},
+      {"template": "random", "responses": [{"text": "Watch out!", "emotionType": "Surprise"}]},
+      {"template": "random", "responses": [{"text": "Watch where you're going!", "emotionType": "Anger"}]},
+      {"template": "random", "responses": [{"text": "What's your problem?", "emotionType": "Anger"}]},
+      {"template": "random", "responses": [{"text": "You thick or somethin'?", "emotionType": "Puzzled"}]}
 	],
     "CombatToNormal": [
-	
+	  {"template": "random", "responses": [{"text": "Let's do this again, shall we?"}]},
+	  {"template": "random", "responses": [{"text": "That was brutal."}]},
+	  {"template": "random", "responses": [{"text": "That was savage."}]},
+	  {"template": "random", "responses": [{"text": "They didn't even put up a real fight."}]},
+	  {"template": "random", "responses": [{"text": "They didn't even stand a chance."}]},
+	  {"template": "random", "responses": [{"text": "Those were just a bunch of losers."}]},
+	  {"template": "random", "responses": [{"text": "Those were some chancers, eh?"}]},
+	  {"template": "random", "responses": [{"text": "Well, they made a right bags outta that. Good riddance."}]},
+	  {"template": "random", "responses": [{"text": "Well, that was exciting."}]},
+	  {"template": "random", "responses": [{"text": "What a buncha idiots."}]},
+	  {"template": "random", "responses": [{"text": "Now we've got that out of our system, let's be on our way."}]},
+	  {"template": "random", "responses": [{"text": "That lot won't be missed."}]},
+	  {"template": "random", "responses": [{"text": "Let's see if there's any good loot."}]}
 	],
     "NormalToCombat": [
-	
+	  {"template": "random", "responses": [{"text": "Well, here goes!"}]},
+	  {"template": "random", "responses": [{"text": "Here goes nothin'!"}]},
+	  {"template": "random", "responses": [{"text": "Let's deal with 'em real quick like."}]},
+	  {"template": "random", "responses": [{"text": "Let's break a leg and get this over with."}]},
+	  {"template": "random", "responses": [{"text": "Let's do this!"}]},
+	  {"template": "random", "responses": [{"text": "Get a load of these dopes. This'll be easy!"}]},
+	  {"template": "random", "responses": [{"text": "Look at these tools. It must be my lucky day."}]},
+	  {"template": "random", "responses": [{"text": "Check out these goons. This'll be fun!"}]},
+	  {"template": "random", "responses": [{"text": "What a buncha melters. Let's make this quick."}]},
+	  {"template": "random", "responses": [{"text": "Time to off these chancers!"}]},
+	  {"template": "random", "responses": [{"text": "Let's off these buffoons!"}]},
+	  {"template": "random", "responses": [{"text": "Let's crack on!"}]}
 	],
     "Agree": [
-	
+      {"template": "random", "responseData": "OK1"},
+      {"template": "random", "responseData": "OK2"},
+      {"template": "random", "responseData": "OK3"},
+      {"template": "random", "responseData": "OK4"},
+      {"template": "random", "responseData": "OK5"},
+      {"template": "random", "responseData": "OK6"},
+      {"template": "random", "responseData": "OK7"},
+      {"template": "random", "responseData": "OK8"}
 	],
     "Refuse": [
-	
+	  {"template": "random", "responses": [{"text": "Are you takin' the piss?"}]},
+	  {"template": "random", "responses": [{"text": "A bit soft in the head, are ya?"}]},
+	  {"template": "random", "responses": [{"text": "Will I, yea?"}]},
+	  {"template": "random", "responses": [{"text": "No."}]},
+	  {"template": "random", "responses": [{"text": "No. No way."}]},
+	  {"template": "random", "responses": [{"text": "Yeah. No."}]},
+	  {"template": "random", "responses": [{"text": "You slaggin' me?"}]},
+	  {"template": "random", "responses": [{"text": "You've gotta be kidding."}]},
+	  {"template": "random", "responses": [{"text": "You've gotta be feckin' kiddin' me."}]},
+	  {"template": "random", "responses": [{"text": "No way."}]},
+	  {"template": "random", "responses": [{"text": "Can't do that."}]},
+	  {"template": "random", "responses": [{"text": "I just can't do that."}]},
+	  {"template": "random", "responses": [{"text": "Sorry."}]}
 	],
     "ExitFavor": [
-	
-	],
-    "Attack": [
-	
-	],
-    "PowerAttack": [
-	
-	],
-    "Block": [
-	
-	],
-    "Hit": [
-	
+      {"template": "random", "responseData": "OK1"},
+      {"template": "random", "responseData": "OK3"},
+	  {"template": "random", "responses": [{"text": "Good. Glad that's settled."}]},
+	  {"template": "random", "responses": [{"text": "Hope you're happy."}]},
+	  {"template": "random", "responses": [{"text": "Boy, that was excitin'."}]},
+	  {"template": "random", "responses": [{"text": "Whatever."}]},
+	  {"template": "random", "responses": [{"text": "Alright. Enough of that."}]},
+	  {"template": "random", "responses": [{"text": "Right. Moving on."}]},
+	  {"template": "random", "responses": [{"text": "I think that's enough for now."}]},
+	  {"template": "random", "responses": [{"text": "You're welcome."}]}
 	],
     "Taunt": [
-	
+	  {"template": "random", "responses": [{"text": "Get ready to die!"}]},
+	  {"template": "random", "responses": [{"text": "Eat shite!"}]},
+	  {"template": "random", "responses": [{"text": "Get ready to go down!"}]},
+	  {"template": "random", "responses": [{"text": "Get feckin' ready to go down!"}]},
+	  {"template": "random", "responses": [{"text": "Get feckin' ready to die, you gobshite!"}]},
+	  {"template": "random", "responses": [{"text": "I could take on all you idiots myself!"}]},
+	  {"template": "random", "responses": [{"text": "What a buncha chancers!"}]},
+	  {"template": "random", "responses": [{"text": "I've seen pups tougher than you!"}]},
+	  {"template": "random", "responses": [{"text": "Well you're a shitehawk if I've ever seen one!"}]}
 	],
     "Bleedout": [
-	
+	  {"template": "random", "responses": [{"text": "A little help here?"}]},
+	  {"template": "random", "responses": [{"text": "I could use a little help here!"}]},
+	  {"template": "random", "responses": [{"text": "I could use a potion or two!"}]},
+	  {"template": "random", "responses": [{"text": "I could use a potion!"}]},
+	  {"template": "random", "responses": [{"text": "I'm not doin' so hot!"}]},
+	  {"template": "random", "responses": [{"text": "I'm not doin' so well over here!"}]},
+	  {"template": "random", "responses": [{"text": "Get over here!"}]},
+	  {"template": "random", "responses": [{"text": "Toss me a feckin' potion already!"}]}
+	]
+  },
+
+  "pendingInfos": {
+    "Attack": [
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]}
+	],
+    "PowerAttack": [
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]}
+	],
+    "Block": [
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]}
+	],
+    "Hit": [
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]},
+	  {"template": "random", "responses": [{"text": ""}]}
 	]
   }
 }
