@@ -30,61 +30,12 @@ const conditionTypes = {
   gt: '01000000',
 };
 
-const commonConditions = {
+const commonConditions = config.conditions;
+commonConditions.isNewVoice = {
   isNewVoice: {
     comparisonValue: '1.0',
     function: 'GetIsVoiceType',
     parameter1: voice.fullName,
-    type: 'eq'
-  },
-  follower: {
-    comparisonValue: '1.0',
-    function: 'GetInFaction',
-    parameter1: 'CurrentFollowerFaction',
-    type: 'eq'
-  },
-  nonFollower: {
-    comparisonValue: '1.0',
-    function: 'GetInFaction',
-    parameter1: 'CurrentFollowerFaction',
-    type: 'ne'
-  },
-  potentialFollower: {
-    comparisonValue: '1.0',
-    function: 'GetInFaction',
-    parameter1: 'PotentialFollowerFaction',
-    type: 'eq'
-  },
-  waiting: {
-    comparisonValue: '1.0',
-    function: 'GetActorValue',
-    parameter1: 'Waiting For Player',
-    type: 'eq'
-  },
-  notWaiting: {
-    comparisonValue: '1.0',
-    function: 'GetActorValue',
-    parameter1: 'Waiting For Player',
-    type: 'ne'
-  },
-  stranger: {
-    comparisonValue: '0.0',
-    function: 'GetRelationshipRank',
-    type: 'le'
-  },
-  friend: {
-    comparisonValue: '1.0',
-    function: 'GetRelationshipRank',
-    type: 'ge'
-  },
-  enemy: {
-    comparisonValue: '0.0',
-    function: 'GetRelationshipRank',
-    type: 'lt'
-  },
-  favorState: {
-    comparisonValue: '1.0',
-    function: 'IsInFavorState',
     type: 'eq'
   }
 };
