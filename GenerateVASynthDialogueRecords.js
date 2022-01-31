@@ -1,8 +1,3 @@
-/**
- * TODO list
- * - Links/invisible continues from top-level topics to the ones with scripts.
- * - Conditions need to be added for most of the responses.
- */
 const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config.json');
 
 const pluginName = config.config.plugin;
@@ -66,6 +61,12 @@ const commonConditions = {
     parameter1: 'Waiting For Player',
     type: 'eq'
   },
+  notWaiting: {
+    comparisonValue: '1.0',
+    function: 'GetActorValue',
+    parameter1: 'Waiting For Player',
+    type: 'ne'
+  },
   stranger: {
     comparisonValue: '0.0',
     function: 'GetRelationshipRank',
@@ -81,14 +82,46 @@ const commonConditions = {
     function: 'GetRelationshipRank',
     type: 'lt'
   },
+  favorState: {
+    comparisonValue: '1.0',
+    function: 'IsInFavorState',
+    type: 'eq'
+  }
 };
+
+// Check for missing audio before proceeding.
+let srcAudioCount = 0;
+let srcAudioMissingCount = 0;
+Object.keys(infos).forEach(topicKey => {
+  let infoList = infos[topicKey];
+  infoList.forEach(info => {
+    if ('responses' in info) {
+      info.responses.forEach(response => {
+        let audioSrc = getAudioSrcPath(topicKey, response);
+        if (fh.jetpack.exists(audioSrc)) {
+          srcAudioCount++;
+        } else {
+          srcAudioMissingCount++;
+          zedit.log("ERROR: Missing audio: " + audioSrc);
+        }
+      });
+    }
+  });
+});
+zedit.log("INFO: Audio files present: " + srcAudioCount.toString());
+zedit.log("INFO: Audio files missing: " + srcAudioMissingCount.toString());
+if (srcAudioMissingCount > 0) {
+  return;
+}
 
 let plugin = xelib.FileByName(pluginName);
 xelib.WithHandle(plugin, function() {
-  // createVoiceType(plugin, voice);
-  // createQuest(plugin, quest);
-  // Object.keys(topics).forEach(key => createTopic(plugin, quest, topics[key]));
-  // Object.keys(branches).forEach(key => createBranch(plugin, quest, branches[key], topics));
+  createVoiceType(plugin, voice);
+  createQuest(plugin, quest);
+  Object.keys(topics).forEach(key =>
+    createTopic(plugin, quest, topics[key]));
+  Object.keys(branches).forEach(key =>
+    createBranch(plugin, quest, branches[key], topics));
   Object.keys(infos).forEach(topicKey => {
     infos[topicKey].forEach(info => createInfo(plugin, topicKey, info));
   });
@@ -197,8 +230,9 @@ function createInfo(plugin, topicKey, info) {
   if ('template' in info) {
     if (info.template in infoTemplates) {
       let template = infoTemplates[info.template];
-      if (!('flags' in info)) info.flags = template.flags;
-      if (!('conditions' in info)) info.conditions = template.conditions;
+      if ('flags' in template && !('flags' in info)) info.flags = template.flags;
+      if ('conditions' in template && !('conditions' in info)) info.conditions = template.conditions;
+      if ('links' in template && !('links' in info)) info.links = template.links;
     } else {
       zedit.log('WARNING: INFO template not found: ' + info.template)
     }
@@ -215,6 +249,12 @@ function createInfo(plugin, topicKey, info) {
   if ('responseData' in info) {
     let sharedInfoEditorId = voice.fullName + '_Shared_' + info.responseData;
     xelib.AddElementValue(element, 'DNAM', sharedInfoEditorId);
+  }
+  if ('links' in info) {
+    info.links.forEach(targetEditorId => {
+      let linkToElement = xelib.AddArrayItem(element, 'Link To', 'TCLT');
+      xelib.SetValue(linkToElement, '', targetEditorId);
+    });
   }
 
   // Mandatory elements/values:
