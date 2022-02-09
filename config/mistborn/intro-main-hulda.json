@@ -1,0 +1,661 @@
+{
+    "config": {
+        "pluginName": "Mistborn.esp",
+        "audioInputPath": {
+            "FemaleNord": "B:\\games\\skyrim\\generated\\voice\\sk_femalenord"
+        },
+        "dataPath": "B:\\games\\skyrim\\se-m\\mods\\Overwrite"
+    },
+    "quest": {
+        "editorId": "MB_Q_Intro",
+        "type": "Side Quests", "name": "The Mistborn: Summon Friends", "priority": 0, "flags": ["Run Once"],
+        "stages": [
+            {"id": 0, "flags": ["Start Up Stage"]},
+            {"id": 10, "flags": ["Shut Down Stage"]}
+        ],
+        "aliases": [
+            {"name": "Hulda", "type": "Ref"}
+        ]
+        },
+
+    "branches": {
+        "Main": {"editorId": "MB_Q_Intro_Branch_Main", "quest": "MB_Q_Intro", "startingTopic": "MB_Q_Intro_Topic_Main", "type": "Top-Level"}
+    },
+
+    "topics": {
+        "MB_Q_Intro_Topic_Shared": {
+            "editorId": "MB_Q_Intro_Topic_Shared",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "category": "Miscellaneous",
+            "subtype": "SharedInfo",
+            "subtypeName": "IDAT"
+        },
+        "MB_Q_Intro_Topic_Main": {
+            "editorId": "MB_Q_Intro_Topic_Main",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "I need to send a message to someone outside the province."
+        },
+        "MB_Q_Intro_Topic_Cancel": {
+            "editorId": "MB_Q_Intro_Topic_Cancel",
+            "priority": "0.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "On second thought, I'll come back later."
+        },
+        "MB_Q_Intro_Topic_Broke": {
+            "editorId": "MB_Q_Intro_Topic_Broke",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "I can't afford that right now."
+        },
+        "MB_Q_Intro_Topic_Where": {
+            "editorId": "MB_Q_Intro_Topic_Where",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_Done1": {
+            "editorId": "MB_Q_Intro_Topic_Done1",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_Done2": {
+            "editorId": "MB_Q_Intro_Topic_Done2",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToCyrodiil1": {
+            "editorId": "MB_Q_Intro_Topic_ToCyrodiil1",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Cyrodiil..."
+        },
+        "MB_Q_Intro_Topic_ToCyrodiil2": {
+            "editorId": "MB_Q_Intro_Topic_ToCyrodiil2",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToCyrodiil3": {
+            "editorId": "MB_Q_Intro_Topic_ToCyrodiil3",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToCyrodiil_Caius": {
+            "editorId": "MB_Q_Intro_Topic_ToCyrodiil_Caius",
+            "priority": "100.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Caius..."
+        },
+        "MB_Q_Intro_Topic_ToCyrodiil_CasVal": {
+            "editorId": "MB_Q_Intro_Topic_ToCyrodiil_CasVal",
+            "priority": "99.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Casilwen and Vallisha..."
+        },
+        "MB_Q_Intro_Topic_ToCyrodiil_EsmeSigi": {
+            "editorId": "MB_Q_Intro_Topic_ToCyrodiil_EsmeSigi",
+            "priority": "98.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Esme and Sigeweard..."
+        },
+        "MB_Q_Intro_Topic_ToCyrodiil_Idina": {
+            "editorId": "MB_Q_Intro_Topic_ToCyrodiil_Idina",
+            "priority": "97.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Idina..."
+        },
+        "MB_Q_Intro_Topic_ToHammerfell1": {
+            "editorId": "MB_Q_Intro_Topic_ToHammerfell1",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Hammerfell..."
+        },
+        "MB_Q_Intro_Topic_ToHammerfell2": {
+            "editorId": "MB_Q_Intro_Topic_ToHammerfell2",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToHammerfell3": {
+            "editorId": "MB_Q_Intro_Topic_ToHammerfell3",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToHammerfell_DaxtonRizara": {
+            "editorId": "MB_Q_Intro_Topic_ToHammerfell_DaxtonRizara",
+            "priority": "100.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Daxton and Ri-Zara..."
+        },
+        "MB_Q_Intro_Topic_ToHammerfell_MaidaUram": {
+            "editorId": "MB_Q_Intro_Topic_ToHammerfell_MaidaUram",
+            "priority": "99.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Maida and Uramlorz..."
+        },
+        "MB_Q_Intro_Topic_ToHighRock1": {
+            "editorId": "MB_Q_Intro_Topic_ToHighRock1",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "High Rock..."
+        },
+        "MB_Q_Intro_Topic_ToHighRock2": {
+            "editorId": "MB_Q_Intro_Topic_ToHighRock2",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToHighRock3": {
+            "editorId": "MB_Q_Intro_Topic_ToHighRock3",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToHighRock_AeowynElfwyn": {
+            "editorId": "MB_Q_Intro_Topic_ToHighRock_AeowynElfwyn",
+            "priority": "100.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Aeowyn and Elfwyn..."
+        },
+        "MB_Q_Intro_Topic_ToHighRock_AtsukaEomir": {
+            "editorId": "MB_Q_Intro_Topic_ToHighRock_AtsukaEomir",
+            "priority": "99.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Atsuka and Eomir..."
+        },
+        "MB_Q_Intro_Topic_ToMorrowind1": {
+            "editorId": "MB_Q_Intro_Topic_ToMorrowind1",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Morrowind..."
+        },
+        "MB_Q_Intro_Topic_ToMorrowind2": {
+            "editorId": "MB_Q_Intro_Topic_ToMorrowind2",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToMorrowind3": {
+            "editorId": "MB_Q_Intro_Topic_ToMorrowind3",
+            "priority": "50.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST"
+        },
+        "MB_Q_Intro_Topic_ToMorrowind_ElisiaMeiraRoald": {
+            "editorId": "MB_Q_Intro_Topic_ToMorrowind_ElisiaMeiraRoald",
+            "priority": "100.0",
+            "quest": "MB_Q_Intro",
+            "branch": "MB_Q_Intro_Branch_Main",
+            "category": "Topic",
+            "subtype": "Custom",
+            "subtypeName": "CUST",
+            "text": "Elisia, Meira, and Roald..."
+        }
+    },
+
+    "conditions": {
+        "isNpc":           {"function": "GetIsID", "parameter1": "REPLACE_WITH_NPC", "comparisonValue": "1.0", "type": "eq"},
+        "questNotStarted": {"function": "GetStage", "parameter1": "REPLACE_WITH_QUEST", "comparisonValue": "0", "type": "eq"},
+        "hasGold":         {"function": "GetItemCount", "parameter1": "Gold001", "comparisonValue": "REPLACE_WITH_AMOUNT", "type": "ge", "reference": "player"}
+    },
+
+    "infoTemplates": {
+        "sendLetter": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "conditions": [
+                {"template": "isNpc", "parameter1": "Hulda"},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_AeowynElfwyn",     "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_AtsukaEomir",      "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_Caius",            "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_CasVal",           "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_DaxtonRizara",     "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_ElisiaMeiraRoald", "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_EsmeSigi",         "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_Idina",            "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_MaidaUram",        "or": true}
+            ],
+            "links": ["MB_Q_Intro_Topic_Where"]
+        },
+        "exit": {
+            "voice": "FemaleNord",
+            "flags": ["Random"]
+        },
+        "sendLetterWhere": {
+            "voice": "FemaleNord",
+            "flags": ["Random"],
+            "links": [
+                "MB_Q_Intro_Topic_Cancel",
+                "MB_Q_Intro_Topic_ToCyrodiil1",
+                "MB_Q_Intro_Topic_ToHammerfell1",
+                "MB_Q_Intro_Topic_ToHighRock1",
+                "MB_Q_Intro_Topic_ToMorrowind1"
+            ]
+        },
+        "done1": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "conditions": [],
+            "links": ["MB_Q_Intro_Topic_Done2"]
+        },
+        "cyrodiil1": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "conditions": [
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_Caius",    "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_CasVal",   "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_EsmeSigi", "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_Idina",    "or": true}
+            ],
+            "links": ["MB_Q_Intro_Topic_ToCyrodiil2"]
+        },
+        "cyrodiil2": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "links": [
+                "MB_Q_Intro_Topic_ToCyrodiil3"
+            ]
+        },
+        "cyrodiil3": {
+            "voice": "FemaleNord",
+            "flags": ["Random"],
+            "links": [
+                "MB_Q_Intro_Topic_ToCyrodiil_Caius",
+                "MB_Q_Intro_Topic_ToCyrodiil_CasVal",
+                "MB_Q_Intro_Topic_ToCyrodiil_EsmeSigi",
+                "MB_Q_Intro_Topic_ToCyrodiil_Idina",
+                "MB_Q_Intro_Topic_Cancel",
+                "MB_Q_Intro_Topic_Broke"
+            ]
+        },
+        "hammerfell1": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "conditions": [
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_DaxtonRizara", "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_MaidaUram",    "or": true}
+            ],
+            "links": ["MB_Q_Intro_Topic_ToHammerfell2"]
+        },
+        "hammerfell2": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "links": [
+                "MB_Q_Intro_Topic_ToHammerfell3"
+            ]
+        },
+        "hammerfell3": {
+            "voice": "FemaleNord",
+            "flags": ["Random"],
+            "links": [
+                "MB_Q_Intro_Topic_ToHammerfell_DaxtonRizara",
+                "MB_Q_Intro_Topic_ToHammerfell_MaidaUram",
+                "MB_Q_Intro_Topic_Cancel",
+                "MB_Q_Intro_Topic_Broke"
+            ]
+        },
+        "highRock1": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "conditions": [
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_AeowynElfwyn", "or": true},
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_AtsukaEomir",  "or": true}
+            ],
+            "links": ["MB_Q_Intro_Topic_ToHighRock2"]
+        },
+        "highRock2": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "links": [
+                "MB_Q_Intro_Topic_ToHighRock3"
+            ]
+        },
+        "highRock3": {
+            "voice": "FemaleNord",
+            "flags": ["Random"],
+            "links": [
+                "MB_Q_Intro_Topic_ToHighRock_AeowynElfwyn",
+                "MB_Q_Intro_Topic_ToHighRock_AtsukaEomir",
+                "MB_Q_Intro_Topic_Cancel",
+                "MB_Q_Intro_Topic_Broke"
+            ]
+        },
+        "morrowind1": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "conditions": [
+                {"template": "questNotStarted", "parameter1": "MB_Q_Intro_ElisiaMeiraRoald", "or": true}
+            ],
+            "links": ["MB_Q_Intro_Topic_ToMorrowind2"]
+        },
+        "morrowind2": {
+            "voice": "FemaleNord",
+            "flags": ["Random", "Invisible continue"],
+            "links": [
+                "MB_Q_Intro_Topic_ToMorrowind3"
+            ]
+        },
+        "morrowind3": {
+            "voice": "FemaleNord",
+            "flags": ["Random"],
+            "links": [
+                "MB_Q_Intro_Topic_ToMorrowind_ElisiaMeiraRoald",
+                "MB_Q_Intro_Topic_Cancel",
+                "MB_Q_Intro_Topic_Broke"
+            ]
+        },
+        "recruit": {
+            "voice": "FemaleNord",
+            "flags": ["Invisible continue"],
+            "responseData": "SharedSilence",
+            "links": ["MB_Q_Intro_Topic_Done1"]
+        }
+    },
+
+    "infos": {
+        "MB_Q_Intro_Topic_Shared": [
+            {"editorId": "MB_Q_Intro_Topic_Shared_Who1",  "voice": "FemaleNord", "responses": [{"text": "To whom will the message be addressed?"}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_Who2",  "voice": "FemaleNord", "responses": [{"text": "To whom should I address this?"}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_Who3",  "voice": "FemaleNord", "responses": [{"text": "Who will be receiving the letter?"}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_Who4",  "voice": "FemaleNord", "responses": [{"text": "Who is the addressee?"}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_Who5",  "voice": "FemaleNord", "responses": [{"text": "Who will be the recipient?"}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_UsualRate1", "voice": "FemaleNord", "responses": [{"text": "The usual rate for that trip is 25 septims."}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_UsualRate2", "voice": "FemaleNord", "responses": [{"text": "Last I checked, deliveries there are running typically, so it will cost only 25 septims.",
+                                                                                                  "audioIn": "Last I checked, deliveries there are running typically, so it will cos"}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_UsualRate3", "voice": "FemaleNord", "responses": [{"text": "Thankfully there's nothing brewing between there and Skyrim, so it will only cost 25 septims.",
+                                                                                                  "audioIn": "Thankfully there's nothing brewing between there and Skyrim, so it wil"}]},
+            {"editorId": "MB_Q_Intro_Topic_Shared_UsualRate4", "voice": "FemaleNord", "responses": [{"text": "That'll just set you back 25 septims."}]}
+        ],
+        "MB_Q_Intro_Topic_Main": [
+            {"template": "sendLetter", "responses": [{"text": "Sure. It can be arranged."}]},
+            {"template": "sendLetter", "responses": [{"text": "Of course. I can arrange that."}]},
+            {"template": "sendLetter", "responses": [{"text": "Not a problem. I can pass it off to the local courier."}]},
+            {"template": "sendLetter", "responses": [{"text": "I can certainly do that for you."}]}
+        ],
+        "MB_Q_Intro_Topic_Cancel": [
+            {"template": "exit", "responses": [{"text": "Alright. Just let me know if you change your mind."}]},
+            {"template": "exit", "responses": [{"text": "Okay. Come back again if anything changes."}]},
+            {"template": "exit", "responses": [{"text": "Sure. Come back if you need my services."}]},
+            {"template": "exit", "responses": [{"text": "If you say so. I'll fetch a courier if and when you need me to."}]}
+        ],
+        "MB_Q_Intro_Topic_Broke": [
+            {"template": "exit", "responses": [{"text": "Okay then. Come back when you have enough."}]},
+            {"template": "exit", "responses": [{"text": "Sorry, but you need to cover the cost of delivery."}]}
+        ],
+        "MB_Q_Intro_Topic_Where": [
+            {"template": "sendLetterWhere", "responses": [{"text": "Where will the message be going?"}]},
+            {"template": "sendLetterWhere", "responses": [{"text": "What province is it going to?"}]},
+            {"template": "sendLetterWhere", "responses": [{"text": "Which direction is it headed?"}]}
+        ],
+        "MB_Q_Intro_Topic_Done1": [
+            {"template": "done1", "responses": [{"text": "Alright then."}]},
+            {"template": "done1", "responses": [{"text": "I think that should cover it."}]},
+            {"template": "done1", "responses": [{"text": "That looks like enough."}]},
+            {"template": "done1", "responses": [{"text": "Of course, I can't guarantee it will find its recipient."}]},
+            {"template": "done1", "responses": [{"text": "That settles it."}]}
+        ],
+        "MB_Q_Intro_Topic_Done2": [
+            {"template": "exit", "responses": [{"text": "I'll have the local courier pick this up in the next batch."}]},
+            {"template": "exit", "responses": [{"text": "This will be handed to the courier on his next run."}]},
+            {"template": "exit", "responses": [{"text": "I'll make sure this one goes out quickly."}]},
+            {"template": "exit", "responses": [{"text": "I assure you it will be sent out promptly."}]}
+        ],
+        "MB_Q_Intro_Topic_ToCyrodiil1": [
+            {"template": "cyrodiil1", "responses": [{"text": "Cyrodiil..."}]},
+            {"template": "cyrodiil1", "responses": [{"text": "Cyrodiil, huh?"}]},
+            {"template": "cyrodiil1", "responses": [{"text": "It's going south of the border, then."}]}
+        ],
+        "MB_Q_Intro_Topic_ToCyrodiil2": [
+            {"template": "cyrodiil2", "responses": [
+                {"text": "Normally this would have been the cheapest province to deliver to."},
+                {"text": "But with things the way they are? It'll cost about 50 septims.",
+              "audioIn": "But with things the way they are It'll cost about 50 septims"}]
+            },
+            {"template": "cyrodiil2", "responses": [{"text": "I see... Given the current state of affairs, that will cost 50 septims, unfortunately.",
+                                                  "audioIn": "I see... Given the current state of affairs, that will cost 50 septims"}]},
+            {"template": "cyrodiil2", "responses": [{"text": "Regretfully it will cost a bit extra these days. 50 septims should cover it.",
+                                                  "audioIn": "Regretfully it will cost a bit extra these days. 50 septims should cov"}]}
+        ],
+        "MB_Q_Intro_Topic_ToCyrodiil3": [
+            {"template": "cyrodiil3", "responseData": "MB_Q_Intro_Topic_Shared_Who1"},
+            {"template": "cyrodiil3", "responseData": "MB_Q_Intro_Topic_Shared_Who2"},
+            {"template": "cyrodiil3", "responseData": "MB_Q_Intro_Topic_Shared_Who3"},
+            {"template": "cyrodiil3", "responseData": "MB_Q_Intro_Topic_Shared_Who4"},
+            {"template": "cyrodiil3", "responseData": "MB_Q_Intro_Topic_Shared_Who5"}
+        ],
+        "MB_Q_Intro_Topic_ToCyrodiil_Caius": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_Caius"},
+                    {"template": "hasGold", "comparisonValue": "50"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToCyrodiil_CasVal": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_CasVal"},
+                    {"template": "hasGold", "comparisonValue": "50"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToCyrodiil_EsmeSigi": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_EsmeSigi"},
+                    {"template": "hasGold", "comparisonValue": "50"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToCyrodiil_Idina": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_Idina"},
+                    {"template": "hasGold", "comparisonValue": "50"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToHammerfell1": [
+            {"template": "hammerfell1", "responses": [{"text": "Hammerfell..."}]},
+            {"template": "hammerfell1", "responses": [{"text": "Hammerfell, eh?"}]},
+            {"template": "hammerfell1", "responses": [{"text": "Ah, Hammerfell. Never been there, but I've always wanted to see it."}]}
+        ],
+        "MB_Q_Intro_Topic_ToHammerfell2": [
+            {"template": "hammerfell2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate1"},
+            {"template": "hammerfell2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate2"},
+            {"template": "hammerfell2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate3"},
+            {"template": "hammerfell2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate4"}
+        ],
+        "MB_Q_Intro_Topic_ToHammerfell3": [
+            {"template": "hammerfell3", "responseData": "MB_Q_Intro_Topic_Shared_Who1"},
+            {"template": "hammerfell3", "responseData": "MB_Q_Intro_Topic_Shared_Who2"},
+            {"template": "hammerfell3", "responseData": "MB_Q_Intro_Topic_Shared_Who3"},
+            {"template": "hammerfell3", "responseData": "MB_Q_Intro_Topic_Shared_Who4"},
+            {"template": "hammerfell3", "responseData": "MB_Q_Intro_Topic_Shared_Who5"}
+        ],
+        "MB_Q_Intro_Topic_ToHammerfell_DaxtonRizara": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_DaxtonRizara"},
+                    {"template": "hasGold", "comparisonValue": "25"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToHammerfell_MaidaUram": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_MaidaUram"},
+                    {"template": "hasGold", "comparisonValue": "25"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToHighRock1": [
+            {"template": "highRock1", "responses": [{"text": "High Rock is quite a trek."}]},
+            {"template": "highRock1", "responses": [{"text": "Oh! High Rock, is it?"}]},
+            {"template": "highRock1", "responses": [{"text": "You have many friends in High Rock I presume?"}]}
+        ],
+        "MB_Q_Intro_Topic_ToHighRock2": [
+            {"template": "highRock2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate1"},
+            {"template": "highRock2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate2"},
+            {"template": "highRock2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate3"},
+            {"template": "highRock2", "responseData": "MB_Q_Intro_Topic_Shared_UsualRate4"}
+        ],
+        "MB_Q_Intro_Topic_ToHighRock3": [
+            {"template": "highRock3", "responseData": "MB_Q_Intro_Topic_Shared_Who1"},
+            {"template": "highRock3", "responseData": "MB_Q_Intro_Topic_Shared_Who2"},
+            {"template": "highRock3", "responseData": "MB_Q_Intro_Topic_Shared_Who3"},
+            {"template": "highRock3", "responseData": "MB_Q_Intro_Topic_Shared_Who4"},
+            {"template": "highRock3", "responseData": "MB_Q_Intro_Topic_Shared_Who5"}
+        ],
+        "MB_Q_Intro_Topic_ToHighRock_AeowynElfwyn": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_AeowynElfwyn"},
+                    {"template": "hasGold", "comparisonValue": "25"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToHighRock_AtsukaEomir": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_AtsukaEomir"},
+                    {"template": "hasGold", "comparisonValue": "25"}
+                ]
+            }
+        ],
+        "MB_Q_Intro_Topic_ToMorrowind1": [
+            {"template": "morrowind1", "responses": [{"text": "Morrowind, you say?"}]},
+            {"template": "morrowind1", "responses": [{"text": "Morrowind?"}]},
+            {"template": "morrowind1", "responses": [{"text": "Not many letters go that way these days."}]}
+        ],
+        "MB_Q_Intro_Topic_ToMorrowind2": [
+            {"template": "morrowind2", "responses": [{"text": "It might cost a little more to cover hazard pay. 75 septims was the rate, last I checked.",
+                                                   "audioIn": "It might cost a little more to cover hazard pay. 75 septims was the ra"}]},
+            {"template": "morrowind2", "responses": [{"text": "Roads to and from Morrowind are particularly treacherous at the moment. You'll need 75 septims to cover the cost.",
+                                                   "audioIn": "Roads to and from Morrowind are particularly treacherous at the moment"}]}
+        ],
+        "MB_Q_Intro_Topic_ToMorrowind3": [
+            {"template": "morrowind3", "responseData": "MB_Q_Intro_Topic_Shared_Who1"},
+            {"template": "morrowind3", "responseData": "MB_Q_Intro_Topic_Shared_Who2"},
+            {"template": "morrowind3", "responseData": "MB_Q_Intro_Topic_Shared_Who3"},
+            {"template": "morrowind3", "responseData": "MB_Q_Intro_Topic_Shared_Who4"},
+            {"template": "morrowind3", "responseData": "MB_Q_Intro_Topic_Shared_Who5"}
+        ],
+        "MB_Q_Intro_Topic_ToMorrowind_ElisiaMeiraRoald": [
+            {
+                "template": "recruit",
+                "conditions": [
+                    {"template": "questNotStarted", "parameter1": "MB_Q_Intro_ElisiaMeiraRoald"},
+                    {"template": "hasGold", "comparisonValue": "75"}
+                ]
+            }
+        ]
+    }
+}
