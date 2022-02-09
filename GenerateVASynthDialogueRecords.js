@@ -1,4 +1,4 @@
-const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config.json');
+const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\vas-configs\\thane.json');
 
 const pluginName = config.config.plugin;
 const voice = config.voice;

@@ -1,0 +1,439 @@
+{
+  "config": {
+    "plugin": "VASynth_Voices.esp",
+    "audioInputPath": "B:\\games\\skyrim\\generated\\voice\\me_thane",
+    "dataPath": "B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth"
+  },
+  "voice": {
+    "sex": "Male",
+    "game": "ME",
+    "name": "Thane"
+  },
+  
+  "branches": {
+    "Recruit":   {"name": "Recruit",   "type": "Top-Level", "startingTopic": "Recruit"},
+    "Dismiss":   {"name": "Dismiss",   "type": "Top-Level", "startingTopic": "Dismiss"},
+    "Wait":      {"name": "Wait",      "type": "Top-Level", "startingTopic": "Wait"},
+    "Follow":    {"name": "Follow",    "type": "Top-Level", "startingTopic": "Follow"},
+    "Favor":     {"name": "Favor",     "type": "Top-Level", "startingTopic": "Favor"},
+    "FavorMore": {"name": "FavorMore", "type": "Blocking",  "startingTopic": "FavorMore"},
+    "Trade":     {"name": "Trade",     "type": "Top-Level", "startingTopic": "Trade"}
+  },
+  
+  "topics": {
+    "Recruit":        {"name": "Recruit",   "priority": 10.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Follow me. I need your help."},
+    "Dismiss":        {"name": "Dismiss",   "priority": 0.0,   "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "It's time for us to part ways"},
+    "Wait":           {"name": "Wait",      "priority": 100.0, "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Wait here."},
+    "Follow":         {"name": "Follow",    "priority": 100.0, "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Follow me."},
+    "Favor":          {"name": "Favor",     "priority": 50.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "I need you to do something."},
+    "FavorMore":      {"name": "FavorMore", "priority": 50.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": ""},
+    "Trade":          {"name": "Trade",     "priority": 10.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "I need to trade some things with you."},
+    "Hello":          {"name": "Hello",                        "category": "Miscellaneous", "subtype": "Hello",                 "subtypeName": "HELO"},
+    "Goodbye":        {"name": "Goodbye",                      "category": "Miscellaneous", "subtype": "GoodBye",               "subtypeName": "GBYE"},
+    "Shared":         {"name": "Shared",                       "category": "Miscellaneous", "subtype": "SharedInfo",            "subtypeName": "IDAT"},
+    "Idle":           {"name": "Idle",                         "category": "Miscellaneous", "subtype": "Idle",                  "subtypeName": "IDLE"},
+    "Collide":        {"name": "Collide",                      "category": "Miscellaneous", "subtype": "ActorCollidewithActor", "subtypeName": "ACAC"},
+    "CombatToNormal": {"name": "CombatToNormal",               "category": "Detection",     "subtype": "CombatToNormal",        "subtypeName": "COTN"},
+    "NormalToCombat": {"name": "NormalToCombat",               "category": "Detection",     "subtype": "NormalToCombat",        "subtypeName": "NOTC"},
+    "Agree":          {"name": "Agree",                        "category": "Favors",        "subtype": "Agree",                 "subtypeName": "AGRE"},
+    "Refuse":         {"name": "Refuse",                       "category": "Favors",        "subtype": "Refuse",                "subtypeName": "REFU"},
+    "ExitFavor":      {"name": "ExitFavor",                    "category": "Favors",        "subtype": "ExitFavorState",        "subtypeName": "FEXT"},
+    "Attack":         {"name": "Attack",                       "category": "Combat",        "subtype": "Attack",                "subtypeName": "ATCK"},
+    "PowerAttack":    {"name": "PowerAttack",                  "category": "Combat",        "subtype": "PowerAttack",           "subtypeName": "POAT"},
+    "Block":          {"name": "Block",                        "category": "Combat",        "subtype": "Block",                 "subtypeName": "BLOC"},
+    "Hit":            {"name": "Hit",                          "category": "Combat",        "subtype": "Hit",                   "subtypeName": "HIT_"},
+    "Taunt":          {"name": "Taunt",                        "category": "Combat",        "subtype": "Taunt",                 "subtypeName": "TAUT"},
+    "Bleedout":       {"name": "Bleedout",                     "category": "Combat",        "subtype": "Bleedout",              "subtypeName": "BLED"}
+  },
+
+  "conditions": {
+    "follower": {
+        "comparisonValue": "1.0",
+        "function": "GetInFaction",
+        "parameter1": "CurrentFollowerFaction",
+        "type": "eq"
+    },
+    "nonFollower": {
+        "comparisonValue": "1.0",
+        "function": "GetInFaction",
+        "parameter1": "CurrentFollowerFaction",
+        "type": "ne"
+    },
+    "potentialFollower": {
+        "comparisonValue": "1.0",
+        "function": "GetInFaction",
+        "parameter1": "PotentialFollowerFaction",
+        "type": "eq"
+    },
+    "waiting": {
+        "comparisonValue": "1.0",
+        "function": "GetActorValue",
+        "parameter1": "Waiting For Player",
+        "type": "eq"
+    },
+    "notWaiting": {
+        "comparisonValue": "1.0",
+        "function": "GetActorValue",
+        "parameter1": "Waiting For Player",
+        "type": "ne"
+    },
+    "stranger": {
+        "comparisonValue": "0.0",
+        "function": "GetRelationshipRank",
+        "type": "le"
+    },
+    "friend": {
+        "comparisonValue": "1.0",
+        "function": "GetRelationshipRank",
+        "type": "ge"
+    },
+    "enemy": {
+        "comparisonValue": "0.0",
+        "function": "GetRelationshipRank",
+        "type": "lt"
+    },
+    "favorState": {
+        "comparisonValue": "1.0",
+        "function": "IsInFavorState",
+        "type": "eq"
+    }
+  },
+  
+  "infoTemplates": {
+    "random": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice"]
+    },
+    "waiting": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "waitingEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "greetingFollower": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "greetingFollowerEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "greeting": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "nonFollower"]    
+    },
+    "greetingFriend": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "friend", "nonFollower"]
+    },
+    "greetingStranger": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "stranger", "nonFollower"]
+    },
+    "goodbye": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice"]
+    },
+    "goodbyeEnemy": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "enemy"]
+    },
+    "goodbyeFriend": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "friend"]
+    },
+    "goodbyeWaiting": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "goodbyeWaitingEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "goodbyeFollower": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "goodbyeFollowerEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "recruit": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "nonFollower", "potentialFollower", "friend"],
+      "links": ["VAS_FollowerDialogue_RecruitTopic"]
+    },
+    "dismiss": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_DismissTopic"]
+    },
+    "wait": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower", "notWaiting"],
+      "links": ["VAS_FollowerDialogue_WaitTopic"]
+    },
+    "follow": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower", "waiting"],
+      "links": ["VAS_FollowerDialogue_FollowTopic"]
+    },
+    "favor": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_FavorTopic"]
+    },
+    "favorMore": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower", "favorState"],
+      "links": ["VAS_FollowerDialogue_FavorMoreTopic"]
+    },
+    "trade": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_TradeTopic"]
+    }
+  },
+  
+  "infos": {
+    "Shared": [
+      {"key": "OK1",       "responses": [{"text": "As you wish."}]},
+      {"key": "OK2",       "responses": [{"text": "Very well."}]},
+      {"key": "Follow1",   "responses": [{"text": "I will follow your lead."}]},
+      {"key": "Follow2",   "responses": [{"text": "I shall follow your lead."}]},
+      {"key": "Follow3",   "responses": [{"text": "Very well. Lead the way."}]},
+      {"key": "Follow4",   "responses": [{"text": "Very well. I shall follow."}]},
+      {"key": "Follow5",   "responses": [{"text": "I will remain close at hand."}]},
+      {"key": "Follow6",   "responses": [{"text": "I will set forth with you immediately."}]},
+      {"key": "Follow7",   "responses": [{"text": "This one will set out with you forthwith."}]},
+      {"key": "Follow8",   "responses": [{"text": "This one is ready to follow."}]},
+      {"key": "Greet1",    "responses": [{"text": "This one is at your beck and call."}]},
+      {"key": "Greet2",    "responses": [{"text": "At your service."}]},
+      {"key": "Greet3",    "responses": [{"text": "I am at your service."}]}
+    ],
+    "Recruit": [
+      {"template": "recruit", "responseData": "Follow1"},
+      {"template": "recruit", "responseData": "Follow2"},
+      {"template": "recruit", "responseData": "Follow6"},
+      {"template": "recruit", "responseData": "Follow7"},
+      {"template": "recruit", "responseData": "Follow8"},
+      {"template": "recruit", "responses": [{"text": "It pleases this one to accompany you in your travels."}]},
+      {"template": "recruit", "responses": [{"text": "It would be my honor to accompany you."}]},
+      {"template": "recruit", "responses": [{"text": "I am happy to sojourn with you, if that is your desire."}]},
+      {"template": "recruit", "responses": [{"text": "This one will follow wherever you may lead."}]},
+      {"template": "recruit", "responses": [{"text": "I am always eager for adventure with a worthy companion such as yourself."}]},
+      {"template": "recruit", "responses": [{"text": "It gratifies me that you would consider me worthy of your companionship."}]},
+      {"template": "recruit", "responses": [{"text": "I am honored you consider this one worthy, and so I shall be at my best."}]}
+    ],
+    "Dismiss": [
+      {"template": "dismiss", "responses": [{"text": "Very well. I shall leave at once. Divines bless you on your continued journies."}]},
+      {"template": "dismiss", "responses": [{"text": "If that is what you wish, I will return home."}]},
+      {"template": "dismiss", "responses": [{"text": "As you command. I will return at once to my present abode."}]},
+      {"template": "dismiss", "responses": [{"text": "I shall depart posthaste. May the divines protect you on your journey."}]},
+      {"template": "dismiss", "responses": [{"text": "Very well. This one may be found in the usual location if further assistance is required."}]},
+      {"template": "dismiss", "responses": [{"text": "If that is your command, I wish you good health, and a pleasant day."}]},
+      {"template": "dismiss", "responses": [{"text": "Then we shall part ways. Please do not hesitate to seek me out if you desire my company."}]},
+      {"template": "dismiss", "responses": [{"text": "All things must come to an end in due time. Farewell, my friend."}]}
+    ],
+    "Wait": [
+      {"template": "wait", "responseData": "OK1"},
+      {"template": "wait", "responseData": "OK2"},
+      {"template": "wait", "responses": [{"text": "I will remain in this location until further notice."}]},
+      {"template": "wait", "responses": [{"text": "This one shall wait for you in the present location."}]},
+      {"template": "wait", "responses": [{"text": "Very well. Please return when you are ready to leave."}]},
+      {"template": "wait", "responses": [{"text": "This one will keep watch from this position."}]},
+      {"template": "wait", "responses": [{"text": "I will remain at this post until your return."}]},
+      {"template": "wait", "responses": [{"text": "As you wish. I shall wait here."}]},
+      {"template": "wait", "responses": [{"text": "As you wish. This one will remain here."}]}
+    ],
+    "Follow": [
+      {"template": "follow", "responseData": "OK1"},
+      {"template": "follow", "responseData": "OK2"},
+      {"template": "follow", "responseData": "Follow1"},
+      {"template": "follow", "responseData": "Follow2"},
+      {"template": "follow", "responseData": "Follow3"},
+      {"template": "follow", "responseData": "Follow4"},
+      {"template": "follow", "responseData": "Follow5"},
+      {"template": "follow", "responseData": "Follow6"},
+      {"template": "follow", "responseData": "Follow7"},
+      {"template": "follow", "responseData": "Follow8"}
+    ],
+    "Favor": [
+      {"template": "favor", "responses": [{"text": "How may I be of assistance?"}]},
+      {"template": "favor", "responses": [{"text": "How may I help you?"}]},
+      {"template": "favor", "responses": [{"text": "This one is ready to help."}]},
+      {"template": "favor", "responses": [{"text": "How may this one serve you?"}]},
+      {"template": "favor", "responses": [{"text": "I am presently at your service."}]},
+      {"template": "favor", "responses": [{"text": "This one is at your service."}]},
+      {"template": "favor", "responses": [{"text": "I await your command."}]},
+      {"template": "favor", "responses": [{"text": "I am awaiting orders."}]}
+    ],
+    "FavorMore": [
+      {"template": "favorMore", "responses": [{"text": "This one awaits further instruction."}]},
+      {"template": "favorMore", "responses": [{"text": "I await further commands."}]},
+      {"template": "favorMore", "responses": [{"text": "Do you have any further orders?"}]},
+      {"template": "favorMore", "responses": [{"text": "Is there anything else you require?"}]},
+      {"template": "favorMore", "responses": [{"text": "How may I be of further assistance?"}]},
+      {"template": "favorMore", "responses": [{"text": "This one remains at your service."}]},
+      {"template": "favorMore", "responses": [{"text": "Do you require anything else of this one?"}]},
+      {"template": "favorMore", "responses": [{"text": "Is additional aid required?"}]}
+    ],
+    "Trade": [
+      {"template": "trade", "responseData": "OK1"},
+      {"template": "trade", "responseData": "OK2"},
+      {"template": "trade", "responseData": "Greet2"},
+      {"template": "trade", "responseData": "Greet3"},
+      {"template": "trade", "responses": [{"text": "What is mine is yours."}]},
+      {"template": "trade", "responses": [{"text": "Is there an item you require?"}]},
+      {"template": "trade", "responses": [{"text": "Do you need help carrying anything?"}]},
+      {"template": "trade", "responses": [{"text": "Do you need to offload some weight?"}]},
+      {"template": "trade", "responses": [{"text": "This one willingly shares your burdens."}]}
+    ],
+    "Hello": [
+      {"template": "greeting",            "responses": [{"text": "You grace me with your presence."}]},
+      {"template": "greeting",            "responses": [{"text": "You honor me with your presence."}]},
+      {"template": "greeting",            "responses": [{"text": "You've come to see me."}]},
+      {"template": "greeting",            "responses": [{"text": "To what do I owe the honor?"}]},
+      {"template": "greetingFollower",    "responseData": "Greet1"},
+      {"template": "greetingFollower",    "responseData": "Greet2"},
+      {"template": "greetingFollower",    "responseData": "Greet3"},
+      {"template": "waiting",             "responses": [{"text": "Welcome back."}]},
+      {"template": "waiting",             "responses": [{"text": "Are we ready to leave this place?"}]},
+      {"template": "waiting",             "responses": [{"text": "I am ready to go when you are."}]},
+      {"template": "waiting",             "responses": [{"text": "I have been waiting for you."}]},
+      {"template": "waiting",             "responses": [{"text": "I have been waiting patiently."}]},
+      {"template": "waiting",             "responses": [{"text": "There you are."}]},
+      {"template": "waiting",             "responses": [{"text": "You have returned."}]},
+      {"template": "waiting",             "responses": [{"text": "You have returned. This is good."}]},
+      {"template": "waitingEnd",          "responses": [{"text": "I continue to abide in this place."}]},
+      {"template": "greetingFollower",    "responses": [{"text": "Are you in need of assistance?"}]},
+      {"template": "greetingFollower",    "responses": [{"text": "For what purpose have you come to me?"}]},
+      {"template": "greetingFollower",    "responses": [{"text": "Is there anything you need?"}]},
+      {"template": "greetingFollower",    "responses": [{"text": "Is there anything you require?"}]},
+      {"template": "greetingFollower",    "responses": [{"text": "Is there something you need?"}]},
+      {"template": "greetingFollower",    "responses": [{"text": "Let me know if you need anything at all."}]},
+      {"template": "greeting",            "responses": [{"text": "Hello."}]},
+      {"template": "greeting",            "responses": [{"text": "How are you?"}]},
+      {"template": "greeting",            "responses": [{"text": "Salutations."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "Good to see you again."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "Greetings, friend."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "Greetings, my friend."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "Hello, my friend."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "How are you doing, my friend?"}]},
+      {"template": "greetingFriend",      "responses": [{"text": "How are you, friend?"}]},
+      {"template": "greetingFriend",      "responses": [{"text": "It is good to see you."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "It pleases me to see you."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "We meet again."}]},
+      {"template": "greetingFriend",      "responses": [{"text": "What brings you today, my friend?"}]}
+    ],
+    "Goodbye": [
+      {"template": "goodbyeWaiting",     "responses": [{"text": "When you are ready to go, just give the command."}]},
+      {"template": "goodbyeWaiting",     "responses": [{"text": "I will remain here."}]},
+      {"template": "goodbyeWaiting",     "responses": [{"text": "I shall await your return."}]},
+      {"template": "goodbyeWaiting",     "responses": [{"text": "This one shall abide at this location until your return."}]},
+      {"template": "goodbyeWaiting",     "responses": [{"text": "I shall continue to wait in this place."}]},
+      {"template": "goodbyeWaiting",     "responses": [{"text": "This one eagerly waits for your return."}]},
+      {"template": "goodbyeWaiting",     "responses": [{"text": "I shall remain in this position until you say otherwise."}]},
+      {"template": "goodbyeWaitingEnd",  "responses": [{"text": "Please return for me when you are ready to leave this place."}]},
+      {"template": "goodbye",            "responses": [{"text": "It was a pleasure."}]},
+      {"template": "goodbye",            "responses": [{"text": "It was my pleasure."}]},
+      {"template": "goodbye",            "responses": [{"text": "It was a pleasure speaking with you as usual."}]},
+      {"template": "goodbyeFollower",    "responses": [{"text": "We shall talk later."}]},
+      {"template": "goodbyeFollower",    "responses": [{"text": "Let me know if you need anything else."}]},
+      {"template": "goodbyeFollower",    "responses": [{"text": "We shall continue this discussion at a later time."}]},
+      {"template": "goodbyeFollower",    "responses": [{"text": "Please inform me if I may be of any further assistance."}]},
+      {"template": "goodbyeFollowerEnd", "responses": [{"text": "Please feel free to speak to me at any time."}]},
+      {"template": "goodbye",            "responses": [{"text": "Goodbye."}]},
+      {"template": "goodbye",            "responses": [{"text": "Farewell."}]},
+      {"template": "goodbye",            "responses": [{"text": "I bid you farewell."}]},
+      {"template": "goodbye",            "responses": [{"text": "Until we meet again."}]},
+      {"template": "goodbye",            "responses": [{"text": "Until next time."}]},
+      {"template": "goodbye",            "responses": [{"text": "This one wishes you good health."}]},
+      {"template": "goodbye",            "responses": [{"text": "This one wishes you a pleasant day."}]},
+      {"template": "goodbye",            "responses": [{"text": "Please take care."}]},
+      {"template": "goodbye",            "responses": [{"text": "Take care of yourself out there."}]},
+      {"template": "goodbye",            "responses": [{"text": "I look forward to seeing you again."}]}
+    ],
+    "Idle": [],
+    "Collide": [
+      {"template": "random", "responses": [{"text": "Be careful."}]},
+      {"template": "random", "responses": [{"text": "Please exercise caution."}]},
+      {"template": "random", "responses": [{"text": "I will move if need be."}]},
+      {"template": "random", "responses": [{"text": "One must respect others' personal space."}]},
+      {"template": "random", "responses": [{"text": "One should be careful."}]},
+      {"template": "random", "responses": [{"text": "If you wish to spar, we should find a more suitable location."}]},
+      {"template": "random", "responses": [{"text": "That behavior is inappropriate."}]},
+      {"template": "random", "responses": [{"text": "Such behavior is disrespectful of others."}]}
+    ],
+    "CombatToNormal": [
+      {"template": "random", "responses": [{"text": "The outcome of that skirmish was... agreeable."}]},
+      {"template": "random", "responses": [{"text": "The outcome of that fight was certainly in our favor."}]},
+      {"template": "random", "responses": [{"text": "That was no challenge for someone of your skill."}]},
+      {"template": "random", "responses": [{"text": "We live to fight another day, unlike our former adversaries."}]},
+      {"template": "random", "responses": [{"text": "Are your adventures always this invigorating and full of excitement?"}]},
+      {"template": "random", "responses": [{"text": "Glory for one is the doom of another."}]},
+      {"template": "random", "responses": [{"text": "They made their choice. We were simply the conclusion."}]},
+      {"template": "random", "responses": [{"text": "Little is more invigorating to the soul than a well earned victory."}]}
+    ],
+    "NormalToCombat": [
+      {"template": "random", "responses": [{"text": "Steel yourself for battle."}]},
+      {"template": "random", "responses": [{"text": "Divines protect you."}]},
+      {"template": "random", "responses": [{"text": "We enter the fray together yet again."}]},
+      {"template": "random", "responses": [{"text": "Good luck to you in this present engagement."}]},
+      {"template": "random", "responses": [{"text": "Good hunting."}]},
+      {"template": "random", "responses": [{"text": "Prepare for battle."}]},
+      {"template": "random", "responses": [{"text": "Ready yourself."}]},
+      {"template": "random", "responses": [{"text": "Onward to victory and glory."}]}
+    ],
+    "Agree": [
+      {"template": "random", "responseData": "OK1"},
+      {"template": "random", "responses": [{"text": "As you command."}]},
+      {"template": "random", "responses": [{"text": "Consider it done."}]},
+      {"template": "random", "responses": [{"text": "It shall be done at once."}]},
+      {"template": "random", "responses": [{"text": "It will be done."}]},
+      {"template": "random", "responses": [{"text": "Understood."}]},
+      {"template": "random", "responses": [{"text": "It will be done posthaste."}]},
+      {"template": "random", "responses": [{"text": "Without delay."}]}
+    ],
+    "Refuse": [
+      {"template": "random", "responses": [{"text": "It cannot be done."}]},
+      {"template": "random", "responses": [{"text": "I cannot comply."}]},
+      {"template": "random", "responses": [{"text": "Regretfully, I cannot do that."}]},
+      {"template": "random", "responses": [{"text": "That is not possible."}]},
+      {"template": "random", "responses": [{"text": "I cannot fulfill your request."}]},
+      {"template": "random", "responses": [{"text": "This one cannot perform your order."}]},
+      {"template": "random", "responses": [{"text": "Respectfully, I must decline that request."}]}
+    ],
+    "ExitFavor": [
+      {"template": "random", "responseData": "OK2"},
+      {"template": "random", "responses": [{"text": "This one is ready should you need anything else."}]},
+      {"template": "random", "responses": [{"text": "I hope I have performed to your satisfaction."}]},
+      {"template": "random", "responses": [{"text": "This one has hopefully met your expectations."}]},
+      {"template": "random", "responses": [{"text": "If there is anything else, do not hesitate to ask."}]},
+      {"template": "random", "responses": [{"text": "I remain at your disposal."}]}
+    ],
+    "Taunt": [],
+    "Bleedout": [],
+    "Attack": [
+    ],
+    "PowerAttack": [
+      {"template": "random", "responses": [{"text": "Huah!", "emotionType": "Anger", "emotionValue": 75}]},
+      {"template": "random", "responses": [{"text": "Kuaah!", "emotionType": "Anger", "emotionValue": 75}]}
+    ],
+    "Block": [
+    ],
+    "Hit": [
+      {"template": "random", "responses": [{"text": "Gah!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Guh!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Hmmh!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Hnnah!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Hnng!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Kaagh!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Knhah!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Mmph!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Uaah!", "emotionType": "Anger", "emotionValue": 100}]}
+    ]
+  }
+}
