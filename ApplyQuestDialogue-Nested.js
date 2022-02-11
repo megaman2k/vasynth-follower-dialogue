@@ -251,7 +251,7 @@ function getAudioSrcPath(topicEditorId, response, voice) {
   //     Hello\
   //       Hey there friend.fuz
   let fuzFileName = 'audioIn' in response ? response.audioIn : response.text;
-  fuzFileName = fuzFileName.replace(/\W$/, '') + '.fuz';
+  fuzFileName = fuzFileName.replace(/[^\w!]$/, '') + '.fuz';
   return [config.constants.audioInputPath[voice], topicEditorId, fuzFileName].join('\\');
 }
 
