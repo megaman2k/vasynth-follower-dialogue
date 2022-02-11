@@ -37,7 +37,7 @@ Object.keys(branches).forEach(branchEditorId => {
   let branch = branches[branchEditorId];
   Object.keys(branch.topics).forEach(topicEditorId => {
     let topic = branch.topics[topicEditorId];
-    createTopicInfos(plugin, topic, quest, branch);
+    createTopicInfos(plugin, topic);
   });
 });
 
@@ -95,10 +95,15 @@ function createTopic(plugin, topic, quest, branch) {
   setValue(element, 'TIFC', topic.infos.length.toString());
 }
 
-function createTopicInfos(plugin, topic, quest, branch) {
+function createTopicInfos(plugin, topic) {
   debug('createTopicInfos: ' + topic.editorId);
 
-  let conditionTemplates = ('conditions' in topic) ? topic.conditions : {};
+  // Commonly used conditions can be specified at the top of the file or in a topic itself.
+  // Those defined in the topic take precedent over the "global" ones.
+  let conditionTemplates = {};
+  if ('conditions' in config) conditionTemplates = JSON.parse(JSON.stringify(config.conditions)); // Deep copy to protect the globals.
+  if ('conditions' in topic) Object.assign(conditionTemplates, topic.conditions);
+  
   let templates = ('infoTemplates' in topic) ? topic.infoTemplates : {};
 
   topic.infos.forEach(info => {
