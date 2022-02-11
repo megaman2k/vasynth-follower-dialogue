@@ -115,7 +115,7 @@ function createTopicInfos(plugin, topic) {
       }
       let template = templates[info.template];
       Object.keys(template).forEach(key => {
-        if (!(key in info)) info.key = template.key;
+        if (!(key in info)) info[key] = template[key];
       });
     }
     
@@ -172,7 +172,7 @@ function createCondition(infoElement, condition, templates) {
     }
     let template = templates[condition.template];
     Object.keys(template).forEach(key => {
-      if (!(key in condition)) condition.key = template.key;
+      if (!(key in condition)) condition[key] = template[key];
     });
   }
 
