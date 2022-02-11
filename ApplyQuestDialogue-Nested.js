@@ -3,6 +3,7 @@
  * - Add scripts to dialogues.
  * - Add scenes.
  * - Set up the quest stages, aliases, scripts, etc.
+ * - Conditions that reference quest variables need to be opened in the CK so that VM values are set.
  * - To keep the FormIDs down, make sure the next record # is as low as possible
  *   before running this script.
  */
@@ -142,10 +143,7 @@ function createTopicInfos(plugin, topic) {
     if ('conditions' in info) info.conditions.forEach(condition => createCondition(element, condition, conditionTemplates));
     let i = 0;
     if ('responses' in info) info.responses.forEach(response => createResponse(element, topic.editorId, info, i++));
-    if ('flags' in info) setFlags(element, 'ENAM', info.flags);
-    //   let f = xelib.AddElement(element, 'ENAM');
-    //   xelib.SetEnabledFlags(f, 'Flags', info.flags);
-    // }
+    if ('flags' in info) setFlags(element, 'ENAM\\Flags', info.flags);
     if ('responseData' in info) setValue(element, 'DNAM', info.responseData);
     if ('links' in info) {
       info.links.forEach(targetEditorId => {
@@ -187,6 +185,7 @@ function createCondition(infoElement, condition, templates) {
   let element = addArrayItem(infoElement, 'Conditions', 'CTDA');
   setValue(element, 'CTDA\\Function', condition.function);
   if ('parameter1' in condition) setValue(element, 'CTDA\\Parameter #1', condition.parameter1);
+  if ('cParameter2' in condition) setValue(element, 'CIS2', condition.cParameter2);
   setValue(element, 'CTDA\\Type', conditionType);
   setValue(element, 'CTDA\\Comparison Value', condition.value);
   if ('reference' in condition) {
@@ -206,8 +205,6 @@ function createResponse(infoElement, topicEditorId, info, responseIndex) {
   setValue(element, 'TRDT\\Emotion Value', 'emotionValue' in response ? response.emotionValue.toString() : '50');
   setValue(element, 'TRDT\\Response number', responseNumber.toString());
   setValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
-  // Leaving this here for now in case the above setValue does not work.
-  //xelib.AddElementValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
 
   let audioSrc = getAudioSrcPath(topicEditorId, response, info.voice);
   let audioDest = getAudioDestPath(topicEditorId, infoElement, responseNumber, info.voice);
