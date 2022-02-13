@@ -156,7 +156,7 @@ function createTopicInfos(plugin, topic) {
       });
     }
 
-    setFlags(element, 'ENAM\\Flags', info.flags);
+    setFlags(element, 'ENAM\\Flags', info.flags, []);
     setValue(element, 'ENAM\\Reset Hours', info.resetHours, '0');
   });
 }
@@ -204,7 +204,8 @@ function createResponse(infoElement, topicEditorId, info, responseIndex) {
   setValue(element, 'TRDT\\Emotion Type', response.emotionType, 'Neutral');
   setValue(element, 'TRDT\\Emotion Value', 'emotionValue' in response ? response.emotionValue.toString() : '50');
   setValue(element, 'TRDT\\Response number', responseNumber.toString());
-  setValue(infoElement, 'Responses\\[' + responseIndex.toString() + ']\\NAM1', response.text);
+  setValue(element, 'NAM1', response.text);
+  if ('idle' in response) setValue(element, 'SNAM', response.idle);
 
   let audioSrc = getAudioSrcPath(topicEditorId, response, info.voice);
   let audioDest = getAudioDestPath(topicEditorId, infoElement, responseNumber, info.voice);
@@ -248,7 +249,9 @@ function getAudioSrcPath(topicEditorId, response, voice) {
   //     Hello\
   //       Hey there friend.fuz
   let fuzFileName = 'audioIn' in response ? response.audioIn : response.text;
-  fuzFileName = fuzFileName.replace(/[^\w!]$/, '') + '.fuz';
+  // Characters that do not get trimmed: word chars, !, space.
+  // Common characters that do get trimmed: a single period, ?.
+  fuzFileName = fuzFileName.replace(/[^\w! ]$/, '') + '.fuz';
   return [config.constants.audioInputPath[voice], topicEditorId, fuzFileName].join('\\');
 }
 
