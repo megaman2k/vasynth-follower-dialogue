@@ -23,6 +23,7 @@ const conditionTypes = {
   gt:   '01000000'
 };
 const globalConditionTemplates = config.conditions;
+const globalTopicTemplates = config.topics;
 
 plugin = xelib.FileByName(config.constants.pluginName);
 // Create the quest if it does not exist.
@@ -77,6 +78,18 @@ function createTopic(plugin, topic, quest, branch) {
   debug('createTopic: ' + topic.editorId);
   let element = createGroupChildIfNotPresent(plugin, 'DIAL', topic.editorId);
   topicEditorIds[topic.editorId] = true;
+  
+  // Apply template values to the topic first.
+  if ('template' in topic) {
+    if (!(topic.template in globalTopicTemplates)) {
+      error('Bad topic template: ' + topic.template);
+      return;
+    }
+    let template = globalTopicTemplates[topic.template];
+    Object.keys(template).forEach(key => {
+      if (!(key in topic)) topic[key] = template[key];
+    });
+  }
 
   // Topic properties.
   if ('text' in topic) setValue(element, 'FULL', topic.text); // Text is optional and should only be set if used.
