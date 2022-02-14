@@ -22,7 +22,6 @@ const conditionTypes = {
   lt:   '00100000',
   gt:   '01000000'
 };
-const globalConditionTemplates = config.conditions;
 const globalTopicTemplates = config.topics;
 
 plugin = xelib.FileByName(config.constants.pluginName);
@@ -118,16 +117,20 @@ function createTopicInfos(plugin, topic) {
   if ('conditions' in config) conditionTemplates = JSON.parse(JSON.stringify(config.conditions)); // Deep copy to protect the globals.
   if ('conditions' in topic) Object.assign(conditionTemplates, topic.conditions);
   
-  let templates = ('infoTemplates' in topic) ? topic.infoTemplates : {};
+  // Commonly used infos can be specified at the top of the file or in a topic itself.
+  // Those defined in the topic take precedent over the "global" ones.
+  let infoTemplates = {};
+  if ('infos' in config) infoTemplates = JSON.parse(JSON.stringify(config.infos)); // Deep copy to protect the globals.
+  if ('infoTemplates' in topic) Object.assign(infoTemplates, topic.infoTemplates);
 
   topic.infos.forEach(info => {
     // Apply template values to the info first.
     if ('template' in info) { 
-      if (!(info.template in templates)) {
+      if (!(info.template in infoTemplates)) {
         error('Topic ' + topic.editorId + ': Bad info template: ' + info.template);
         return;
       }
-      let template = templates[info.template];
+      let template = infoTemplates[info.template];
       Object.keys(template).forEach(key => {
         if (!(key in info)) info[key] = template[key];
       });
