@@ -22,7 +22,6 @@ const conditionTypes = {
   lt:   '00100000',
   gt:   '01000000'
 };
-const globalTopicTemplates = config.topics;
 
 plugin = xelib.FileByName(config.constants.pluginName);
 // Create the quest if it does not exist.
@@ -80,11 +79,11 @@ function createTopic(plugin, topic, quest, branch) {
   
   // Apply template values to the topic first.
   if ('template' in topic) {
-    if (!(topic.template in globalTopicTemplates)) {
+    if (!('topics' in config) || !(topic.template in config.topics)) {
       error('Bad topic template: ' + topic.template);
       return;
     }
-    let template = globalTopicTemplates[topic.template];
+    let template = config.topics[topic.template];
     Object.keys(template).forEach(key => {
       if (!(key in topic)) topic[key] = template[key];
     });
