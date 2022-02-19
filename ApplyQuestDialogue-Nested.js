@@ -112,8 +112,9 @@ function createTopicInfos(plugin, topic) {
   
   if ('replaceTopicInfos' in config.constants && !config.constants.replaceTopicInfos) {
     let topicElement = xelib.GetElement(plugin, 'DIAL\\' + topic.editorId);
-    let expectedInfoCount = xelib.GetIntValue(topicElement, 'TIFC');
-    let actualInfoCount = xelib.ElementCount(topicElement);
+    let expectedInfoCount = topic.infos.length;
+    let actualInfoCount = xelib.GetChildGroup(topicElement);
+    if (actualInfoCount != 0) actualInfoCount = xelib.ElementCount(actualInfoCount);
     if (expectedInfoCount <= actualInfoCount) {
       debug("Skipping infos for topic with existing infos: " + topic.editorId);
       return;
