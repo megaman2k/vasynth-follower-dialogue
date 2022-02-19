@@ -355,14 +355,17 @@ function logChildElements(rootElement) {
 }
 
 function info(message) {
+  if ('logLevels' in config.constants && !('info' in config.constants.logLevels)) return;
   zedit.log('INFO: ' + message);
 }
 
 function debug(message) {
+  if ('logLevels' in config.constants && !('debug' in config.constants.logLevels)) return;
   zedit.log('DEBUG: ' + message);
 }
 
 function error(message) {
+  if ('logLevels' in config.constants && !('error' in config.constants.logLevels)) return;
   zedit.error(message);
 }
 
