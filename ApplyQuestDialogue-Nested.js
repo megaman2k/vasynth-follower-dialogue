@@ -8,7 +8,7 @@
  *   before running this script.
  */
 
-const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config\\mistborn\\esme-intro.json');
+const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config\\mistborn\\aeowyn-intro.json');
 const quest = config.quest;
 const branches = config.branches;
 
@@ -109,6 +109,16 @@ function createTopic(plugin, topic, quest, branch) {
 
 function createTopicInfos(plugin, topic) {
   debug('createTopicInfos: ' + topic.editorId);
+  
+  if ('replaceTopicInfos' in config.constants && !config.constants.replaceTopicInfos) {
+    let topicElement = xelib.GetElement(plugin, 'DIAL\\' + topic.editorId);
+    let expectedInfoCount = xelib.GetIntValue(topicElement, 'TIFC');
+    let actualInfoCount = xelib.ElementCount(topicElement);
+    if (expectedInfoCount <= actualInfoCount) {
+      debug("Skipping infos for topic with existing infos: " + topic.editorId);
+      return;
+    }
+  }
 
   // Commonly used conditions can be specified at the top of the file or in a topic itself.
   // Those defined in the topic take precedent over the "global" ones.
@@ -201,6 +211,8 @@ function createCondition(infoElement, condition, templates) {
   setValue(element, 'CTDA\\Function', condition.function);
   if ('parameter1' in condition) setValue(element, 'CTDA\\Parameter #1', condition.parameter1);
   if ('cParameter2' in condition) setValue(element, 'CIS2', condition.cParameter2);
+  if ('runOn' in condition) setValue(element, 'CTDA\\Run On', condition.runOn);
+  
   setValue(element, 'CTDA\\Type', conditionType);
   setValue(element, 'CTDA\\Comparison Value', condition.value);
   if ('reference' in condition) {
