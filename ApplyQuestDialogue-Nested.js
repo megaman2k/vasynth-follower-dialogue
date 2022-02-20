@@ -45,7 +45,7 @@ function createQuest(plugin, quest) {
   debug('createQuest: ' + quest.editorId);
   let element = createGroupChildIfNotPresent(plugin, 'QUST', quest.editorId);
   setValue(element, 'FULL', quest.name);
-  setFlags(element, 'DNAM\\Flags', []);
+  setFlags(element, 'DNAM\\Flags', quest.flags, []);
   setValue(element, 'DNAM\\Form Version', '255');
   setValue(element, 'DNAM\\Type', quest.type);
   // Stages
