@@ -165,6 +165,20 @@ function createTopicInfos(plugin, topic) {
       });
     }
 
+    // Walk away topics require a link-to, a couple of flags, and a separate "TWAT" value.
+    if ('walkAwayTopic' in info) {
+      if (info.walkAwayTopic in topicEditorIds) {
+        if (!('links' in info)) info.links = [];
+        if (!info.links.includes(info.walkAwayTopic)) info.links.push(info.walkAwayTopic);
+        if (!('flags' in info)) info.flags = [];
+        if (!info.flags.includes('Walk Away')) info.flags.push('Walk Away');
+        if (!info.flags.includes('Walk Away Invisible In Menu')) info.flags.push('Walk Away Invisible In Menu');
+        setValue(element, 'TWAT', info.walkAwayTopic);
+      } else {
+        error("Walk away topic set to invalid topic: " + info.walkAwayTopic);
+      }
+    }
+
     if ('editorId' in info) setValue(element, 'EDID', info.editorId);
     if ('conditions' in info) info.conditions.forEach(condition => createCondition(element, condition, conditionTemplates));
     let i = 0;
