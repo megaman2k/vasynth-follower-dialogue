@@ -8,9 +8,11 @@
  *   before running this script.
  */
 
-const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config\\mistborn\\aeowyn-intro.json');
+const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config\\mistborn\\chat.json');
 const quest = config.quest;
 const branches = config.branches;
+
+if (!('updateExistingElements' in config.constants)) config.constants.updateExistingElements = true;
 
 const topicEditorIds = {};
 
@@ -43,6 +45,10 @@ Object.keys(branches).forEach(branchEditorId => {
 
 function createQuest(plugin, quest) {
   debug('createQuest: ' + quest.editorId);
+  if (!config.constants.updateExistingElements && xelib.GetElement(plugin, 'QUST\\' + quest.editorId) != 0) {
+    info("Skipping existing quest: " + quest.editorId);
+    return;
+  }
   let element = createGroupChildIfNotPresent(plugin, 'QUST', quest.editorId);
   setValue(element, 'FULL', quest.name);
   setFlags(element, 'DNAM\\Flags', quest.flags, []);
@@ -55,15 +61,22 @@ function createQuest(plugin, quest) {
 
 function createBranch(plugin, branch, quest) {
   debug('createBranch: ' + branch.editorId);
+  let skipBranchCreation = (!config.constants.updateExistingElements && xelib.GetElement(plugin, 'DLBR\\' + branch.editorId) != 0)
+  if (skipBranchCreation) {
+    info("Skipping existing branch: " + branch.editorId);
+  }
   let element = createGroupChildIfNotPresent(plugin, 'DLBR', branch.editorId);
-  setValue(element, 'QNAM', quest.editorId);
-  setValue(element, 'TNAM', '0');
-  setFlags(element, 'DNAM', branch.flags, []);
+  if (!skipBranchCreation) {
+    setValue(element, 'QNAM', quest.editorId);
+    setValue(element, 'TNAM', '0');
+    setFlags(element, 'DNAM', branch.flags, []);
+  }
   Object.keys(branch.topics).forEach(editorId => {
     let topic = branch.topics[editorId];
     topic.editorId = editorId;
     createTopic(plugin, topic, quest, branch);
   });
+  if (skipBranchCreation) return;
   // Make sure the starting topic is valid.
   if (!('startingTopic' in branch) || !(branch.startingTopic in branch.topics)) {
     error('Branch ' + branch.editorId + ': Invalid starting topic');
@@ -74,8 +87,12 @@ function createBranch(plugin, branch, quest) {
 
 function createTopic(plugin, topic, quest, branch) {
   debug('createTopic: ' + topic.editorId);
-  let element = createGroupChildIfNotPresent(plugin, 'DIAL', topic.editorId);
   topicEditorIds[topic.editorId] = true;
+  if (!config.constants.updateExistingElements && xelib.GetElement(plugin, 'DIAL\\' + topic.editorId) != 0) {
+    info("Skipping existing topic: " + topic.editorId);
+    return;
+  }
+  let element = createGroupChildIfNotPresent(plugin, 'DIAL', topic.editorId);
   
   // Apply template values to the topic first.
   if ('template' in topic) {
@@ -222,11 +239,12 @@ function createCondition(infoElement, condition, templates) {
     conditionType = conditionType.substring(0, 3) + '1' + conditionType.substring(4);
   }
 
-  let element = addArrayItem(infoElement, 'Conditions', 'CTDA');
+  let element = addArrayItem(infoElement, 'Conditions');
   setValue(element, 'CTDA\\Function', condition.function);
   if ('parameter1' in condition) setValue(element, 'CTDA\\Parameter #1', condition.parameter1);
   if ('cParameter2' in condition) setValue(element, 'CIS2', condition.cParameter2);
   if ('runOn' in condition) setValue(element, 'CTDA\\Run On', condition.runOn);
+  if ('reference' in condition) setValue(element, 'CTDA\\Reference', condition.reference);
   
   setValue(element, 'CTDA\\Type', conditionType);
   setValue(element, 'CTDA\\Comparison Value', condition.value);
@@ -250,7 +268,7 @@ function createResponse(infoElement, topicEditorId, info, responseIndex) {
   if ('idle' in response) setValue(element, 'SNAM', response.idle);
 
   let audioSrc = getAudioSrcPath(topicEditorId, response, info.voice);
-  let audioDest = getAudioDestPath(topicEditorId, infoElement, responseNumber, info.voice);
+  let audioDest = getAudioDestPath(topicEditorId, infoElement, responseNumber, info.voice, audioSrc.endsWith('.wav'));
   if (fh.jetpack.exists(audioSrc)) {
     debug('Copying "' + audioSrc + '" to "' + audioDest + '"');
     if (!config.constants.dryRun) fh.jetpack.copy(audioSrc, audioDest, { overwrite: true });
@@ -293,7 +311,8 @@ function getAudioSrcPath(topicEditorId, response, voice) {
   let fuzFileName = 'audioIn' in response ? response.audioIn : response.text;
   // Characters that do not get trimmed: word chars, !, space.
   // Common characters that do get trimmed: a single period, ?.
-  fuzFileName = fuzFileName.replace(/[^\w! ]$/, '') + '.fuz';
+  fuzFileName = fuzFileName.replace(/[^\w! ]$/, '');
+  if (!fuzFileName.endsWith('.wav')) fuzFileName += '.fuz';
   return [config.constants.audioInputPath[voice], topicEditorId, fuzFileName].join('\\');
 }
 
@@ -331,13 +350,16 @@ function getAudioDestPath(topicEditorId, infoElement, responseNumber, voice) {
  *   but an INFO may have multiple responses.
  * @returns The filename for the response's .fuz file.
  */
-function getVoiceFileName(topicEditorId, infoElement, responseNumber) {
-  return [
+function getVoiceFileName(topicEditorId, infoElement, responseNumber, wav) {
+  let base = [
     quest.editorId.substring(0, 10),                        // First 10 chars of the Quest's EditorID
-    topicEditorId.substring(0, 15),                         // First 15 chars of the Topic's EditorID
+    //topicEditorId.substring(0, 15),                         // First 15 chars of the Topic's EditorID
+    topicEditorId.substring(0, 16),                         // First 16 chars of the Topic's EditorID ... not sure why this seems to fluctuate
     config.constants.dryRun ? 'DRY_RUN_FAKE_VALUE' : ('00' + xelib.GetHexFormID(infoElement, false, true)), // FormID for the INFO (starting with 00)
     responseNumber.toString()                               // The response number for the audio in the INFO (1-indexed)
-  ].join('_') + '.fuz';                                     // Separated by underscores, plus the extension.
+  ].join('_');                                              // Separated by underscores.
+  if (wav) return base + '.wav';
+  return base + '.fuz';
 }
 
 /**
@@ -428,5 +450,3 @@ function createGroupChildIfNotPresent(plugin, group, editorId) {
   }
   return element;
 }
-
-return;
