@@ -25,6 +25,17 @@ const conditionTypes = {
   gt:   '01000000'
 };
 
+const validEmotionTypes = {
+  'Neutral': 1,
+  'Anger': 1,
+  'Disgust': 1,
+  'Fear': 1,
+  'Sad': 1,
+  'Happy': 1,
+  'Surprise': 1,
+  'Puzzled': 1
+};
+
 plugin = xelib.FileByName(config.constants.pluginName);
 // Create the quest if it does not exist.
 createQuest(plugin, quest);
@@ -261,6 +272,11 @@ function createResponse(infoElement, topicEditorId, info, responseIndex) {
   let response = info.responses[responseIndex];
   let responseNumber = responseIndex + 1;
   let element = addArrayItem(infoElement, 'Responses');
+
+  if ('emotionType' in response && !(response.emotionType in validEmotionTypes)) {
+    error('Invalid emotion type: ' + response.emotionType);
+  }
+
   setValue(element, 'TRDT\\Emotion Type', response.emotionType, 'Neutral');
   setValue(element, 'TRDT\\Emotion Value', 'emotionValue' in response ? response.emotionValue.toString() : '50');
   setValue(element, 'TRDT\\Response number', responseNumber.toString());
