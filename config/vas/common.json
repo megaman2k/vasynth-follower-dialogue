@@ -1,0 +1,198 @@
+{
+  "branches": {
+    "Recruit":   {"name": "Recruit",   "type": "Top-Level", "startingTopic": "Recruit"},
+    "Dismiss":   {"name": "Dismiss",   "type": "Top-Level", "startingTopic": "Dismiss"},
+    "Wait":      {"name": "Wait",      "type": "Top-Level", "startingTopic": "Wait"},
+    "Follow":    {"name": "Follow",    "type": "Top-Level", "startingTopic": "Follow"},
+    "Favor":     {"name": "Favor",     "type": "Top-Level", "startingTopic": "Favor"},
+    "FavorMore": {"name": "FavorMore", "type": "Blocking",  "startingTopic": "FavorMore"},
+    "Trade":     {"name": "Trade",     "type": "Top-Level", "startingTopic": "Trade"}
+  },
+  
+  "topics": {
+    "Recruit":        {"name": "Recruit",   "priority": 10.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Follow me. I need your help."},
+    "Dismiss":        {"name": "Dismiss",   "priority": 0.0,   "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "It's time for us to part ways."},
+    "Wait":           {"name": "Wait",      "priority": 100.0, "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Wait here."},
+    "Follow":         {"name": "Follow",    "priority": 100.0, "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "Follow me."},
+    "Favor":          {"name": "Favor",     "priority": 50.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "I need you to do something."},
+    "FavorMore":      {"name": "FavorMore", "priority": 50.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": ""},
+    "Trade":          {"name": "Trade",     "priority": 10.0,  "category": "Topic",         "subtype": "Custom",                "subtypeName": "CUST", "text": "I need to trade some things with you."},
+    "Hello":          {"name": "Hello",                        "category": "Miscellaneous", "subtype": "Hello",                 "subtypeName": "HELO"},
+    "Goodbye":        {"name": "Goodbye",                      "category": "Miscellaneous", "subtype": "GoodBye",               "subtypeName": "GBYE"},
+    "Shared":         {"name": "Shared",                       "category": "Miscellaneous", "subtype": "SharedInfo",            "subtypeName": "IDAT"},
+    "Idle":           {"name": "Idle",                         "category": "Miscellaneous", "subtype": "Idle",                  "subtypeName": "IDLE"},
+    "Collide":        {"name": "Collide",                      "category": "Miscellaneous", "subtype": "ActorCollidewithActor", "subtypeName": "ACAC"},
+    "DetectFriendDie":{"name": "DetectFriendDie",              "category": "Detection",     "subtype": "NormalToCombat",        "subtypeName": "DFDA"},
+    "AlertIdle":      {"name": "AlertIdle",                    "category": "Detection",     "subtype": "AlertIdle",             "subtypeName": "ALIL"},
+    "LostIdle":       {"name": "LostIdle",                     "category": "Detection",     "subtype": "LostIdle",              "subtypeName": "LOIL"},
+    "NormalToAlert":  {"name": "NormalToAlert",                "category": "Detection",     "subtype": "NormalToAlert",         "subtypeName": "NOTA"},
+    "NormalToCombat": {"name": "NormalToCombat",               "category": "Detection",     "subtype": "NormalToCombat",        "subtypeName": "NOTC"},
+    "AlertToCombat":  {"name": "AlertToCombat",                "category": "Detection",     "subtype": "AlertToCombat",         "subtypeName": "ALTC"},
+    "AlertToNormal":  {"name": "AlertToNormal",                "category": "Detection",     "subtype": "AlertToNormal",         "subtypeName": "ALTN"},
+    "CombatToNormal": {"name": "CombatToNormal",               "category": "Detection",     "subtype": "CombatToNormal",        "subtypeName": "COTN"},
+    "CombatToLost":   {"name": "CombatToLost",                 "category": "Detection",     "subtype": "CombatToLost",          "subtypeName": "COLO"},
+    "LostToNormal":   {"name": "LostToNormal",                 "category": "Detection",     "subtype": "LostToNormal",          "subtypeName": "LOTN"},
+    "LostToCombat":   {"name": "LostToCombat",                 "category": "Detection",     "subtype": "LostToCombat",          "subtypeName": "LOTC"},
+    "Agree":          {"name": "Agree",                        "category": "Favors",        "subtype": "Agree",                 "subtypeName": "AGRE"},
+    "Refuse":         {"name": "Refuse",                       "category": "Favors",        "subtype": "Refuse",                "subtypeName": "REFU"},
+    "ExitFavor":      {"name": "ExitFavor",                    "category": "Favors",        "subtype": "ExitFavorState",        "subtypeName": "FEXT"},
+    "Attack":         {"name": "Attack",                       "category": "Combat",        "subtype": "Attack",                "subtypeName": "ATCK"},
+    "PowerAttack":    {"name": "PowerAttack",                  "category": "Combat",        "subtype": "PowerAttack",           "subtypeName": "POAT"},
+    "Block":          {"name": "Block",                        "category": "Combat",        "subtype": "Block",                 "subtypeName": "BLOC"},
+    "Hit":            {"name": "Hit",                          "category": "Combat",        "subtype": "Hit",                   "subtypeName": "HIT_"},
+    "Taunt":          {"name": "Taunt",                        "category": "Combat",        "subtype": "Taunt",                 "subtypeName": "TAUT"},
+    "Bleedout":       {"name": "Bleedout",                     "category": "Combat",        "subtype": "Bleedout",              "subtypeName": "BLED"},
+    "Death":          {"name": "Death",                        "category": "Combat",        "subtype": "Death",                 "subtypeName": "DETH"}
+  },
+
+  "conditions": {
+    "follower": {
+        "comparisonValue": "1.0",
+        "function": "GetInFaction",
+        "parameter1": "CurrentFollowerFaction",
+        "type": "eq"
+    },
+    "nonFollower": {
+        "comparisonValue": "1.0",
+        "function": "GetInFaction",
+        "parameter1": "CurrentFollowerFaction",
+        "type": "ne"
+    },
+    "potentialFollower": {
+        "comparisonValue": "1.0",
+        "function": "GetInFaction",
+        "parameter1": "PotentialFollowerFaction",
+        "type": "eq"
+    },
+    "waiting": {
+        "comparisonValue": "1.0",
+        "function": "GetActorValue",
+        "parameter1": "Waiting For Player",
+        "type": "eq"
+    },
+    "notWaiting": {
+        "comparisonValue": "1.0",
+        "function": "GetActorValue",
+        "parameter1": "Waiting For Player",
+        "type": "ne"
+    },
+    "stranger": {
+        "comparisonValue": "0.0",
+        "function": "GetRelationshipRank",
+        "type": "le"
+    },
+    "friend": {
+        "comparisonValue": "1.0",
+        "function": "GetRelationshipRank",
+        "type": "ge"
+    },
+    "enemy": {
+        "comparisonValue": "0.0",
+        "function": "GetRelationshipRank",
+        "type": "lt"
+    },
+    "favorState": {
+        "comparisonValue": "1.0",
+        "function": "IsInFavorState",
+        "type": "eq"
+    }
+  },
+  
+  "infoTemplates": {
+    "random": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice"]
+    },
+    "waiting": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "waitingEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "greetingFollower": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "greetingFollowerEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "greeting": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "nonFollower"]    
+    },
+    "greetingFriend": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "friend", "nonFollower"]
+    },
+    "greetingStranger": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "stranger", "nonFollower"]
+    },
+    "goodbye": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice"]
+    },
+    "goodbyeEnemy": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "enemy"]
+    },
+    "goodbyeFriend": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "friend"]
+    },
+    "goodbyeWaiting": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "goodbyeWaitingEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower", "waiting"]
+    },
+    "goodbyeFollower": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "goodbyeFollowerEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "recruit": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "nonFollower", "potentialFollower", "friend"],
+      "links": ["VAS_FollowerDialogue_RecruitTopic"]
+    },
+    "dismiss": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_DismissTopic"]
+    },
+    "wait": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower", "notWaiting"],
+      "links": ["VAS_FollowerDialogue_WaitTopic"]
+    },
+    "follow": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower", "waiting"],
+      "links": ["VAS_FollowerDialogue_FollowTopic"]
+    },
+    "favor": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_FavorTopic"]
+    },
+    "favorMore": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower", "favorState"],
+      "links": ["VAS_FollowerDialogue_FavorMoreTopic"]
+    },
+    "trade": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_TradeTopic"]
+    }
+  }
+}

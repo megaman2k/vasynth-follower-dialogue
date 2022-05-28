@@ -1,4 +1,6 @@
-const config = fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config\\vas\\thane.json');
+const config = Object.assign(
+    fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config\\vas\\common.json'),
+    fh.loadJsonFile(fh.jetpack.cwd() + '\\scripts\\config\\vas\\serana.json'));
 
 const pluginName = config.config.plugin;
 const voice = config.voice;
@@ -32,12 +34,10 @@ const conditionTypes = {
 
 const commonConditions = config.conditions;
 commonConditions.isNewVoice = {
-  isNewVoice: {
-    comparisonValue: '1.0',
-    function: 'GetIsVoiceType',
-    parameter1: voice.fullName,
-    type: 'eq'
-  }
+  comparisonValue: '1.0',
+  function: 'GetIsVoiceType',
+  parameter1: voice.fullName,
+  type: 'eq'
 };
 
 // Check for missing audio before proceeding.
@@ -233,8 +233,8 @@ function createCondition(infoElement, condition) {
       return;
     }
   }
-
-  let element = xelib.AddArrayItem(infoElement, 'Conditions', 'CTDA');
+  
+  let element = xelib.AddArrayItem(infoElement, 'Conditions');
   xelib.SetValue(element, 'CTDA\\Function', condition.function);
   if ('parameter1' in condition) xelib.SetValue(element, 'CTDA\\Parameter #1', condition.parameter1);
   xelib.SetValue(element, 'CTDA\\Type', conditionTypes[condition.type]);
@@ -278,8 +278,13 @@ function getAudioSrcPath(topicKey, response) {
   //   D:\my\vasynth-outputs\f4_cait\
   //     Hello\
   //       Hey there friend.fuz
-  let fuzFileName = 'audioIn' in response ? response.audioIn : response.text;
-  fuzFileName = fuzFileName.replace(/\W$/, '') + '.fuz';
+  let fuzFileName = response.text;
+  'audioIn' in response ? response.audioIn : response.text;
+  if ('audioIn' in response) {
+    fuzFileName = response.audioIn + '.fuz';
+  } else {
+    fuzFileName = fuzFileName.replace(/\W$/, '') + '.fuz';
+  }
   return [config.config.audioInputPath, topicKey, fuzFileName].join('\\');
 }
 
