@@ -62,7 +62,7 @@ Object.keys(infos).forEach(topicKey => {
 zedit.log("INFO: Audio files present: " + srcAudioCount.toString());
 zedit.log("INFO: Audio files missing: " + srcAudioMissingCount.toString());
 if (srcAudioMissingCount > 0) {
-  return;
+  exit;
 }
 
 let plugin = xelib.FileByName(pluginName);
@@ -420,4 +420,4 @@ function maybeAddElementValue(parent, elementName, value, type) {
   });
 }
 
-return;
+exit;
