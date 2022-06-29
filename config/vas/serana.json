@@ -2,11 +2,11 @@
   "config": {
     "plugin": "VASynth_Voices.esp",
     "audioInputPath": "B:\\games\\skyrim\\generated\\voice\\sk_serana",
-    "dataPath": "B:\\games\\skyrim\\se-m\\mods\\mods\\VA Synth"
+    "dataPath": "B:\\games\\skyrim\\mods\\se-create\\overwrite"
   },
   "voice": {
     "sex": "Female",
-    "game": "TES",
+    "game": "TESV",
     "name": "Serana"
   },
    
@@ -21,10 +21,10 @@
       {"key": "OK7",       "responses": [{"text": "Got it."}]},
       {"key": "OK8",       "responses": [{"text": "I understand."}]},
       {"key": "OK9",       "responses": [{"text": "If you say so."}]},
-      {"key": "OK10",      "responses": [{"text": "Certainly"}]},
+      {"key": "OK10",      "responses": [{"text": "Certainly."}]},
       {"key": "OK11",      "responses": [{"text": "Of course."}]},
-      {"key": "OK12",      "responses": [{"text": "Yes.", "audioIn": "Oh. Yes"}]},
-      {"key": "OK13",      "responses": [{"text": "Yes. Of course.", "audioIn": "Oh. Yes. Of course."}]},
+      {"key": "OK12",      "responses": [{"text": "Yes."}]},
+      {"key": "OK13",      "responses": [{"text": "Yes. Of course."}]},
       {"key": "OK14",      "responses": [{"text": "That's fine by me."}]},
       {"key": "OK15",      "responses": [{"text": "As you wish.", "audioIn": "As you wish (2)"}]},
       {"key": "Follow2",   "responses": [{"text": "I'm right behind you."}]},
@@ -39,26 +39,28 @@
       {"key": "Follow11",  "responses": [{"text": "Right behind you."}]},
       {"key": "Follow12",  "responses": [{"text": "That's what I wanted to hear."}]},
       {"key": "Follow13",  "responses": [{"text": "Well, let's move then."}]},
-      {"key": "Follow14",  "responses": [{"text": "Let's not waste any more time then."}]}
+      {"key": "Follow14",  "responses": [{"text": "Let's not waste any more time then."}]},
+	    {"key": "Follow15",   "responses": [{"text": "I'm right behind you.", "audioIn": "I'm right behind you (2)"}]}
     ],
     "Recruit": [
-      {"template": "recruit", "responseData": "Follow1"},
+      {"template": "recruit", "responseData": "Follow2"},
       {"template": "recruit", "responseData": "Follow9"},
       {"template": "recruit", "responseData": "Follow12"},
+      {"template": "recruit", "responseData": "Follow14"},
       {"template": "recruit", "responses": [{"text": "Another adventure."}, {"text": "Don't let me stand in your way, then.", "emotionType": "Happy"}]},
       {"template": "recruit", "responses": [{"text": "I knew you'd miss me.", "emotionType": "Happy"}, {"text": "Let's make some more stories.", "emotionType": "Happy"}]},
       {"template": "recruit", "responses": [{"text": "Excellent.", "emotionType": "Happy"}, {"text": "I've been really wanting to get out and explore a bit.", "emotionType": "Happy"}]},
       {"template": "recruit", "responses": [{"text": "Thought you'd never ask."}]},
       {"template": "recruit", "responses": [{"text": "I certainly wouldn't mind the company."}]},
       {"template": "recruit", "responses": [{"text": "Good. I've been wanting to get out for a bit.", "audioIn": "Oh. Good. I've been wanting to get out for a bit"}]},
-      {"template": "recruit", "responses": [{"text": "All right. Let's see what you have in store for me this time.", "audioIn": "Alright. Let's see what you have in store for me this time"}]},
-      {"template": "recruit", "responses": [{"text": "Very well. Lead on, brave adventurer!"}]},
+      {"template": "recruit", "responses": [{"text": "All right. Let's see what you have in store for me this time."}]},
+      {"template": "recruit", "responses": [{"text": "Very well."}, {"text": "Lead on, brave adventurer!", "emotionType": "Happy"}]},
       {"template": "recruit", "responses": [{"text": "I'll do my best to help any way I can.", "audioIn": "I'll do my best to help any way eye can"}]}
     ],
     "Dismiss": [
       {"template": "dismiss", "responses": [{"text": "Oh. All right then. You know where to find me."}]},
       {"template": "dismiss", "responses": [{"text": "Oh. I... I see.", "emotionType": "Surprise"}, {"text": "I'll meet you back home.", "emotionType": "Sad"}]},
-      {"template": "dismiss", "responses": [{"text": "Oh, you're off on your own for a while? All right.", "audioIn": "Oh, you're off on your own for a while All right"}]},
+      {"template": "dismiss", "responses": [{"text": "Oh, you're off on your own for a while? All right.", "audioIn": "Oh, you're off on your own for a while All right."}]},
       {"template": "dismiss", "responses": [{"text": "Oh. All right. Goodbye, then."}]},
       {"template": "dismiss", "responses": [{"text": "Oh. All right, then."}, {"text": "You know where to find me if you change your mind.", "emotionType": "Happy"}]},
       {"template": "dismiss", "responses": [{"text": "Oh, all right.", "emotionType": "Surprise"}, {"text": "Suit yourself."}]},
@@ -87,7 +89,6 @@
       {"template": "follow", "responseData": "OK3"},
       {"template": "follow", "responseData": "OK7"},
       {"template": "follow", "responseData": "OK11"},
-      {"template": "follow", "responseData": "Follow1"},
       {"template": "follow", "responseData": "Follow2"},
       {"template": "follow", "responseData": "Follow3"},
       {"template": "follow", "responseData": "Follow4"},
@@ -99,7 +100,9 @@
       {"template": "follow", "responseData": "Follow10"},
       {"template": "follow", "responseData": "Follow11"},
       {"template": "follow", "responseData": "Follow12"},
-      {"template": "follow", "responseData": "Follow13"}
+      {"template": "follow", "responseData": "Follow13"},
+	    {"template": "follow", "responseData": "Follow14"},
+      {"template": "follow", "responseData": "Follow15"}
     ],
     "Favor": [
       {"template": "favor", "responses": [{"text": "Of course. What is it?", "emotionType": "Puzzled"}]},
@@ -108,7 +111,7 @@
       {"template": "favor", "responses": [{"text": "What is it?", "emotionType": "Puzzled"}]},
       {"template": "favor", "responses": [{"text": "Sure. How can I help?", "emotionType": "Puzzled"}]},
       {"template": "favor", "responses": [{"text": "Of course. What is it you need?", "emotionType": "Puzzled"}]},
-      {"template": "favor", "responses": [{"text": "Very well. How may I help?", "emotionType": "Puzzled"}]},
+      {"template": "favor", "responses": [{"text": "Very well."}, {"text": "How may I help?", "emotionType": "Puzzled"}]},
       {"template": "favor", "responses": [{"text": "I'm happy to oblige.", "emotionType": "Puzzled"}]}
     ],
     "FavorMore": [
@@ -123,12 +126,12 @@
     ],
     "ExitFavor": [
       {"template": "random", "responseData": "OK2"},
-      {"template": "random", "responses": [{"text": "Finished."}]},
-      {"template": "random", "responses": [{"text": "Nothing else?"}, {"text": "Good.", "audioIn": "Good (2)"}]},
-      {"template": "random", "responses": [{"text": "That's it? All right.", "audioIn": "That's it All right"}]},
+      {"template": "random", "responses": [{"text": "Finished?"}]},
+      {"template": "random", "responses": [{"text": "Nothing else?"}, {"text": "Good."}]},
+      {"template": "random", "responses": [{"text": "That's it? All right.", "audioIn": "That's it All right."}]},
       {"template": "random", "responses": [{"text": "Anyway..."}]},
       {"template": "random", "responses": [{"text": "I guess we're done here, then."}]},
-      {"template": "random", "responses": [{"text": "Glad that's taken care of."}]}
+      {"template": "random", "responses": [{"text": "Glad that's taken care of.", "audioIn": "Oh. Glad that's taken care of"}]}
     ],
     "Trade": [
       {"template": "trade", "responseData": "OK1"},
@@ -143,16 +146,18 @@
       {"template": "trade", "responses": [{"text": "If you think it'll help."}]},
       {"template": "trade", "responses": [{"text": "This better not be all the things you just can't be bothered with.", "emotionType": "Disgust"}]},
       {"template": "trade", "responses": [{"text": "Let's have a peek, shall we?"}]},
-      {"template": "trade", "responses": [{"text": "I can probably help you carry a few things."}]},
+      {"template": "trade", "responses": [{"text": "Let's have a look. Perhaps I can help offload some of your burden."}]},
       {"template": "trade", "responses": [{"text": "Maybe I can help you carry a few things."}]},
       {"template": "trade", "responses": [{"text": "Just try not to give me anything too heavy, okay?", "audioIn": "Oh. Just try not to give me anything too heavy, okay"}]},
       {"template": "trade", "responses": [{"text": "Define trade.", "audioIn": "Oh. Define trade."}]}
     ],
     "Hello": [
-      {"template": "greetingFriend",      "responses": [{"text": "Hey.", "audioIn": "Oh. Hey", "emotionType": "Happy"}]},
+      {"template": "greetingFriend",      "responses": [{"text": "Hey.", "emotionType": "Happy"}]},
       {"template": "greetingFriend",      "responses": [{"text": "Were you looking for me?", "emotionType": "Puzzled"}]},
       {"template": "waiting",             "responses": [{"text": "Let me know if you want me along."}]},
+      {"template": "waiting",             "responses": [{"text": "Let me know when you're ready."}]},
       {"template": "waiting",             "responses": [{"text": "Whenever you're ready."}]},
+      {"template": "waiting",             "responses": [{"text": "Whenever you're ready.", "audioIn": "Whenever you're ready (2)"}]},
       {"template": "waiting",             "responses": [{"text": "Where have you been?", "emotionType": "Happy"}]},
       {"template": "waiting",             "responses": [{"text": "There you are."}]},
       {"template": "waiting",             "responses": [{"text": "I'm ready when you are."}]},
@@ -165,15 +170,18 @@
       {"template": "greetingFollower",    "responses": [{"text": "You wanted to talk?"}]},
       {"template": "greetingFollower",    "responses": [{"text": "Is everything okay?", "emotionType": "Puzzled"}]},
       {"template": "greetingFollower",    "responses": [{"text": "I'm here if you need me."}]},
+	    {"template": "greetingFollower",    "responses": [{"text": "If you need some help, I'm ready."}]},
+	    {"template": "greetingFollower",    "responses": [{"text": "Yes? What did you need?", "audioIn": "Yes What did you need"}]},
+	    {"template": "greetingFollower",    "responses": [{"text": "Yes?", "audioIn": "Yes (2)"}]},
       {"template": "greetingFollowerEnd", "responses": [{"text": "Yes?"}]},
       {"template": "greeting",            "responses": [{"text": "Greetings."}]},
       {"template": "greeting",            "responses": [{"text": "Good morning.", "audioIn": "Oh. Good morning"}]},
       {"template": "greeting",            "responses": [{"text": "Good afternoon.", "audioIn": "Oh. Good afternoon"}]},
-      {"template": "greeting",            "responses": [{"text": "Good evening.", "audioIn": "Oh. Good evening"}]},
-      {"template": "greetingStranger",    "responses": [{"text": "Greetings, traveler.", "audioIn": "Oh. Greetings, traveler"}]},
-      {"template": "greetingStranger",    "responses": [{"text": "Hello there.", "audioIn": "Oh. Hello there"}]},
+      {"template": "greeting",            "responses": [{"text": "Good evening."}]},
+      {"template": "greetingStranger",    "responses": [{"text": "Greetings, traveler."}]},
+      {"template": "greetingStranger",    "responses": [{"text": "Hello there."}]},
       {"template": "greetingStranger",    "responses": [{"text": "It's a pleasure."}]},
-      {"template": "greetingFriend",      "responses": [{"text": "It's good to see you.", "audioIn": "Oh. It's good to see you", "emotionType": "Happy"}]},
+      {"template": "greetingFriend",      "responses": [{"text": "It's good to see you.", "emotionType": "Happy"}]},
       {"template": "greetingFriend",      "responses": [{"text": "It's a pleasure as always.", "emotionType": "Happy"}]},
       {"template": "greetingFriend",      "responses": [{"text": "It's good to see you, friend.", "emotionType": "Happy"}]},
       {"template": "greetingFriend",      "responses": [{"text": "You came to see me.", "emotionType": "Happy"}]},
@@ -187,7 +195,7 @@
       {"template": "goodbyeWaiting",     "responses": [{"text": "I'll just be around here if you need me."}]},
       {"template": "goodbyeWaiting",     "responses": [{"text": "Well, you know where to find me, when you're ready to go."}]},
       {"template": "goodbyeWaiting",     "responses": [{"text": "Be careful out there."}]},
-      {"template": "goodbyeWaiting",     "responses": [{"text": "I suppose I'll just be here until you want to leave."}]},
+      {"template": "goodbyeWaiting",     "responses": [{"text": "I suppose I'll just stick around here until you want to leave."}]},
       {"template": "goodbyeWaiting",     "responses": [{"text": "I won't be going anywhere."}]},
       {"template": "goodbyeWaiting",     "responses": [{"text": "You know where to find me."}]},
       {"template": "goodbyeWaitingEnd",  "responses": [{"text": "Please don't run off too far without me."}]},
@@ -196,25 +204,25 @@
       {"template": "goodbyeFollower",    "responseData": "OK3"},
       {"template": "goodbyeFollower",    "responses": [{"text": "I'll be right next to you if you need anything."}]},
       {"template": "goodbyeFollower",    "responses": [{"text": "I'm here for you."}]},
-      {"template": "goodbyeFollower",    "responses": [{"text": "Just ask if you need any help. That's why I'm here.", "audioIn": "Oh. Just ask if you need any help. That's why I'm here"}]},
-      {"template": "goodbyeFollower",    "responses": [{"text": "All right, then.", "audioIn": "Alright then."}]},
+      {"template": "goodbyeFollower",    "responses": [{"text": "Just ask if you need any help. That's why I'm here."}]},
+      {"template": "goodbyeFollower",    "responses": [{"text": "All right then."}]},
       {"template": "goodbyeFollowerEnd", "responses": [{"text": "If you need something, let me know."}]},
       {"template": "goodbye",            "responses": [{"text": "Until we meet again."}]},
       {"template": "goodbye",            "responses": [{"text": "Until next time."}]},
       {"template": "goodbyeFriend",      "responses": [{"text": "Good luck out there. Hopefully I'll see you again soon."}]},
       {"template": "goodbyeFriend",      "responses": [{"text": "Good luck out there."}]},
       {"template": "goodbyeFriend",      "responses": [{"text": "I'll see you again. Soon."}]},
+	    {"template": "goodbyeFriend",      "responses": [{"text": "I'll see you soon."}]},
       {"template": "goodbyeFriend",      "responses": [{"text": "I'll see you soon.", "audioIn": "I'll see you soon (2)"}]},
       {"template": "goodbyeFriend",      "responses": [{"text": "See you later."}]},
-      {"template": "goodbyeFriend",      "responses": [{"text": "Don't be a stranger, okay?", "audioIn": "Oh. Don't be a stranger, okay"}]},
+      {"template": "goodbyeFriend",      "responses": [{"text": "Don't be a stranger, okay?"}]},
       {"template": "goodbyeFriend",      "responses": [{"text": "I look forward to seeing you again."}]},
       {"template": "goodbyeFriend",      "responses": [{"text": "Come see me any time you please."}]},
-      {"template": "goodbyeFriend",      "responses": [{"text": "Stay safe out there, friend."}]},
-      {"template": "goodbyeFriendEnd",   "responses": [{"text": "I'll see you soon."}]},
-      {"template": "goodbye",            "responses": [{"text": "Farewell.", "audioIn": "Oh. Farewell"}]},
+      {"template": "goodbyeFriendEnd",   "responses": [{"text": "Stay safe out there, friend."}]},
+      {"template": "goodbye",            "responses": [{"text": "Farewell."}]},
       {"template": "goodbye",            "responses": [{"text": "Good health to you, traveler."}]},
       {"template": "goodbye",            "responses": [{"text": "Blessings and warm health to you."}]},
-      {"template": "goodbye",            "responses": [{"text": "Safe travels.", "audioIn": "Oh. Safe travels"}]}
+      {"template": "goodbye",            "responses": [{"text": "Safe travels."}]}
     ],
     "Idle": [],
     "Collide": [
@@ -222,11 +230,11 @@
       {"template": "random", "responses": [{"text": "Hands to yourself.", "emotionType": "Anger"}]},
       {"template": "random", "responses": [{"text": "Watch your step.", "audioIn": "Oh. Watch your step", "emotionType": "Anger"}]},
       {"template": "random", "responses": [{"text": "Mind your manners.", "audioIn": "Oh. Mind your manners", "emotionType": "Disgust"}]},
-      {"template": "random", "responses": [{"text": "It works better if you walk around other people, you know?", "emotionType": "Disgust"}]},
-      {"template": "random", "responses": [{"text": "I'd appreciate if you were to ask nicely the next time."}]},
+      {"template": "random", "responses": [{"text": "It works better if you walk around, rather than through, you know?", "emotionType": "Disgust"}]},
+      {"template": "random", "responses": [{"text": "It would be appreciated if you were to ask nicely the next time."}]},
       {"template": "random", "responses": [{"text": "No need to get rough.", "audioIn": "Oh. No need to get rough", "emotionType": "Anger"}]},
-      {"template": "random", "responses": [{"text": "Oh, excuse me, then.", "emotionType": "Surprise"}]},
-      {"template": "random", "responses": [{"text": "Let me get out of your way.", "audioIn": "Oh. Let me get out of your way"}]}
+      {"template": "random", "responses": [{"text": "Oh.", "emotionType": "Surprise"}, {"text": "Excuse me, then.", "audioIn": "Oh, excuse me, then"}]},
+      {"template": "random", "responses": [{"text": "Allow me to get out of your way."}]}
     ],
     "Agree": [
       {"template": "random", "responseData": "OK1"},
@@ -274,9 +282,9 @@
       {"template": "random", "responses": [{"text": "Who's there?"}]},
       {"template": "random", "responses": [{"text": "Wait... I hear something!"}]},
       {"template": "random", "responses": [{"text": "I've got the feeling we're not alone."}]},
-      {"template": "random", "responses": [{"text": "I feel like I'm being watched."}]},
+      {"template": "random", "responses": [{"text": "I feel like we're being watched."}]},
       {"template": "random", "responses": [{"text": "I don't think we're the only ones here."}]},
-      {"template": "random", "responses": [{"text": "Something's amiss.", "audioIn": "Oh. Something's amiss"}]}
+      {"template": "random", "responses": [{"text": "Something's not right.", "audioIn": "Oh. Something's not right."}]}
     ],
     "AlertToCombat": [
       {"template": "random", "responses": [{"text": "There you are!"}]},
@@ -293,11 +301,12 @@
     ],
     "AlertToNormal": [
       {"template": "random", "responses": [{"text": "I was sure I heard something."}]},
-      {"template": "random", "responses": [{"text": "Seems like we're clear."}]},
+      {"template": "random", "responses": [{"text": "Seems we're in the clear."}]},
       {"template": "random", "responses": [{"text": "I think we're all in the clear, for now."}]},
       {"template": "random", "responses": [{"text": "I guess it's nothing to worry about."}]},
       {"template": "random", "responses": [{"text": "It seems the danger has passed."}]},
-      {"template": "random", "responses": [{"text": "I suppose we can relax a bit now."}]}
+      {"template": "random", "responses": [{"text": "I guess I was just hearing things."}]},
+	    {"template": "random", "responses": [{"text": "Must've been my imagination."}]}
     ],
     "CombatToNormal": [
       {"template": "random", "responses": [{"text": "Done and done.", "emotionType": "Happy"}]},
@@ -373,7 +382,7 @@
       {"template": "random", "responses": [{"text": "Hunh!", "emotionType": "Anger", "emotionValue": 100}]},
       {"template": "random", "responses": [{"text": "Nuhn!", "emotionType": "Anger", "emotionValue": 100}]},
       {"template": "random", "responses": [{"text": "Oof!", "emotionType": "Anger", "emotionValue": 100}]},
-      {"template": "random", "responses": [{"text": "Rrargh!", "emotionType": "Anger", "emotionValue": 100}]},
+      {"template": "random", "responses": [{"text": "Rargh!", "emotionType": "Anger", "emotionValue": 100}]},
       {"template": "random", "responses": [{"text": "Unh!", "emotionType": "Anger", "emotionValue": 100}]},
       {"template": "random", "responses": [{"text": "Unnff!", "emotionType": "Anger", "emotionValue": 100}]},
       {"template": "random", "responses": [{"text": "Wagh!", "emotionType": "Anger", "emotionValue": 100}]}

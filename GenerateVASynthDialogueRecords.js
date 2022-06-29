@@ -62,7 +62,7 @@ Object.keys(infos).forEach(topicKey => {
 zedit.log("INFO: Audio files present: " + srcAudioCount.toString());
 zedit.log("INFO: Audio files missing: " + srcAudioMissingCount.toString());
 if (srcAudioMissingCount > 0) {
-  exit;
+  return;
 }
 
 let plugin = xelib.FileByName(pluginName);
@@ -277,15 +277,16 @@ function getAudioSrcPath(topicKey, response) {
   // Example:
   //   D:\my\vasynth-outputs\f4_cait\
   //     Hello\
-  //       Hey there friend.fuz
-  let fuzFileName = response.text;
-  'audioIn' in response ? response.audioIn : response.text;
-  if ('audioIn' in response) {
-    fuzFileName = response.audioIn + '.fuz';
-  } else {
-    fuzFileName = fuzFileName.replace(/\W$/, '') + '.fuz';
+  //       Hey there, friend..fuz
+
+  // First, check for /path/to/audio/text-with-punctuation.fuz
+  let filename = 'audioIn' in response ? response.audioIn : response.text.replace(/\?/, ''); // remove question marks
+  let filepath = [config.config.audioInputPath, topicKey, filename].join('\\') + '.fuz';
+  if (fh.jetpack.exists(filepath)) {
+    return filepath;
   }
-  return [config.config.audioInputPath, topicKey, fuzFileName].join('\\');
+  // Failing that, check for /path/to/audio/text-without-last-period.fuz
+  return filepath.replace(/\.\.fuz/, '.fuz');
 }
 
 /**
@@ -420,4 +421,4 @@ function maybeAddElementValue(parent, elementName, value, type) {
   });
 }
 
-exit;
+return;
