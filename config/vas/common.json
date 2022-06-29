@@ -143,6 +143,10 @@
       "flags": ["Random"],
       "conditions": ["isNewVoice", "friend"]
     },
+    "goodbyeFriendEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "friend"]
+    },
     "goodbyeWaiting": {
       "flags": ["Random"],
       "conditions": ["isNewVoice", "follower", "waiting"]
