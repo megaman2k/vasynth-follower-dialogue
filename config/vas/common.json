@@ -42,7 +42,9 @@
     "Hit":            {"name": "Hit",                          "category": "Combat",        "subtype": "Hit",                   "subtypeName": "HIT_"},
     "Taunt":          {"name": "Taunt",                        "category": "Combat",        "subtype": "Taunt",                 "subtypeName": "TAUT"},
     "Bleedout":       {"name": "Bleedout",                     "category": "Combat",        "subtype": "Bleedout",              "subtypeName": "BLED"},
-    "Death":          {"name": "Death",                        "category": "Combat",        "subtype": "Death",                 "subtypeName": "DETH"}
+    "Death":          {"name": "Death",                        "category": "Combat",        "subtype": "Death",                 "subtypeName": "DETH"},
+    "Flee":           {"name": "Flee",                         "category": "Combat",        "subtype": "Flee",                  "subtypeName": "FLEE"},
+    "Bash":           {"name": "Bash",                         "category": "Combat",        "subtype": "Bash",                  "subtypeName": "BASH"}
   },
 
   "conditions": {
