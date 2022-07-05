@@ -180,7 +180,7 @@ function createInfo(plugin, topicKey, info) {
   // Templates are used to keep info definitions in JSON simple.
   if ('template' in info || 'defaultInfoTemplate' in config.config) {
     let template = null;
-    if ('template' in info) {
+    if ('template' in info && info.template in infoTemplates) {
       template = infoTemplates[info.template];
     } else if ('defaultInfoTemplate' in config.config) {
       template = infoTemplates[config.config.defaultInfoTemplate];
