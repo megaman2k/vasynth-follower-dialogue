@@ -178,15 +178,19 @@ function createInfo(plugin, topicKey, info) {
   let element = xelib.AddElement(plugin, 'DIAL\\' + topic.editorId + '\\INFO\\');
 
   // Templates are used to keep info definitions in JSON simple.
-  if ('template' in info) {
-    if (info.template in infoTemplates) {
-      let template = infoTemplates[info.template];
-      if ('flags' in template && !('flags' in info)) info.flags = template.flags;
-      if ('conditions' in template && !('conditions' in info)) info.conditions = template.conditions;
-      if ('links' in template && !('links' in info)) info.links = template.links;
+  if ('template' in info || 'defaultInfoTemplate' in config.config) {
+    let template = null;
+    if ('template' in info) {
+      template = infoTemplates[info.template];
+    } else if ('defaultInfoTemplate' in config.config) {
+      template = infoTemplates[config.config.defaultInfoTemplate];
     } else {
-      zedit.log('WARNING: INFO template not found: ' + info.template)
+      zedit.log('WARNING: INFO template not found: ' + info.template);
+      return;
     }
+    if ('flags' in template && !('flags' in info)) info.flags = template.flags;
+    if ('conditions' in template && !('conditions' in info)) info.conditions = template.conditions;
+    if ('links' in template && !('links' in info)) info.links = template.links; 
   }
 
   if ('editorId' in info) maybeAddElementValue(element, 'EDID', info.editorId);

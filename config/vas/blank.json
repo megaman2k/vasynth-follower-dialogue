@@ -2,7 +2,8 @@
   "config": {
     "plugin": "Mistborn.esp",
     "audioInputPath": "B:\\games\\skyrim\\generated\\voice\\me_thane",
-    "dataPath": "B:\\games\\skyrim\\se-m\\mods\\mods\\Mistborn"
+    "dataPath": "B:\\games\\skyrim\\se-m\\mods\\mods\\Mistborn",
+    "defaultInfoTemplate": "random"
   },
   "voice": {
     "sex": "Male",
@@ -36,7 +37,7 @@
       {"template": "trade", "responseData": "SharedSilence"}
     ],
     "Hello": [
-      {"template": "random", "responseData": "SharedSilence"},
+      {"responseData": "SharedSilence"},
       {"template": "waiting", "responseData": "SharedSilence"},
       {"template": "waitingEnd", "responseData": "SharedSilence"},
       {"template": "follower", "responseData": "SharedSilence"},
