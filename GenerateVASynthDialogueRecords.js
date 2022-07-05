@@ -199,6 +199,7 @@ function createInfo(plugin, topicKey, info) {
   }
   if ('responseData' in info) {
     let sharedInfoEditorId = voice.fullName + '_Shared_' + info.responseData;
+    if (info.responseData === 'SharedSilence') sharedInfoEditorId = 'SharedSilence';
     xelib.AddElementValue(element, 'DNAM', sharedInfoEditorId);
   }
   if ('links' in info) {
