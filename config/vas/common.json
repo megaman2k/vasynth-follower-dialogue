@@ -105,6 +105,43 @@
       "flags": ["Random"],
       "conditions": ["isNewVoice"]
     },
+
+    "recruit": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "nonFollower", "potentialFollower", "friend"],
+      "links": ["VAS_FollowerDialogue_RecruitTopic"]
+    },
+    "dismiss": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_DismissTopic"]
+    },
+    "wait": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower", "notWaiting"],
+      "links": ["VAS_FollowerDialogue_WaitTopic"]
+    },
+    "follow": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower", "waiting"],
+      "links": ["VAS_FollowerDialogue_FollowTopic"]
+    },
+    "favor": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_FavorTopic"]
+    },
+    "favorMore": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower", "favorState"],
+      "links": ["VAS_FollowerDialogue_FavorMoreTopic"]
+    },
+    "trade": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "follower"],
+      "links": ["VAS_FollowerDialogue_TradeTopic"]
+    },
+
     "waiting": {
       "flags": ["Random"],
       "conditions": ["isNewVoice", "follower", "waiting"]
@@ -113,6 +150,27 @@
       "flags": ["Random", "Random End"],
       "conditions": ["isNewVoice", "follower", "waiting"]
     },
+    "follower": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "followerEnd": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "follower"]
+    },
+    "nonFollower": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "nonFollower"]
+    },
+    "nonFollowerFriend": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "friend", "nonFollower"]
+    },
+    "nonFollowerStranger": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "stranger", "nonFollower"]
+    },
+
     "greetingFollower": {
       "flags": ["Random"],
       "conditions": ["isNewVoice", "follower"]
@@ -164,41 +222,6 @@
     "goodbyeFollowerEnd": {
       "flags": ["Random", "Random End"],
       "conditions": ["isNewVoice", "follower"]
-    },
-    "recruit": {
-      "flags": ["Random", "Invisible continue"],
-      "conditions": ["isNewVoice", "nonFollower", "potentialFollower", "friend"],
-      "links": ["VAS_FollowerDialogue_RecruitTopic"]
-    },
-    "dismiss": {
-      "flags": ["Random", "Invisible continue"],
-      "conditions": ["isNewVoice", "follower"],
-      "links": ["VAS_FollowerDialogue_DismissTopic"]
-    },
-    "wait": {
-      "flags": ["Random", "Invisible continue"],
-      "conditions": ["isNewVoice", "follower", "notWaiting"],
-      "links": ["VAS_FollowerDialogue_WaitTopic"]
-    },
-    "follow": {
-      "flags": ["Random", "Invisible continue"],
-      "conditions": ["isNewVoice", "follower", "waiting"],
-      "links": ["VAS_FollowerDialogue_FollowTopic"]
-    },
-    "favor": {
-      "flags": ["Random", "Invisible continue"],
-      "conditions": ["isNewVoice", "follower"],
-      "links": ["VAS_FollowerDialogue_FavorTopic"]
-    },
-    "favorMore": {
-      "flags": ["Random"],
-      "conditions": ["isNewVoice", "follower", "favorState"],
-      "links": ["VAS_FollowerDialogue_FavorMoreTopic"]
-    },
-    "trade": {
-      "flags": ["Random", "Invisible continue"],
-      "conditions": ["isNewVoice", "follower"],
-      "links": ["VAS_FollowerDialogue_TradeTopic"]
     }
   }
 }
