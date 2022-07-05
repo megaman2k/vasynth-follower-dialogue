@@ -1,0 +1,104 @@
+{
+  "config": {
+    "plugin": "Mistborn.esp",
+    "audioInputPath": "B:\\games\\skyrim\\generated\\voice\\me_thane",
+    "dataPath": "B:\\games\\skyrim\\se-m\\mods\\mods\\Mistborn"
+  },
+  "voice": {
+    "sex": "Male",
+    "game": "NA",
+    "name": "Generic"
+  },
+   
+  "infos": {
+    "Shared": [],
+    "Recruit": [
+      {"template": "recruit", "responseData": "SharedSilence"}
+    ],
+    "Dismiss": [
+      {"template": "dismiss", "responseData": "SharedSilence"}
+    ],
+    "Wait": [
+      {"template": "wait", "responseData": "SharedSilence"}
+    ],
+    "Follow": [
+      {"template": "follow", "responseData": "SharedSilence"}
+    ],
+    "Favor": [
+      {"template": "favor", "responseData": "SharedSilence"}
+    ],
+    "FavorMore": [
+      {"template": "favorMore", "responseData": "SharedSilence"}
+    ],
+    "ExitFavor": [
+    ],
+    "Trade": [
+      {"template": "trade", "responseData": "SharedSilence"}
+    ],
+    "Hello": [
+      {"template": "random", "responseData": "SharedSilence"},
+      {"template": "waiting", "responseData": "SharedSilence"},
+      {"template": "waitingEnd", "responseData": "SharedSilence"},
+      {"template": "follower", "responseData": "SharedSilence"},
+      {"template": "followerEnd", "responseData": "SharedSilence"},
+      {"template": "nonFollower", "responseData": "SharedSilence"},
+      {"template": "nonFollowerFriend", "responseData": "SharedSilence"},
+      {"template": "nonFollowerStranger", "responseData": "SharedSilence"}
+    ],
+    "Goodbye": [
+      {"template": "random", "responseData": "SharedSilence"},
+      {"template": "waiting", "responseData": "SharedSilence"},
+      {"template": "waitingEnd", "responseData": "SharedSilence"},
+      {"template": "follower", "responseData": "SharedSilence"},
+      {"template": "followerEnd", "responseData": "SharedSilence"},
+      {"template": "nonFollower", "responseData": "SharedSilence"},
+      {"template": "nonFollowerFriend", "responseData": "SharedSilence"},
+      {"template": "nonFollowerStranger", "responseData": "SharedSilence"}
+    ],
+    "Collide": [
+    ],
+    "Agree": [
+    ],
+    "Refuse": [
+    ],
+    "Idle": [],
+    "Taunt": [
+    ],
+    "Bleedout": [
+    ],
+    "Attack": [
+    ],
+    "PowerAttack": [
+    ],
+    "AlertIdle": [
+    ],
+    "AlertToCombat": [
+    ],
+    "AlertToNormal": [
+    ],
+    "Bash": [
+    ],
+    "Block": [
+    ],
+    "CombatToLost": [
+    ],
+    "CombatToNormal": [
+    ],
+    "Death": [
+    ],
+    "Flee": [
+    ],
+    "Hit": [
+    ],
+    "LostIdle": [
+    ],
+    "LostToCombat": [
+    ],
+    "LostToNormal": [
+    ],
+    "NormalToAlert": [
+    ],
+    "NormalToCombat": [
+    ]
+  }
+}
