@@ -142,6 +142,14 @@
       "links": ["VAS_FollowerDialogue_TradeTopic"]
     },
 
+    "friend": {
+      "flags": ["Random"],
+      "conditions": ["isNewVoice", "friend"]
+    },
+    "stranger": {
+      "flags": ["Random", "Random End"],
+      "conditions": ["isNewVoice", "stranger"]
+    },    
     "waiting": {
       "flags": ["Random"],
       "conditions": ["isNewVoice", "follower", "waiting"]

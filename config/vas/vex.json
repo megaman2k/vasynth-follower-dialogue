@@ -117,12 +117,12 @@
       {"template": "trade", "responses": [{"text": "Then by all means, let's trade some things."}]}
     ],
     "Hello": [
-      {"template": "greeting", "responses": [{"text": "Yes?", "audioIn": "Yes"}]},
-      {"template": "greeting", "responses": [{"text": "Yes, what is it?", "audioIn": "Yes, what is it"}]},
-      {"template": "greeting", "responses": [{"text": "Hmm?", "audioIn": "Hmm_"}]},
-      {"template": "greeting", "responses": [{"text": "Well?", "audioIn": "Well_"}]},
-      {"template": "greeting", "responses": [{"text": "Out with it."}]},
-      {"template": "greeting", "responses": [{"text": "I'm listening."}]},
+      {"template": "random", "responses": [{"text": "Yes?", "audioIn": "Yes"}]},
+      {"template": "random", "responses": [{"text": "Yes, what is it?", "audioIn": "Yes, what is it"}]},
+      {"template": "random", "responses": [{"text": "Hmm?", "audioIn": "Hmm_"}]},
+      {"template": "random", "responses": [{"text": "Well?", "audioIn": "Well_"}]},
+      {"template": "random", "responses": [{"text": "Out with it."}]},
+      {"template": "random", "responses": [{"text": "I'm listening."}]},
       {"template": "waiting", "responses": [{"text": "Are we done here?", "audioIn": "Are we done here"}]},
       {"template": "waiting", "responses": [{"text": "Can we go now?", "audioIn": "Can we go now"}]},
       {"template": "waiting", "responses": [{"text": "How much longer do you want me to stay here?", "audioIn": "How much longer do you want me to stay here"}]},

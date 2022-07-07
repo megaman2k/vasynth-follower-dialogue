@@ -152,8 +152,8 @@
       {"template": "trade", "responses": [{"text": "Define trade.", "audioIn": "Oh. Define trade."}]}
     ],
     "Hello": [
-      {"template": "greetingFriend",      "responses": [{"text": "Hey.", "emotionType": "Happy"}]},
-      {"template": "greetingFriend",      "responses": [{"text": "Were you looking for me?", "emotionType": "Puzzled"}]},
+      {"template": "friend",              "responses": [{"text": "Hey.", "emotionType": "Happy"}]},
+      {"template": "friend",              "responses": [{"text": "Were you looking for me?", "emotionType": "Puzzled"}]},
       {"template": "waiting",             "responses": [{"text": "Let me know if you want me along."}]},
       {"template": "waiting",             "responses": [{"text": "Let me know when you're ready."}]},
       {"template": "waiting",             "responses": [{"text": "Whenever you're ready."}]},
