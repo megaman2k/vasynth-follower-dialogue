@@ -53,7 +53,12 @@
       {"template": "recruit", "responses": [{"text": "I'm up for it. So where we headed?"}]},
       {"template": "recruit", "responses": [{"text": "You can count me in."}]},
       {"template": "recruit", "responses": [{"text": "Where you taking me this time?"}]},
-      {"template": "recruit", "responses": [{"text": "I hope you're planning on doing something fun."}]}
+      {"template": "recruit", "responses": [{"text": "I hope you're planning on doing something fun."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Looks like you've already got your company."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Looks like you've got someone already."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Sure, I'll come with you, if you tell your other friend to feck off so."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Why don't you send your other friend home first."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "You have someone else with you, already."}]}
     ],
     "Dismiss": [
       {"template": "dismiss", "responseData": "OK1"},

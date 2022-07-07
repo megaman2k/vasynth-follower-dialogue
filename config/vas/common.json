@@ -97,6 +97,18 @@
         "comparisonValue": "1.0",
         "function": "IsInFavorState",
         "type": "eq"
+    },
+    "canRecruit": {
+        "comparisonValue": "0.0",
+        "function": "GetGlobalValue",
+        "type": "eq",
+        "parameter1": "PlayerFollowerCount"
+    },
+    "cannotRecruit": {
+      "comparisonValue": "1.0",
+      "function": "GetGlobalValue",
+      "type": "eq",
+      "parameter1": "PlayerFollowerCount"
     }
   },
   
@@ -108,8 +120,12 @@
 
     "recruit": {
       "flags": ["Random", "Invisible continue"],
-      "conditions": ["isNewVoice", "nonFollower", "potentialFollower", "friend"],
+      "conditions": ["isNewVoice", "nonFollower", "potentialFollower", "friend", "canRecruit"],
       "links": ["VAS_FollowerDialogue_RecruitTopic"]
+    },
+    "cannotRecruit": {
+      "flags": ["Random", "Invisible continue"],
+      "conditions": ["isNewVoice", "nonFollower", "potentialFollower", "friend", "cannotRecruit"]
     },
     "dismiss": {
       "flags": ["Random", "Invisible continue"],

@@ -44,7 +44,12 @@
       {"template": "recruit", "responses": [{"text": "Good...", "emotionType": "Happy"}, {"text": "I'm ready to do my part.", "emotionType": "Happy"}]},
       {"template": "recruit", "responses": [{"text": "Is that right? Good. I'm just itching for a fight.", "audioIn": "Is that right_ Good. I'm just itching for a fight.", "emotionType": "Happy"}]},
       {"template": "recruit", "responses": [{"text": "Smart man.", "emotionType": "Happy"}, {"text": "Let's do this.", "emotionType": "Happy"}]},
-      {"template": "recruit", "responses": [{"text": "Smart woman.", "emotionType": "Happy"}, {"text": "Let's do this.", "emotionType": "Happy"}]}
+      {"template": "recruit", "responses": [{"text": "Smart woman.", "emotionType": "Happy"}, {"text": "Let's do this.", "emotionType": "Happy"}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Not until you send your other friend off."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Tell your other friend to go home."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "You already have someone with you."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "You have someone already, friend."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "You have someone with you already."}]}
     ],
     "Dismiss": [
       {"template": "dismiss", "responses": [{"text": "If that's what you want. I'll be off, then."}]},

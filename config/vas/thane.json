@@ -38,7 +38,12 @@
       {"template": "recruit", "responses": [{"text": "This one will follow wherever you may lead."}]},
       {"template": "recruit", "responses": [{"text": "I am always eager for adventure with a worthy companion such as yourself."}]},
       {"template": "recruit", "responses": [{"text": "It gratifies me that you would consider me worthy of your companionship."}]},
-      {"template": "recruit", "responses": [{"text": "I am honored you consider this one worthy, and so I shall be at my best."}]}
+      {"template": "recruit", "responses": [{"text": "I am honored you consider this one worthy, and so I shall be at my best."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I'm afraid I must refuse until you come to me alone."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I'm afraid I will only get in the way of your current companion."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "It would be my pleasure. However, you must be alone."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "You already have a traveling partner, friend."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "You already have someone accompanying you, my friend."}]}
     ],
     "Dismiss": [
       {"template": "dismiss", "responses": [{"text": "Very well. I shall leave at once. Divines bless you on your continued journies."}]},

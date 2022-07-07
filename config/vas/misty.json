@@ -50,7 +50,12 @@
           {"text": "Or maybe you will. I guess we'll just have to find out.", "emotionType": "Puzzled"}]},
       {"template": "recruit", "responses": [{"text": "Why not? That certainly sounds more exciting than what I was doing.", "emotionType": "Happy", "audioIn": "Why not That certainly sounds more exciting than what I was doing"}]},
       {"template": "recruit", "responses": [{"text": "You need my help?", "emotionType": "Puzzled"},
-          {"text": "Well, I'll try to be of assistance."}]}
+          {"text": "Well, I'll try to be of assistance."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I can accompany you when you're alone."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I'd like to, but first you need to dismiss your other follower."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "It looks like you already have company. Come back to me when you're by yourself."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Sure, but it looks like you've already got a friend tagging along."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "You already have someone with you, friend."}]}
     ],
     "Dismiss": [
       {"template": "dismiss", "responses": [{"text": "You know where to find me if you need anything."}]},

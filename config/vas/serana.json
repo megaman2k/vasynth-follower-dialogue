@@ -55,7 +55,12 @@
       {"template": "recruit", "responses": [{"text": "Good. I've been wanting to get out for a bit.", "audioIn": "Oh. Good. I've been wanting to get out for a bit"}]},
       {"template": "recruit", "responses": [{"text": "All right. Let's see what you have in store for me this time."}]},
       {"template": "recruit", "responses": [{"text": "Very well."}, {"text": "Lead on, brave adventurer!", "emotionType": "Happy"}]},
-      {"template": "recruit", "responses": [{"text": "I'll do my best to help any way I can.", "audioIn": "I'll do my best to help any way eye can"}]}
+      {"template": "recruit", "responses": [{"text": "I'll do my best to help any way I can.", "audioIn": "I'll do my best to help any way eye can"}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I'd love to, but it looks like you already have a traveling companion"}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I don't want to step on anyone's toes. Come back to me when you're alone?", "audioIn": "I don't want to step on anyone's toes. Come back to me when you're alone_"}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I'd rather not endanger your friend"}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I knew you'd miss me. But... come back to me when you're alone."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "When it's just you and me, we can go."}]}
     ],
     "Dismiss": [
       {"template": "dismiss", "responses": [{"text": "Oh. All right then. You know where to find me."}]},

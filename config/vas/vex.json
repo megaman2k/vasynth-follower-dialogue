@@ -38,7 +38,12 @@
       {"template": "recruit", "responses": [{"text": "That works for me."}]},
       {"template": "recruit", "responses": [{"text": "Fine."}, {"text": "I'll follow your lead."}]},
       {"template": "recruit", "responses": [{"text": "That would be a welcome change of pace. For me, anyway.", "audioIn": "That would be a welcome change of payce. For me, anyway"}]},
-      {"template": "recruit", "responses": [{"text": "I wouldn't mind helping out a friend. Lead the way."}]}
+      {"template": "recruit", "responses": [{"text": "I wouldn't mind helping out a friend. Lead the way."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Ditch your other follower. Then come see me."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "I don't do jobs with big teams. Come back by yourself."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Listen. I don't do crowds. So if you want me along, you've gotta be alone."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "No. But if you come alone, maybe I'll reconsider."}]},
+      {"template": "cannotRecruit", "responses": [{"text": "Not with your other friend tagging along. They'll just get in the way."}]}
     ],
     "Dismiss": [
       {"template": "dismiss", "responses": [{"text": "All right, whatever you want."}, {"text": "I'll just be on my way."}]},
